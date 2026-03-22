@@ -1,0 +1,73 @@
+package com.piedrazul.citas.application;
+
+import com.piedrazul.citas.domain.Cita;
+import com.piedrazul.citas.dto.CitaResponse;
+import com.piedrazul.citas.infrastructure.persistence.CitaRepository;
+import com.piedrazul.shared.exception.BusinessException;
+import com.piedrazul.shared.exception.ResourceNotFoundException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+@RequiredArgsConstructor
+public class CitaService {
+
+    private final CitaRepository citaRepository;
+
+    @Transactional
+    public Cita guardar(Cita cita) {
+        if (citaRepository.existsByMedicoIdAndFechaHora(
+                cita.getMedico().getId(), cita.getFechaHora())) {
+            throw new BusinessException(
+                    "Ya existe una cita para el médico en esa fecha y hora");
+        }
+        return citaRepository.save(cita);
+    }
+
+    /** HU-01: Listar citas de un médico en una fecha */
+    @Transactional(readOnly = true)
+    public List<CitaResponse> listarPorMedicoYFecha(Long medicoId, LocalDate fecha) {
+        LocalDateTime inicio = fecha.atStartOfDay();
+        LocalDateTime fin    = fecha.plusDays(1).atStartOfDay();
+        return citaRepository.findByMedicoIdAndFecha(medicoId, inicio, fin)
+                .stream().map(this::toResponse).collect(Collectors.toList());
+    }
+
+    /** Obtiene las horas (LocalTime) ya ocupadas para la vista de franjas */
+    @Transactional(readOnly = true)
+    public List<LocalTime> obtenerHorasOcupadas(Long medicoId, LocalDate fecha) {
+        LocalDateTime inicio = fecha.atStartOfDay();
+        LocalDateTime fin    = fecha.plusDays(1).atStartOfDay();
+        return citaRepository.findFechaHorasByMedicoIdAndFecha(medicoId, inicio, fin)
+                .stream().map(LocalDateTime::toLocalTime).collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public CitaResponse obtenerPorId(Long id) {
+        return citaRepository.findById(id)
+                .map(this::toResponse)
+                .orElseThrow(() -> new ResourceNotFoundException("Cita", id));
+    }
+
+    public CitaResponse toResponse(Cita c) {
+        return CitaResponse.builder()
+                .id(c.getId())
+                .pacienteId(c.getPaciente().getId())
+                .nombrePaciente(c.getPaciente().getNombres() + " " + c.getPaciente().getApellidos())
+                .documentoPaciente(c.getPaciente().getNumeroDocumento())
+                .celularPaciente(c.getPaciente().getCelular())
+                .medicoId(c.getMedico().getId())
+                .nombreMedico(c.getMedico().getNombres() + " " + c.getMedico().getApellidos())
+                .fechaHora(c.getFechaHora())
+                .origen(c.getOrigen())
+                .creadoEn(c.getCreadoEn())
+                .build();
+    }
+}
