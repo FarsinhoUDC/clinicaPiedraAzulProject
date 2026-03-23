@@ -3,7 +3,8 @@ package com.piedrazul.medicos.dto;
 import lombok.Builder;
 import lombok.Data;
 
-@Data @Builder
+@Data
+@Builder
 public class MedicoResponse {
     private Long id;
     private String nombres;

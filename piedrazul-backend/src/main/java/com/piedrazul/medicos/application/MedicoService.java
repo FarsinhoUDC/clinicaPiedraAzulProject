@@ -8,18 +8,20 @@ import com.piedrazul.shared.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class MedicoService {
+
     private final MedicoRepository medicoRepository;
 
     @Transactional(readOnly = true)
     public List<MedicoResponse> listarActivos() {
-        return medicoRepository.findByActivoTrue().stream()
-                .map(this::toResponse).collect(Collectors.toList());
+        return medicoRepository.findByActivoTrue()
+                .stream().map(this::toResponse).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
@@ -40,8 +42,11 @@ public class MedicoService {
 
     public MedicoResponse toResponse(Medico m) {
         return MedicoResponse.builder()
-                .id(m.getId()).nombres(m.getNombres())
-                .apellidos(m.getApellidos()).especialidad(m.getEspecialidad())
-                .activo(m.isActivo()).build();
+                .id(m.getId())
+                .nombres(m.getNombres())
+                .apellidos(m.getApellidos())
+                .especialidad(m.getEspecialidad())
+                .activo(m.isActivo())
+                .build();
     }
 }

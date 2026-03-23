@@ -3,9 +3,11 @@ package com.piedrazul.citas.dto;
 import com.piedrazul.citas.domain.OrigenCita;
 import lombok.Builder;
 import lombok.Data;
+
 import java.time.LocalDateTime;
 
-@Data @Builder
+@Data
+@Builder
 public class CitaResponse {
     private Long id;
     private Long pacienteId;

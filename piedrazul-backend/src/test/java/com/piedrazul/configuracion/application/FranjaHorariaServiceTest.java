@@ -6,6 +6,7 @@ import com.piedrazul.configuracion.infrastructure.persistence.DisponibilidadMedi
 import com.piedrazul.medicos.domain.Medico;
 import com.piedrazul.shared.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -23,17 +24,17 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@DisplayName("FranjaHorariaService - pruebas unitarias")
 class FranjaHorariaServiceTest {
 
     @Mock private DisponibilidadMedicoRepository disponibilidadMedicoRepository;
     @InjectMocks private FranjaHorariaService franjaHorariaService;
 
     private DisponibilidadMedico disponibilidad;
-    private Medico medico;
 
     @BeforeEach
     void setUp() {
-        medico = Medico.builder().id(1L).nombres("Dr. Carlos").apellidos("Gomez").build();
+        Medico medico = Medico.builder().id(1L).nombres("Carlos").apellidos("Gomez").build();
         disponibilidad = DisponibilidadMedico.builder()
                 .id(1L).medico(medico)
                 .diasSemana(Set.of(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY, DayOfWeek.FRIDAY))
@@ -44,33 +45,41 @@ class FranjaHorariaServiceTest {
     }
 
     @Test
+    @DisplayName("generarFranjas - dia habil - retorna 8 franjas entre 08:00 y 11:30")
     void generarFranjas_diaHabil_retornaFranjasCorrectas() {
-        when(disponibilidadMedicoRepository.findByMedicoId(1L)).thenReturn(Optional.of(disponibilidad));
+        when(disponibilidadMedicoRepository.findByMedicoId(1L))
+                .thenReturn(Optional.of(disponibilidad));
 
-        // Buscar un lunes
+        // Lunes 23 de marzo 2026
         LocalDate lunes = LocalDate.of(2026, 3, 23);
-        List<FranjaHorariaResponse> franjas = franjaHorariaService.generarFranjas(1L, lunes, List.of());
+        List<FranjaHorariaResponse> franjas =
+                franjaHorariaService.generarFranjas(1L, lunes, List.of());
 
-        // 08:00 a 11:30 con intervalo 30 min = 8 franjas
+        // 08:00, 08:30, 09:00, 09:30, 10:00, 10:30, 11:00, 11:30 = 8 franjas
         assertThat(franjas).hasSize(8);
         assertThat(franjas.get(0).getHora()).isEqualTo(LocalTime.of(8, 0));
         assertThat(franjas.get(0).isDisponible()).isTrue();
     }
 
     @Test
+    @DisplayName("generarFranjas - dia no habil - retorna lista vacia")
     void generarFranjas_diaNoHabil_retornaListaVacia() {
-        when(disponibilidadMedicoRepository.findByMedicoId(1L)).thenReturn(Optional.of(disponibilidad));
+        when(disponibilidadMedicoRepository.findByMedicoId(1L))
+                .thenReturn(Optional.of(disponibilidad));
 
-        // Martes no esta en diasSemana
+        // Martes 24 de marzo 2026 (no esta en diasSemana)
         LocalDate martes = LocalDate.of(2026, 3, 24);
-        List<FranjaHorariaResponse> franjas = franjaHorariaService.generarFranjas(1L, martes, List.of());
+        List<FranjaHorariaResponse> franjas =
+                franjaHorariaService.generarFranjas(1L, martes, List.of());
 
         assertThat(franjas).isEmpty();
     }
 
     @Test
+    @DisplayName("generarFranjas - hora ocupada - marca slot como no disponible")
     void generarFranjas_horaOcupada_marcaComoNoDisponible() {
-        when(disponibilidadMedicoRepository.findByMedicoId(1L)).thenReturn(Optional.of(disponibilidad));
+        when(disponibilidadMedicoRepository.findByMedicoId(1L))
+                .thenReturn(Optional.of(disponibilidad));
 
         LocalDate lunes = LocalDate.of(2026, 3, 23);
         List<FranjaHorariaResponse> franjas = franjaHorariaService.generarFranjas(
@@ -81,10 +90,13 @@ class FranjaHorariaServiceTest {
     }
 
     @Test
-    void generarFranjas_medicoSinConfiguracion_lanzaResourceNotFoundException() {
-        when(disponibilidadMedicoRepository.findByMedicoId(99L)).thenReturn(Optional.empty());
+    @DisplayName("generarFranjas - medico sin configuracion - lanza ResourceNotFoundException")
+    void generarFranjas_sinConfiguracion_lanzaException() {
+        when(disponibilidadMedicoRepository.findByMedicoId(99L))
+                .thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> franjaHorariaService.generarFranjas(99L, LocalDate.now(), List.of()))
+        assertThatThrownBy(() ->
+                franjaHorariaService.generarFranjas(99L, LocalDate.now(), List.of()))
                 .isInstanceOf(ResourceNotFoundException.class);
     }
 }

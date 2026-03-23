@@ -38,20 +38,19 @@ class CitaServiceTest {
 
     @BeforeEach
     void setUp() {
-        medico = Medico.builder()
-                .id(1L).nombres("Juan").apellidos("Pérez").especialidad("General").build();
-        paciente = Paciente.builder()
-                .id(1L).numeroDocumento("12345").nombres("María")
-                .apellidos("López").celular("3001234567").genero(Genero.MUJER).build();
+        medico = Medico.builder().id(1L).nombres("Juan").apellidos("Perez")
+                .especialidad("General").build();
+        paciente = Paciente.builder().id(1L).numeroDocumento("12345")
+                .nombres("Maria").apellidos("Lopez")
+                .celular("3001234567").genero(Genero.MUJER).build();
         fechaHora = LocalDateTime.now().plusDays(1)
                 .withHour(9).withMinute(0).withSecond(0).withNano(0);
-        cita = Cita.builder()
-                .id(1L).medico(medico).paciente(paciente)
+        cita = Cita.builder().id(1L).medico(medico).paciente(paciente)
                 .fechaHora(fechaHora).origen(OrigenCita.AGENDADOR).build();
     }
 
     @Test
-    @DisplayName("guardar - cita válida - guarda y retorna la cita")
+    @DisplayName("guardar - cita valida - retorna cita guardada")
     void guardar_citaValida_retornaCitaGuardada() {
         when(citaRepository.existsByMedicoIdAndFechaHora(anyLong(), any())).thenReturn(false);
         when(citaRepository.save(any(Cita.class))).thenReturn(cita);
@@ -74,7 +73,7 @@ class CitaServiceTest {
     }
 
     @Test
-    @DisplayName("listarPorMedicoYFecha - retorna lista mapeada a CitaResponse")
+    @DisplayName("listarPorMedicoYFecha - retorna lista mapeada correctamente")
     void listarPorMedicoYFecha_retornaListaMapeada() {
         when(citaRepository.findByMedicoIdAndFecha(
                 anyLong(), any(LocalDateTime.class), any(LocalDateTime.class)))
@@ -83,12 +82,12 @@ class CitaServiceTest {
         List<CitaResponse> resultado = citaService.listarPorMedicoYFecha(1L, fechaHora.toLocalDate());
 
         assertThat(resultado).hasSize(1);
-        assertThat(resultado.get(0).getNombrePaciente()).isEqualTo("María López");
-        assertThat(resultado.get(0).getNombreMedico()).isEqualTo("Juan Pérez");
+        assertThat(resultado.get(0).getNombrePaciente()).isEqualTo("Maria Lopez");
+        assertThat(resultado.get(0).getNombreMedico()).isEqualTo("Juan Perez");
     }
 
     @Test
-    @DisplayName("listarPorMedicoYFecha - sin citas - retorna lista vacía")
+    @DisplayName("listarPorMedicoYFecha - sin citas - retorna lista vacia")
     void listarPorMedicoYFecha_sinCitas_retornaListaVacia() {
         when(citaRepository.findByMedicoIdAndFecha(
                 anyLong(), any(LocalDateTime.class), any(LocalDateTime.class)))

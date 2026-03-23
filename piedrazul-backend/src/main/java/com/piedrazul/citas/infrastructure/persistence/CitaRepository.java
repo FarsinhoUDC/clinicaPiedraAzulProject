@@ -5,17 +5,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
 public interface CitaRepository extends JpaRepository<Cita, Long> {
 
-    /**
-     * Citas de un médico en una fecha (HU-01).
-     * Compara el rango del día completo para compatibilidad con H2 y PostgreSQL.
-     */
+    // HU-01: listar citas de un medico en un rango de dia completo
     @Query("SELECT c FROM Cita c " +
            "WHERE c.medico.id = :medicoId " +
            "AND c.fechaHora >= :inicio " +
@@ -23,21 +19,18 @@ public interface CitaRepository extends JpaRepository<Cita, Long> {
            "ORDER BY c.fechaHora ASC")
     List<Cita> findByMedicoIdAndFecha(
             @Param("medicoId") Long medicoId,
-            @Param("inicio")   LocalDateTime inicio,
-            @Param("fin")      LocalDateTime fin);
+            @Param("inicio") LocalDateTime inicio,
+            @Param("fin") LocalDateTime fin);
 
-    /**
-     * Horas ya ocupadas para un médico en una fecha.
-     * Usadas por FranjaHorariaService para marcar slots como no disponibles.
-     */
+    // Para calcular franjas ocupadas
     @Query("SELECT c.fechaHora FROM Cita c " +
            "WHERE c.medico.id = :medicoId " +
            "AND c.fechaHora >= :inicio " +
            "AND c.fechaHora < :fin")
     List<LocalDateTime> findFechaHorasByMedicoIdAndFecha(
             @Param("medicoId") Long medicoId,
-            @Param("inicio")   LocalDateTime inicio,
-            @Param("fin")      LocalDateTime fin);
+            @Param("inicio") LocalDateTime inicio,
+            @Param("fin") LocalDateTime fin);
 
     boolean existsByMedicoIdAndFechaHora(Long medicoId, LocalDateTime fechaHora);
 }

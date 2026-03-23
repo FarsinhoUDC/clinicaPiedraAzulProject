@@ -3,9 +3,11 @@ package com.piedrazul.pacientes.dto;
 import com.piedrazul.pacientes.domain.Genero;
 import lombok.Builder;
 import lombok.Data;
+
 import java.time.LocalDate;
 
-@Data @Builder
+@Data
+@Builder
 public class PacienteResponse {
     private Long id;
     private String numeroDocumento;
@@ -15,5 +17,4 @@ public class PacienteResponse {
     private Genero genero;
     private LocalDate fechaNacimiento;
     private String correo;
-    private boolean tieneUsuario;
 }

@@ -15,14 +15,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 /**
- * PATRÓN FACADE:
- * Coordina PacienteService, MedicoService, FranjaHorariaService y CitaService
- * para ejecutar el caso de uso completo de creación de cita.
- * El controlador solo interactúa con esta fachada.
+ * PATRON FACADE: coordina PacienteService, MedicoService,
+ * FranjaHorariaService y CitaService para crear una cita completa.
  */
 @Service
 @RequiredArgsConstructor
@@ -36,23 +35,21 @@ public class AgendamientoService {
     @Transactional
     public CitaResponse crearCita(CrearCitaRequest request, OrigenCita origen) {
 
-        // 1. Crear o actualizar paciente (upsert por documento)
+        // 1. Upsert del paciente por numero de documento
         pacienteService.crearOActualizar(request.getPaciente());
         Paciente paciente = pacienteService.obtenerEntidadPorDocumento(
                 request.getPaciente().getNumeroDocumento());
 
-        // 2. Verificar que el médico existe y está activo
+        // 2. Verificar que el medico existe
         Medico medico = medicoService.obtenerPorId(request.getMedicoId());
 
-        // 3. Validar que la hora cae dentro de una franja válida del médico
+        // 3. Validar franja horaria
         LocalDate fecha = request.getFechaHora().toLocalDate();
         LocalTime hora  = request.getFechaHora().toLocalTime();
-        DisponibilidadMedico disponibilidad =
-                franjaHorariaService.obtenerDisponibilidad(medico.getId());
+        DisponibilidadMedico disp = franjaHorariaService.obtenerDisponibilidad(medico.getId());
+        validarFranja(disp, fecha, hora);
 
-        validarFranjaHoraria(disponibilidad, fecha, hora);
-
-        // 4. Construir y persistir la cita
+        // 4. Persistir cita
         Cita cita = Cita.builder()
                 .paciente(paciente)
                 .medico(medico)
@@ -63,33 +60,21 @@ public class AgendamientoService {
         return citaService.toResponse(citaService.guardar(cita));
     }
 
-    // ──────────────────────────────────────────────────────────────
-    // Validaciones de negocio
-    // ──────────────────────────────────────────────────────────────
-
-    private void validarFranjaHoraria(DisponibilidadMedico disp,
-                                       LocalDate fecha, LocalTime hora) {
-        // Validar día de la semana
+    private void validarFranja(DisponibilidadMedico disp, LocalDate fecha, LocalTime hora) {
         if (!disp.getDiasSemana().contains(fecha.getDayOfWeek())) {
             throw new BusinessException(
-                    "El médico no atiende el " + fecha.getDayOfWeek()
-                    + ". Días disponibles: " + disp.getDiasSemana());
+                    "El medico no atiende el " + fecha.getDayOfWeek());
         }
-
-        // Validar rango horario
         if (hora.isBefore(disp.getHoraInicio()) || hora.isAfter(disp.getHoraFin())) {
             throw new BusinessException(
-                    "La hora " + hora + " está fuera de la franja del médico ("
-                    + disp.getHoraInicio() + " - " + disp.getHoraFin() + ")");
+                    "Hora fuera de la franja del medico (" +
+                    disp.getHoraInicio() + " - " + disp.getHoraFin() + ")");
         }
-
-        // Validar que la hora corresponde a un slot del intervalo
-        long minutosDesdeInicio = java.time.Duration
-                .between(disp.getHoraInicio(), hora).toMinutes();
-        if (minutosDesdeInicio < 0 || minutosDesdeInicio % disp.getIntervaloMinutos() != 0) {
+        long mins = Duration.between(disp.getHoraInicio(), hora).toMinutes();
+        if (mins < 0 || mins % disp.getIntervaloMinutos() != 0) {
             throw new BusinessException(
-                    "La hora no corresponde a ningún slot válido del médico. "
-                    + "Intervalo: " + disp.getIntervaloMinutos() + " minutos");
+                    "La hora no corresponde a un slot valido. " +
+                    "Intervalo: " + disp.getIntervaloMinutos() + " min");
         }
     }
 }

@@ -26,12 +26,12 @@ public class CitaService {
         if (citaRepository.existsByMedicoIdAndFechaHora(
                 cita.getMedico().getId(), cita.getFechaHora())) {
             throw new BusinessException(
-                    "Ya existe una cita para el médico en esa fecha y hora");
+                    "Ya existe una cita para el medico en esa fecha y hora");
         }
         return citaRepository.save(cita);
     }
 
-    /** HU-01: Listar citas de un médico en una fecha */
+    // HU-01
     @Transactional(readOnly = true)
     public List<CitaResponse> listarPorMedicoYFecha(Long medicoId, LocalDate fecha) {
         LocalDateTime inicio = fecha.atStartOfDay();
@@ -40,7 +40,6 @@ public class CitaService {
                 .stream().map(this::toResponse).collect(Collectors.toList());
     }
 
-    /** Obtiene las horas (LocalTime) ya ocupadas para la vista de franjas */
     @Transactional(readOnly = true)
     public List<LocalTime> obtenerHorasOcupadas(Long medicoId, LocalDate fecha) {
         LocalDateTime inicio = fecha.atStartOfDay();
