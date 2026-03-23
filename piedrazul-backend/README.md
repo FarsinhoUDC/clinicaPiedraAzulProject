@@ -2,7 +2,6 @@
 
 Spring Boot 3.2 · Monolito Modular · Lombok · H2 (dev) / PostgreSQL (prod)
 
-> **Sin autenticación** — versión de desarrollo para construcción del frontend Angular.
 
 ## Estructura
 
