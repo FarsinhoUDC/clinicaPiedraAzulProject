@@ -6,9 +6,11 @@ import lombok.Data;
 @Data
 @Builder
 public class MedicoResponse {
+
     private Long id;
     private String nombres;
     private String apellidos;
+    private String correo;
     private String especialidad;
     private boolean activo;
 }

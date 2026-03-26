@@ -31,8 +31,10 @@ public class DataInitializer implements CommandLineRunner {
     public void run(String... args) {
         log.info("--- Cargando datos iniciales ---");
 
-        MedicoResponse medico1 = crearMedico("Carlos", "Gomez", "Medicina General");
-        MedicoResponse medico2 = crearMedico("Laura", "Martinez", "Fisioterapia");
+        MedicoResponse medico1 = crearMedico(
+                "Carlos", "Gomez", "carlos.gomez@piedrazul.com", "1234", "Medicina General");
+        MedicoResponse medico2 = crearMedico(
+                "Laura", "Martinez", "laura.martinez@piedrazul.com", "1234", "Fisioterapia");
 
         configurarDisponibilidad(
                 medico1.getId(),
@@ -52,10 +54,14 @@ public class DataInitializer implements CommandLineRunner {
                 medico1.getId(), medico2.getId());
     }
 
-    private MedicoResponse crearMedico(String nombres, String apellidos, String especialidad) {
+    private MedicoResponse crearMedico(String nombres, String apellidos,
+                                        String correo, String contrasena,
+                                        String especialidad) {
         MedicoRequest req = new MedicoRequest();
         req.setNombres(nombres);
         req.setApellidos(apellidos);
+        req.setCorreo(correo);
+        req.setContrasena(contrasena);
         req.setEspecialidad(especialidad);
         return medicoService.crear(req);
     }

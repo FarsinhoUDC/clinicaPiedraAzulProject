@@ -1,31 +1,34 @@
 package com.piedrazul.pacientes.domain;
 
+import com.piedrazul.sesion.domain.RolUsuario;
+import com.piedrazul.sesion.domain.Usuario;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 
+/**
+ * Paciente del sistema. Extiende de Usuario heredando:
+ *  id, nombres, apellidos, correo, contrasena, rol, activo.
+ *
+ * Campos propios del paciente:
+ *  - numeroDocumento
+ *  - celular
+ *  - genero
+ *  - fechaNacimiento
+ */
 @Entity
 @Table(name = "pacientes")
+@PrimaryKeyJoinColumn(name = "usuario_id")
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class Paciente {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@SuperBuilder
+public class Paciente extends Usuario {
 
     @Column(unique = true, nullable = false)
     private String numeroDocumento;
-
-    @Column(nullable = false)
-    private String nombres;
-
-    @Column(nullable = false)
-    private String apellidos;
 
     @Column(nullable = false)
     private String celular;
@@ -36,5 +39,24 @@ public class Paciente {
 
     private LocalDate fechaNacimiento;
 
-    private String correo;
+    /**
+     * Factory method de conveniencia para crear un Paciente con rol ya asignado.
+     */
+    public static Paciente nuevo(String nombres, String apellidos,
+                                  String correo, String contrasena,
+                                  String numeroDocumento, String celular,
+                                  Genero genero, LocalDate fechaNacimiento) {
+        Paciente p = new Paciente();
+        p.setNombres(nombres);
+        p.setApellidos(apellidos);
+        p.setCorreo(correo);
+        p.setContrasena(contrasena);
+        p.setRol(RolUsuario.PACIENTE);
+        p.setActivo(true);
+        p.setNumeroDocumento(numeroDocumento);
+        p.setCelular(celular);
+        p.setGenero(genero);
+        p.setFechaNacimiento(fechaNacimiento);
+        return p;
+    }
 }

@@ -2,17 +2,35 @@
 
 Spring Boot 3.2 · Monolito Modular · Lombok · H2 (dev) / PostgreSQL (prod)
 
+---
 
-## Estructura
+## Estructura de módulos
 
 ```
 com.piedrazul
-├── shared/                     ← CorsConfig, ApiResponse, excepciones
-├── pacientes/                  ← Paciente, PacienteService, PacienteController
-├── medicos/                    ← Medico, MedicoService, MedicoController
-├── configuracion/              ← DisponibilidadMedico, FranjaHorariaService (Strategy), ConfiguracionService
-└── citas/                      ← Cita, CitaService, AgendamientoService (Facade), CitaController
+├── shared/           ← CorsConfig, ApiResponse, excepciones globales
+├── sesion/           ← Usuario (base), RolUsuario, SesionService, SesionController
+├── medicos/          ← Medico extends Usuario, MedicoService, MedicoController
+├── pacientes/        ← Paciente extends Usuario, PacienteService, PacienteController
+├── configuracion/    ← DisponibilidadMedico, FranjaHorariaService, ConfiguracionService
+└── citas/            ← Cita, CitaService, AgendamientoService (Facade), CitaController
 ```
+
+### Jerarquía de dominio
+
+`Medico` y `Paciente` extienden de `Usuario` (módulo `sesion`) usando
+herencia JPA con estrategia `JOINED`. Esto genera tres tablas:
+
+```
+usuarios   → id, nombres, apellidos, correo, contrasena, rol, activo
+medicos    → usuario_id (FK), especialidad
+pacientes  → usuario_id (FK), numeroDocumento, celular, genero, fechaNacimiento
+```
+
+El módulo `sesion` expone `UsuarioRepository` para autenticar a cualquier
+tipo de usuario sin depender de los módulos `medicos` o `pacientes`.
+
+---
 
 ## Arrancar
 
@@ -23,41 +41,108 @@ com.piedrazul
 - App: `http://localhost:8080`
 - Consola H2: `http://localhost:8080/h2-console`
   - JDBC URL: `jdbc:h2:mem:piedrazuldb`
-  - User: `sa` | Password: (vacío)
+  - User: `sa` / Password: (vacío)
 
-Al arrancar se crean automáticamente dos médicos de prueba con su disponibilidad.
+Al arrancar, `DataInitializer` crea dos médicos de prueba con disponibilidad
+configurada y credenciales de acceso:
+
+| Correo                          | Contraseña | Especialidad      |
+|---------------------------------|------------|-------------------|
+| carlos.gomez@piedrazul.com      | 1234       | Medicina General  |
+| laura.martinez@piedrazul.com    | 1234       | Fisioterapia      |
+
+---
 
 ## Endpoints
+
+### Sesión
+| Método | URL | Descripción |
+|--------|-----|-------------|
+| POST | `/api/sesion/login` | Iniciar sesión (médico o paciente) |
+| GET  | `/api/sesion/usuario/{id}` | Consultar datos básicos de un usuario |
 
 ### Médicos
 | Método | URL | Descripción |
 |--------|-----|-------------|
-| GET | `/api/medicos` | Listar médicos activos |
-| POST | `/api/medicos` | Crear médico |
+| GET  | `/api/medicos` | Listar médicos activos |
+| POST | `/api/medicos` | Registrar nuevo médico |
 
 ### Pacientes
 | Método | URL | Descripción |
 |--------|-----|-------------|
-| GET | `/api/pacientes/documento/{numero}` | Buscar paciente por documento |
+| GET  | `/api/pacientes/documento/{numero}` | Buscar paciente por documento |
 | POST | `/api/pacientes` | Crear / actualizar paciente |
 
 ### Citas
 | Método | URL | Descripción |
 |--------|-----|-------------|
-| GET | `/api/citas?medicoId=1&fecha=2026-03-27` | **HU-01** Listar citas |
+| GET  | `/api/citas?medicoId=1&fecha=2026-03-27` | **HU-01** Listar citas del día |
 | POST | `/api/citas/agendador` | **HU-02** Crear cita (agendador) |
 | POST | `/api/citas/paciente` | **HU-03** Crear cita (paciente) |
-| GET | `/api/citas/franjas/1?fecha=2026-03-27` | Ver franjas disponibles |
-| GET | `/api/citas/{id}` | Detalle de una cita |
+| GET  | `/api/citas/franjas/1?fecha=2026-03-27` | Ver franjas disponibles |
+| GET  | `/api/citas/{id}` | Detalle de una cita |
 
 ### Configuración
 | Método | URL | Descripción |
 |--------|-----|-------------|
-| GET | `/api/configuracion` | Listar disponibilidades |
-| POST | `/api/configuracion/disponibilidad` | Configurar médico (**HU-04**) |
+| GET  | `/api/configuracion` | Listar disponibilidades |
+| POST | `/api/configuracion/disponibilidad` | Configurar horario médico (**HU-04**) |
 | POST | `/api/configuracion/sistema` | Configurar ventana de semanas |
 
-## Ejemplo POST /api/citas/agendador
+---
+
+## Ejemplos de peticiones
+
+### POST `/api/sesion/login`
+
+```json
+{
+  "correo": "carlos.gomez@piedrazul.com",
+  "contrasena": "1234"
+}
+```
+
+Respuesta:
+```json
+{
+  "data": {
+    "id": 1,
+    "nombres": "Carlos",
+    "apellidos": "Gomez",
+    "correo": "carlos.gomez@piedrazul.com",
+    "rol": "MEDICO",
+    "activo": true
+  }
+}
+```
+
+### POST `/api/medicos`
+
+```json
+{
+  "nombres": "Pedro",
+  "apellidos": "Ramirez",
+  "correo": "pedro.ramirez@piedrazul.com",
+  "contrasena": "segura123",
+  "especialidad": "Cardiología"
+}
+```
+
+### POST `/api/pacientes`
+
+```json
+{
+  "numeroDocumento": "1061000001",
+  "nombres": "Ana",
+  "apellidos": "Torres",
+  "correo": "ana.torres@correo.com",
+  "contrasena": "pass456",
+  "celular": "3101234567",
+  "genero": "MUJER"
+}
+```
+
+### POST `/api/citas/agendador`
 
 ```json
 {
@@ -65,16 +150,32 @@ Al arrancar se crean automáticamente dos médicos de prueba con su disponibilid
     "numeroDocumento": "1061000001",
     "nombres": "Ana",
     "apellidos": "Torres",
+    "correo": "ana.torres@correo.com",
+    "contrasena": "pass456",
     "celular": "3101234567",
     "genero": "MUJER"
   },
   "medicoId": 1,
-  "fechaHora": "2026-03-25T08:00:00"
+  "fechaHora": "2026-03-30T08:00:00"
 }
 ```
 
-## Ejecutar pruebas
+---
+
+## Pruebas unitarias
 
 ```bash
 ./mvnw test
 ```
+
+| Clase de prueba | Módulo | Casos cubiertos |
+|---|---|---|
+| `SesionServiceTest` | sesion | Login correcto (médico y paciente), correo no encontrado, contraseña incorrecta, usuario inactivo, consulta por id |
+| `PacienteServiceTest` | pacientes | Crear paciente nuevo, correo duplicado, actualizar existente (sin cambiar credenciales), buscar por documento, not found |
+| `CitaServiceTest` | citas | Guardar cita válida, horario ocupado, listar por médico y fecha, lista vacía |
+| `FranjaHorariaServiceTest` | configuracion | Día hábil (8 franjas), día no hábil, hora ocupada, médico sin configuración |
+
+> La contraseña se compara en texto plano porque el proyecto aún no integra
+> Spring Security. Cuando se agregue, reemplazar la comparación directa en
+> `SesionService` por `BCryptPasswordEncoder.matches(raw, encoded)`.
+

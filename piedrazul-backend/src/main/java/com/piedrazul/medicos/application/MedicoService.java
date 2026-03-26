@@ -4,8 +4,10 @@ import com.piedrazul.medicos.domain.Medico;
 import com.piedrazul.medicos.dto.MedicoRequest;
 import com.piedrazul.medicos.dto.MedicoResponse;
 import com.piedrazul.medicos.infrastructure.persistence.MedicoRepository;
+import com.piedrazul.shared.exception.BusinessException;
 import com.piedrazul.shared.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +19,7 @@ import java.util.stream.Collectors;
 public class MedicoService {
 
     private final MedicoRepository medicoRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional(readOnly = true)
     public List<MedicoResponse> listarActivos() {
@@ -32,11 +35,16 @@ public class MedicoService {
 
     @Transactional
     public MedicoResponse crear(MedicoRequest request) {
-        Medico medico = Medico.builder()
-                .nombres(request.getNombres())
-                .apellidos(request.getApellidos())
-                .especialidad(request.getEspecialidad())
-                .build();
+        if (medicoRepository.existsByCorreo(request.getCorreo())) {
+            throw new BusinessException(
+                    "Ya existe un usuario registrado con el correo: " + request.getCorreo());
+        }
+        Medico medico = Medico.nuevo(
+                request.getNombres(),
+                request.getApellidos(),
+                request.getCorreo(),
+                passwordEncoder.encode(request.getContrasena()),
+                request.getEspecialidad());
         return toResponse(medicoRepository.save(medico));
     }
 
@@ -45,6 +53,7 @@ public class MedicoService {
                 .id(m.getId())
                 .nombres(m.getNombres())
                 .apellidos(m.getApellidos())
+                .correo(m.getCorreo())
                 .especialidad(m.getEspecialidad())
                 .activo(m.isActivo())
                 .build();

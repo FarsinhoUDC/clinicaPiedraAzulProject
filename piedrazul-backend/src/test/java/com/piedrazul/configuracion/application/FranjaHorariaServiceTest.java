@@ -34,7 +34,11 @@ class FranjaHorariaServiceTest {
 
     @BeforeEach
     void setUp() {
-        Medico medico = Medico.builder().id(1L).nombres("Carlos").apellidos("Gomez").build();
+        // Medico construido con factory method — incluye campos heredados de Usuario
+        Medico medico = Medico.nuevo("Carlos", "Gomez",
+                "carlos.gomez@test.com", "pass123", "Medicina General");
+        medico.setId(1L);
+
         disponibilidad = DisponibilidadMedico.builder()
                 .id(1L).medico(medico)
                 .diasSemana(Set.of(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY, DayOfWeek.FRIDAY))

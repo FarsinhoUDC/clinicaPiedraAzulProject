@@ -4,8 +4,10 @@ import com.piedrazul.pacientes.domain.Paciente;
 import com.piedrazul.pacientes.dto.PacienteRequest;
 import com.piedrazul.pacientes.dto.PacienteResponse;
 import com.piedrazul.pacientes.infrastructure.persistence.PacienteRepository;
+import com.piedrazul.shared.exception.BusinessException;
 import com.piedrazul.shared.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,20 +18,36 @@ import java.util.Optional;
 public class PacienteService {
 
     private final PacienteRepository pacienteRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public PacienteResponse crearOActualizar(PacienteRequest request) {
         Paciente paciente = pacienteRepository
                 .findByNumeroDocumento(request.getNumeroDocumento())
-                .orElseGet(Paciente::new);
+                .orElse(null);
 
-        paciente.setNumeroDocumento(request.getNumeroDocumento());
-        paciente.setNombres(request.getNombres());
-        paciente.setApellidos(request.getApellidos());
-        paciente.setCelular(request.getCelular());
-        paciente.setGenero(request.getGenero());
-        paciente.setFechaNacimiento(request.getFechaNacimiento());
-        paciente.setCorreo(request.getCorreo());
+        if (paciente == null) {
+            if (pacienteRepository.existsByCorreo(request.getCorreo())) {
+                throw new BusinessException(
+                        "Ya existe un usuario registrado con el correo: " + request.getCorreo());
+            }
+            paciente = Paciente.nuevo(
+                    request.getNombres(),
+                    request.getApellidos(),
+                    request.getCorreo(),
+                    passwordEncoder.encode(request.getContrasena()),
+                    request.getNumeroDocumento(),
+                    request.getCelular(),
+                    request.getGenero(),
+                    request.getFechaNacimiento());
+        } else {
+            // Actualizar datos existentes (correo y contraseña no se modifican aquí)
+            paciente.setNombres(request.getNombres());
+            paciente.setApellidos(request.getApellidos());
+            paciente.setCelular(request.getCelular());
+            paciente.setGenero(request.getGenero());
+            paciente.setFechaNacimiento(request.getFechaNacimiento());
+        }
 
         return toResponse(pacienteRepository.save(paciente));
     }
@@ -58,10 +76,10 @@ public class PacienteService {
                 .numeroDocumento(p.getNumeroDocumento())
                 .nombres(p.getNombres())
                 .apellidos(p.getApellidos())
+                .correo(p.getCorreo())
                 .celular(p.getCelular())
                 .genero(p.getGenero())
                 .fechaNacimiento(p.getFechaNacimiento())
-                .correo(p.getCorreo())
                 .build();
     }
 }

@@ -38,15 +38,24 @@ class CitaServiceTest {
 
     @BeforeEach
     void setUp() {
-        medico = Medico.builder().id(1L).nombres("Juan").apellidos("Perez")
-                .especialidad("General").build();
-        paciente = Paciente.builder().id(1L).numeroDocumento("12345")
-                .nombres("Maria").apellidos("Lopez")
-                .celular("3001234567").genero(Genero.MUJER).build();
+        // Medico construido con factory method — incluye campos heredados de Usuario
+        medico = Medico.nuevo("Juan", "Perez",
+                "juan.perez@test.com", "pass123", "General");
+        medico.setId(1L);
+
+        // Paciente construido con factory method — incluye campos heredados de Usuario
+        paciente = Paciente.nuevo("Maria", "Lopez",
+                "maria.lopez@test.com", "pass123",
+                "12345", "3001234567", Genero.MUJER, null);
+        paciente.setId(1L);
+
         fechaHora = LocalDateTime.now().plusDays(1)
                 .withHour(9).withMinute(0).withSecond(0).withNano(0);
-        cita = Cita.builder().id(1L).medico(medico).paciente(paciente)
-                .fechaHora(fechaHora).origen(OrigenCita.AGENDADOR).build();
+
+        cita = Cita.builder()
+                .id(1L).medico(medico).paciente(paciente)
+                .fechaHora(fechaHora).origen(OrigenCita.AGENDADOR)
+                .build();
     }
 
     @Test

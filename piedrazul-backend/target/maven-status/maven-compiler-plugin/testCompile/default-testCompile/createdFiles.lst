@@ -1,0 +1,4 @@
+com/piedrazul/pacientes/application/PacienteServiceTest.class
+com/piedrazul/sesion/application/SesionServiceTest.class
+com/piedrazul/configuracion/application/FranjaHorariaServiceTest.class
+com/piedrazul/citas/application/CitaServiceTest.class
