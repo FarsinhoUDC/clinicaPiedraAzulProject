@@ -21,16 +21,26 @@ public class PacienteService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public PacienteResponse crearOActualizar(PacienteRequest request) {
-        Paciente paciente = pacienteRepository
-                .findByNumeroDocumento(request.getNumeroDocumento())
-                .orElse(null);
+public PacienteResponse crearOActualizar(PacienteRequest request) {
 
-        if (paciente == null) {
-            if (pacienteRepository.existsByCorreo(request.getCorreo())) {
-                throw new BusinessException(
-                        "Ya existe un usuario registrado con el correo: " + request.getCorreo());
-            }
+    // 1. Buscar por documento
+    Paciente paciente = pacienteRepository
+            .findByNumeroDocumento(request.getNumeroDocumento())
+            .orElse(null);
+
+    if (paciente == null) {
+
+        Optional<Paciente> existentePorCorreo =
+                pacienteRepository.findByCorreo(request.getCorreo());
+
+        if (existentePorCorreo.isPresent()) {
+
+
+            paciente = existentePorCorreo.get();
+
+        } else {
+
+   
             paciente = Paciente.nuevo(
                     request.getNombres(),
                     request.getApellidos(),
@@ -39,18 +49,21 @@ public class PacienteService {
                     request.getNumeroDocumento(),
                     request.getCelular(),
                     request.getGenero(),
-                    request.getFechaNacimiento());
-        } else {
-            // Actualizar datos existentes (correo y contraseña no se modifican aquí)
-            paciente.setNombres(request.getNombres());
-            paciente.setApellidos(request.getApellidos());
-            paciente.setCelular(request.getCelular());
-            paciente.setGenero(request.getGenero());
-            paciente.setFechaNacimiento(request.getFechaNacimiento());
+                    request.getFechaNacimiento()
+            );
         }
 
-        return toResponse(pacienteRepository.save(paciente));
+    } else {
+
+        paciente.setNombres(request.getNombres());
+        paciente.setApellidos(request.getApellidos());
+        paciente.setCelular(request.getCelular());
+        paciente.setGenero(request.getGenero());
+        paciente.setFechaNacimiento(request.getFechaNacimiento());
     }
+
+    return toResponse(pacienteRepository.save(paciente));
+}
 
     @Transactional(readOnly = true)
     public Optional<PacienteResponse> buscarPorDocumento(String numeroDocumento) {

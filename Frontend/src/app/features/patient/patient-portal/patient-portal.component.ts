@@ -101,15 +101,9 @@ export class PatientPortalComponent implements OnInit {
     if (!snapshot.selectedDoctor || !snapshot.selectedDate || !snapshot.selectedSlot || !session) {
       return;
     }
-    console.log("SESSION:", session);
-    console.log("numeroDocumento:", session.numeroDocumento);
-    console.log("celular:", session.celular);
-    console.log("genero:", session.genero);
-
-
 this.appointmentApi.create({
   paciente: {
-    numeroDocumento: "123456",
+    numeroDocumento: "123123123",
     nombres: session.nombres,
     apellidos: session.apellidos,
     celular: "3001234567",
