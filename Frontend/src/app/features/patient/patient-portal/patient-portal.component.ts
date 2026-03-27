@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-
+import { Router } from '@angular/router';
 import { Appointment } from '../../../core/models/appointment.model';
 import { Doctor, TimeSlot } from '../../../core/models/doctor.model';
 import { AppointmentApiService } from '../../../core/services/appointment-api.service';
@@ -39,7 +39,8 @@ export class PatientPortalComponent implements OnInit {
     private readonly doctorApi: DoctorApiService,
     private readonly appointmentApi: AppointmentApiService,
     private readonly configurationApi: ConfigurationApiService,
-    private readonly sessionService: SessionService
+    private readonly sessionService: SessionService,
+    private readonly router: Router 
   ) {}
 
   ngOnInit(): void {
@@ -129,4 +130,10 @@ this.appointmentApi.create({
     this.availableSlots = [];
     this.confirmation = null;
   }
+
+  closeConfirmation(): void {
+  this.confirmation = null;
+  this.wizardStore.reset();
+  this.router.navigate(['/inicio']);
+}
 }

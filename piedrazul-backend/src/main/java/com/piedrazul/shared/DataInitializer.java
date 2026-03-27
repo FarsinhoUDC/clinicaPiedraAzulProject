@@ -6,19 +6,19 @@ import com.piedrazul.configuracion.dto.DisponibilidadMedicoRequest;
 import com.piedrazul.medicos.application.MedicoService;
 import com.piedrazul.medicos.dto.MedicoRequest;
 import com.piedrazul.medicos.dto.MedicoResponse;
+import com.piedrazul.sesion.domain.RolUsuario;
+import com.piedrazul.sesion.domain.Usuario;
+import com.piedrazul.sesion.infrastructure.persistence.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.Set;
 
-/**
- * Carga datos iniciales para desarrollo y pruebas.
- * Eliminar o comentar en produccion.
- */
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -26,10 +26,14 @@ public class DataInitializer implements CommandLineRunner {
 
     private final MedicoService medicoService;
     private final ConfiguracionService configuracionService;
+    private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) {
         log.info("--- Cargando datos iniciales ---");
+
+        crearAdmin();
 
         MedicoResponse medico1 = crearMedico(
                 "Carlos", "Gomez", "carlos.gomez@piedrazul.com", "1234", "Medicina General");
@@ -52,6 +56,24 @@ public class DataInitializer implements CommandLineRunner {
 
         log.info("--- Datos iniciales cargados. Medico1 id={}, Medico2 id={} ---",
                 medico1.getId(), medico2.getId());
+        log.info("--- Admin: admin@piedrazul.com / admin1234 ---");
+    }
+
+    private void crearAdmin() {
+        String correo = "admin@piedrazul.com";
+        if (usuarioRepository.existsByCorreo(correo)) {
+            log.info("Admin ya existe, omitiendo creacion.");
+            return;
+        }
+        Usuario admin = new Usuario();
+        admin.setNombres("Administrador");
+        admin.setApellidos("Piedrazul");
+        admin.setCorreo(correo);
+        admin.setContrasena(passwordEncoder.encode("admin1234"));
+        admin.setRol(RolUsuario.ADMIN);
+        admin.setActivo(true);
+        usuarioRepository.save(admin);
+        log.info("Admin creado: {}", correo);
     }
 
     private MedicoResponse crearMedico(String nombres, String apellidos,

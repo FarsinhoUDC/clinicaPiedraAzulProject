@@ -2,5 +2,6 @@ package com.piedrazul.sesion.domain;
 
 public enum RolUsuario {
     MEDICO,
-    PACIENTE
+    PACIENTE,
+    ADMIN
 }

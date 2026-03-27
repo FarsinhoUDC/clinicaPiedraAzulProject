@@ -51,8 +51,20 @@
       </div>
     </div>
 
-    <div class="portal-success" *ngIf="confirmation">
-      Cita confirmada con codigo {{ confirmation.id }} para {{ confirmation.nombreMedico }}.
+  <div class="confirm-modal-overlay" *ngIf="confirmation">
+  <div class="confirm-modal">
+    <div class="confirm-modal-icon">✓</div>
+    <h2 class="confirm-modal-title">¡Cita confirmada!</h2>
+    <div class="confirm-modal-body">
+      <p><strong>Código:</strong> {{ confirmation.id }}</p>
+      <p><strong>Médico:</strong> {{ confirmation.nombreMedico }}</p>
+      <p><strong>Fecha y hora:</strong> {{ confirmation.fechaHora | date:'dd/MM/yyyy HH:mm' }}</p>
     </div>
+    <button class="portal-primary confirm-modal-btn" type="button" (click)="closeConfirmation()">
+      Aceptar
+    </button>
+  </div>
+
+</div>
   </div>
 </section>
