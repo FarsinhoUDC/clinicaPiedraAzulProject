@@ -30,7 +30,7 @@ Sistema web de agendamiento de citas médicas para la clínica Piedrazul. Permit
 
 ---
 
-## ⚙️ Prerrequisitos
+## Prerrequisitos
 
 - Java 17+
 - Maven 3.8+
