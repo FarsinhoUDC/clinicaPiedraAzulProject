@@ -255,7 +255,7 @@ La protección se implementa con route guards funcionales en `auth.guard.ts`.
 
 ---
 
-## 🧪 Pruebas
+## Pruebas
 
 ### Backend
 
