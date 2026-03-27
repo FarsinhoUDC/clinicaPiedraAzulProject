@@ -1,0 +1,65 @@
+:root {
+  /* Palette de colores */
+  --color-primary-blue: #173250;
+  --color-secondary-blue-light: #b7c8d2;
+  --color-background-light: #eef4f8;
+  --color-white: #ffffff;
+  --color-accent-green: #5cb85c;
+  --color-accent-green-dark: #4cae4c;
+  --color-link-blue: #118a9b;
+  --color-input-border: #c8d7e0;
+  --color-input-focus-shadow: rgba(30, 195, 204, 0.15);
+  --color-text-dark: #305064;
+  --color-text-subtle: #7890a1;
+  --color-text-main: #173042;
+  --color-success-bg: #e7f8eb;
+  --color-success-text: #2da35a;
+  --color-error-text: #d32f2f;
+  --color-error-bg: #ffebee;
+
+  color-scheme: light;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background: #eaf0f5;
+  color: #173042;
+  overflow-x: hidden;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* Scrollbar estilos */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c8d7e0;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a0b5c5;
+}

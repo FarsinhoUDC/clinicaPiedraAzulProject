@@ -80,7 +80,7 @@ public class CitaController {
      * Detalle de una cita.
      * GET /api/citas/1
      */
-    @GetMapping("/{id}")
+    @GetMapping("/{id:\\d+}")
     public ResponseEntity<ApiResponse<CitaResponse>> obtener(@PathVariable Long id) {
         return ResponseEntity.ok(ApiResponse.ok(citaService.obtenerPorId(id)));
     }
