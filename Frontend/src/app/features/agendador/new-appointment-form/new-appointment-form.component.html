@@ -106,6 +106,9 @@
           <div class="slot-help" *ngIf="isLoadingSlots">Consultando franjas disponibles...</div>
           <div class="slot-help" *ngIf="!isLoadingSlots">{{ slotMessage }}</div>
           <span class="field-error" *ngIf="form.controls.hora.touched && form.controls.hora.invalid">Debe seleccionar una hora disponible.</span>
+          <div class="day-unavailable-msg" *ngIf="dayUnavailableMessage">
+             {{ dayUnavailableMessage }}
+          </div>
         </div>
 
         <div class="appointment-summary">

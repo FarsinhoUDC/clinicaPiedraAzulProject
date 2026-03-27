@@ -33,6 +33,9 @@
         <label>Fecha</label>
         <input type="date" [min]="minDate" [max]="maxDate" (change)="loadSlots(($any($event.target)).value)">
       </div>
+      <div class="day-unavailable-msg" *ngIf="dayUnavailableMessage">
+          {{ dayUnavailableMessage }}
+      </div>
 
       <div class="slot-row">
         <button class="slot-pill" type="button" *ngFor="let slot of availableSlots" (click)="selectSlot(slot)">

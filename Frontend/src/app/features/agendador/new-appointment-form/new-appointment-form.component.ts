@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
-
+import { ConfigurationApiService } from '../../../core/services/configuration-api.service';
+import { DoctorAvailability } from '../../../core/models/doctor.model';
 import { GENDER_OPTIONS } from '../../../core/constants/day-options';
 import { Appointment } from '../../../core/models/appointment.model';
 import { Doctor, TimeSlot } from '../../../core/models/doctor.model';
@@ -16,7 +16,7 @@ import { colombianCellphoneValidator } from '../../../shared/validators/custom-v
 @Component({
   selector: 'app-new-appointment-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './new-appointment-form.component.html',
   styleUrls: ['./new-appointment-form.component.css']
 })
@@ -34,6 +34,8 @@ export class NewAppointmentFormComponent implements OnInit {
     hora: ['', Validators.required]
   });
 
+  doctorAvailabilities: DoctorAvailability[] = [];
+  dayUnavailableMessage = '';
   doctors: Doctor[] = [];
   availableSlots: TimeSlot[] = [];
   selectedAppointment: Appointment | null = null;
@@ -53,13 +55,17 @@ export class NewAppointmentFormComponent implements OnInit {
     private readonly formBuilder: FormBuilder,
     private readonly appointmentApi: AppointmentApiService,
     private readonly doctorApi: DoctorApiService,
-    private readonly patientApi: PatientApiService
+    private readonly patientApi: PatientApiService,
+    private readonly configurationApi: ConfigurationApiService
   ) {}
 
   ngOnInit(): void {
     this.doctorApi.list().subscribe((doctors) => {
       this.doctors = doctors;
     });
+    this.configurationApi.listDoctorAvailability().subscribe((availabilities) => {
+    this.doctorAvailabilities = availabilities;
+  });
   }
 
   lookupPatient(): void {
@@ -85,12 +91,24 @@ export class NewAppointmentFormComponent implements OnInit {
     const medicoId = Number(this.form.controls.medicoId.value);
     const fecha = this.form.controls.fecha.value;
     this.errorMessage = '';
+    this.dayUnavailableMessage = '';
 
     if (!medicoId || !fecha) {
       this.availableSlots = [];
       this.slotMessage = 'Selecciona medico y fecha para cargar las horas disponibles.';
       return;
     }
+    const availability = this.doctorAvailabilities.find(a => a.medicoId === medicoId);
+    if (availability) {
+      const dayName = this.getDayName(fecha);
+      if (!availability.diasSemana.includes(dayName)) {
+        this.availableSlots = [];
+        this.form.controls.hora.setValue('');
+        this.slotMessage = '';
+        this.dayUnavailableMessage = `Este día no está disponible para este médico. Atiende los días: ${this.formatDays(availability.diasSemana)}.`;
+        return;
+    }
+  }
 
     this.isLoadingSlots = true;
     this.form.controls.hora.setValue('');
@@ -301,5 +319,17 @@ export class NewAppointmentFormComponent implements OnInit {
       nombres: parts.slice(0, -1).join(' '),
       apellidos: parts.slice(-1).join(' ')
     };
+  }
+  private getDayName(fecha: string): string {
+    const days = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
+    return days[new Date(`${fecha}T00:00:00`).getDay()];
+  }
+
+  private formatDays(days: string[]): string {
+    const labels: Record<string, string> = {
+      MONDAY: 'Lunes', TUESDAY: 'Martes', WEDNESDAY: 'Miércoles',
+      THURSDAY: 'Jueves', FRIDAY: 'Viernes', SATURDAY: 'Sábado', SUNDAY: 'Domingo'
+    };
+    return days.map(d => labels[d] ?? d).join(', ');
   }
 }

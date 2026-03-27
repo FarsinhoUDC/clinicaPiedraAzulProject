@@ -2,13 +2,14 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Appointment } from '../../../core/models/appointment.model';
-import { Doctor, TimeSlot } from '../../../core/models/doctor.model';
+import { Doctor, TimeSlot, DoctorAvailability } from '../../../core/models/doctor.model';
 import { AppointmentApiService } from '../../../core/services/appointment-api.service';
 import { ConfigurationApiService } from '../../../core/services/configuration-api.service';
 import { DoctorApiService } from '../../../core/services/doctor-api.service';
 import { SessionService } from '../../../core/services/session.service';
 import { BookingWizardStore } from '../../../core/state/booking-wizard.store';
 import { calculateWindowEndDate } from '../../../core/utils/slot-calculator.util';
+
 
 @Component({
   selector: 'app-patient-portal',
@@ -27,6 +28,8 @@ export class PatientPortalComponent implements OnInit {
   sessionName = '';
   minDate = new Date().toISOString().slice(0, 10);
   maxDate = this.minDate;
+  doctorAvailabilities: DoctorAvailability[] = [];
+  dayUnavailableMessage = '';
 
   readonly steps = [
     { index: 1, title: '1. Médico' },
@@ -54,6 +57,9 @@ export class PatientPortalComponent implements OnInit {
     this.configurationApi.getAppointmentWindow().subscribe((weeks) => {
       this.maxDate = calculateWindowEndDate(this.minDate, weeks);
     });
+      this.configurationApi.listDoctorAvailability().subscribe((availabilities) => {
+      this.doctorAvailabilities = availabilities;
+    });
   }
 
   filterBySpecialty(value: string): void {
@@ -74,20 +80,30 @@ export class PatientPortalComponent implements OnInit {
   }
 
   loadSlots(date: string): void {
-    const doctor = this.wizardStore.snapshot.selectedDoctor;
-    if (!doctor) {
+  const doctor = this.wizardStore.snapshot.selectedDoctor;
+  if (!doctor) return;
+
+  this.dayUnavailableMessage = '';
+  this.availableSlots = [];
+
+  const availability = this.doctorAvailabilities.find(a => Number(a.medicoId) === Number(doctor.id));
+  if (availability) {
+    const dayName = this.getDayName(date);
+    if (!availability.diasSemana.includes(dayName)) {
+      console.log('Doctor seleccionado:', doctor.id);
+      console.log('Disponibilidades:', this.doctorAvailabilities);
+      console.log('Availability encontrada:', availability);
+      this.wizardStore.update({ selectedDate: date, selectedSlot: null });
+      this.dayUnavailableMessage = `Este día no está disponible para este médico. Atiende los días: ${this.formatDays(availability.diasSemana)}.`;
       return;
     }
-
-    this.wizardStore.update({
-      selectedDate: date,
-      selectedSlot: null
-    });
-
-    this.appointmentApi.getAvailableSlots(doctor.id, date).subscribe((slots) => {
-      this.availableSlots = slots;
-    });
   }
+
+  this.wizardStore.update({ selectedDate: date, selectedSlot: null });
+  this.appointmentApi.getAvailableSlots(doctor.id, date).subscribe((slots) => {
+    this.availableSlots = slots;
+  });
+}
 
   selectSlot(slot: TimeSlot): void {
     this.wizardStore.update({
@@ -135,5 +151,17 @@ this.appointmentApi.create({
   this.confirmation = null;
   this.wizardStore.reset();
   this.router.navigate(['/inicio']);
+}
+private getDayName(fecha: string): string {
+  const days = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
+  return days[new Date(`${fecha}T00:00:00`).getDay()];
+}
+
+private formatDays(days: string[]): string {
+  const labels: Record<string, string> = {
+    MONDAY: 'Lunes', TUESDAY: 'Martes', WEDNESDAY: 'Miércoles',
+    THURSDAY: 'Jueves', FRIDAY: 'Viernes', SATURDAY: 'Sábado', SUNDAY: 'Domingo'
+  };
+  return days.map(d => labels[d] ?? d).join(', ');
 }
 }
