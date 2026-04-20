@@ -17,7 +17,6 @@ import java.util.Optional;
 public class PacienteController {
 
     private final PacienteService pacienteService;
-
     @GetMapping("/documento/{numero}")
     public ResponseEntity<ApiResponse<PacienteResponse>> buscarPorDocumento(
             @PathVariable String numero) {

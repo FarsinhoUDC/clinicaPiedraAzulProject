@@ -21,49 +21,49 @@ public class PacienteService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-public PacienteResponse crearOActualizar(PacienteRequest request) {
+    public PacienteResponse crearOActualizar(PacienteRequest request) {
 
-    // 1. Buscar por documento
-    Paciente paciente = pacienteRepository
-            .findByNumeroDocumento(request.getNumeroDocumento())
-            .orElse(null);
+        // 1. Buscar por documento
+        Paciente paciente = pacienteRepository
+                .findByNumeroDocumento(request.getNumeroDocumento())
+                .orElse(null);
 
-    if (paciente == null) {
+        if (paciente == null) {
 
-        Optional<Paciente> existentePorCorreo =
-                pacienteRepository.findByCorreo(request.getCorreo());
+            Optional<Paciente> existentePorCorreo =
+                    pacienteRepository.findByCorreo(request.getCorreo());
 
-        if (existentePorCorreo.isPresent()) {
+            if (existentePorCorreo.isPresent()) {
 
 
-            paciente = existentePorCorreo.get();
+                paciente = existentePorCorreo.get();
+
+            } else {
+
+    
+                paciente = Paciente.nuevo(
+                        request.getNombres(),
+                        request.getApellidos(),
+                        request.getCorreo(),
+                        passwordEncoder.encode(request.getContrasena()),
+                        request.getNumeroDocumento(),
+                        request.getCelular(),
+                        request.getGenero(),
+                        request.getFechaNacimiento()
+                );
+            }
 
         } else {
 
-   
-            paciente = Paciente.nuevo(
-                    request.getNombres(),
-                    request.getApellidos(),
-                    request.getCorreo(),
-                    passwordEncoder.encode(request.getContrasena()),
-                    request.getNumeroDocumento(),
-                    request.getCelular(),
-                    request.getGenero(),
-                    request.getFechaNacimiento()
-            );
+            paciente.setNombres(request.getNombres());
+            paciente.setApellidos(request.getApellidos());
+            paciente.setCelular(request.getCelular());
+            paciente.setGenero(request.getGenero());
+            paciente.setFechaNacimiento(request.getFechaNacimiento());
         }
 
-    } else {
-
-        paciente.setNombres(request.getNombres());
-        paciente.setApellidos(request.getApellidos());
-        paciente.setCelular(request.getCelular());
-        paciente.setGenero(request.getGenero());
-        paciente.setFechaNacimiento(request.getFechaNacimiento());
+        return toResponse(pacienteRepository.save(paciente));
     }
-
-    return toResponse(pacienteRepository.save(paciente));
-}
 
     @Transactional(readOnly = true)
     public Optional<PacienteResponse> buscarPorDocumento(String numeroDocumento) {

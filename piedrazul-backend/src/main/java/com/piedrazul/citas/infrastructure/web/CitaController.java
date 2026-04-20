@@ -31,10 +31,10 @@ public class CitaController {
      * HU-01: Listar citas de un medico en una fecha.
      * GET /api/citas?medicoId=1&fecha=2026-03-27
      */
-    @GetMapping
+    @GetMapping("/total/{medicoId}/{fecha}")
     public ResponseEntity<ApiResponse<List<CitaResponse>>> listar(
-            @RequestParam Long medicoId,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha) {
+            @PathVariable Long medicoId,
+            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha) {
         List<CitaResponse> citas = citaService.listarPorMedicoYFecha(medicoId, fecha);
         return ResponseEntity.ok(ApiResponse.ok("Total: " + citas.size(), citas));
     }

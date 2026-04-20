@@ -6,6 +6,8 @@ com/piedrazul/pacientes/dto/PacienteResponse.class
 com/piedrazul/pacientes/infrastructure/web/PacienteController.class
 com/piedrazul/sesion/infrastructure/persistence/UsuarioRepository.class
 com/piedrazul/citas/dto/CitaResponse.class
+com/piedrazul/reports/infrastructure/web/ReportController.class
+com/piedrazul/reports/infrastructure/converter/CSVConverter.class
 com/piedrazul/configuracion/dto/FranjaHorariaResponse.class
 com/piedrazul/pacientes/infrastructure/persistence/PacienteRepository.class
 com/piedrazul/medicos/application/MedicoService.class
@@ -29,6 +31,7 @@ com/piedrazul/citas/infrastructure/web/CitaController.class
 com/piedrazul/pacientes/domain/Paciente$PacienteBuilderImpl.class
 com/piedrazul/configuracion/domain/DisponibilidadMedico$DisponibilidadMedicoBuilder.class
 com/piedrazul/shared/exception/BusinessException.class
+com/piedrazul/reports/domain/Report.class
 com/piedrazul/sesion/dto/LoginRequest.class
 com/piedrazul/shared/exception/ResourceNotFoundException.class
 com/piedrazul/medicos/infrastructure/web/MedicoController.class
@@ -41,7 +44,9 @@ com/piedrazul/shared/DataInitializer.class
 com/piedrazul/configuracion/dto/DisponibilidadMedicoRequest.class
 com/piedrazul/citas/application/AgendamientoService.class
 com/piedrazul/medicos/infrastructure/persistence/MedicoRepository.class
+com/piedrazul/reports/application/service/IReportService.class
 com/piedrazul/sesion/domain/Usuario.class
+com/piedrazul/reports/application/converter/IReportConvert.class
 com/piedrazul/configuracion/domain/ConfiguracionSistema.class
 com/piedrazul/citas/application/CitaService.class
 com/piedrazul/sesion/application/SesionService.class
@@ -52,6 +57,7 @@ com/piedrazul/pacientes/dto/PacienteResponse$PacienteResponseBuilder.class
 com/piedrazul/configuracion/application/FranjaHorariaService.class
 com/piedrazul/medicos/domain/Medico$MedicoBuilder.class
 com/piedrazul/citas/infrastructure/persistence/CitaRepository.class
+com/piedrazul/reports/application/service/ReportServiceImp.class
 com/piedrazul/shared/CorsConfig$1.class
 com/piedrazul/configuracion/dto/ConfiguracionSistemaRequest.class
 com/piedrazul/shared/CorsConfig.class

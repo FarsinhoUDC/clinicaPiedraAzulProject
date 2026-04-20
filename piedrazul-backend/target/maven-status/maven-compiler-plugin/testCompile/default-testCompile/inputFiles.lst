@@ -1,4 +1,4 @@
-/home/javiersolanop777/Documentos/clinicaPiedraAzulProject/piedrazul-refactored/src/test/java/com/piedrazul/configuracion/application/FranjaHorariaServiceTest.java
-/home/javiersolanop777/Documentos/clinicaPiedraAzulProject/piedrazul-refactored/src/test/java/com/piedrazul/sesion/application/SesionServiceTest.java
-/home/javiersolanop777/Documentos/clinicaPiedraAzulProject/piedrazul-refactored/src/test/java/com/piedrazul/pacientes/application/PacienteServiceTest.java
-/home/javiersolanop777/Documentos/clinicaPiedraAzulProject/piedrazul-refactored/src/test/java/com/piedrazul/citas/application/CitaServiceTest.java
+/home/javiersolanop777/Documentos/clinicaPiedraAzulProject/piedrazul-backend/src/test/java/com/piedrazul/citas/application/CitaServiceTest.java
+/home/javiersolanop777/Documentos/clinicaPiedraAzulProject/piedrazul-backend/src/test/java/com/piedrazul/pacientes/application/PacienteServiceTest.java
+/home/javiersolanop777/Documentos/clinicaPiedraAzulProject/piedrazul-backend/src/test/java/com/piedrazul/configuracion/application/FranjaHorariaServiceTest.java
+/home/javiersolanop777/Documentos/clinicaPiedraAzulProject/piedrazul-backend/src/test/java/com/piedrazul/sesion/application/SesionServiceTest.java

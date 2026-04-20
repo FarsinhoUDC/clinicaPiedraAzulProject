@@ -61,6 +61,11 @@ configurada y credenciales de acceso:
 | POST | `/api/sesion/login` | Iniciar sesión (médico o paciente) |
 | GET  | `/api/sesion/usuario/{id}` | Consultar datos básicos de un usuario |
 
+### Reportes
+| Método | URL | Descripción |
+|--------|-----|-------------|
+| GET  | `/api/reportes/citas/{medicoId}/{fecha}` | Obtener el reporte de las citas de un medico en una fecha especifica |
+
 ### Médicos
 | Método | URL | Descripción |
 |--------|-----|-------------|
@@ -76,10 +81,10 @@ configurada y credenciales de acceso:
 ### Citas
 | Método | URL | Descripción |
 |--------|-----|-------------|
-| GET  | `/api/citas?medicoId=1&fecha=2026-03-27` | **HU-01** Listar citas del día |
+| GET  | `/api/citas/{medicoId}/{fecha}` | **HU-01** Listar citas del día |
 | POST | `/api/citas/agendador` | **HU-02** Crear cita (agendador) |
 | POST | `/api/citas/paciente` | **HU-03** Crear cita (paciente) |
-| GET  | `/api/citas/franjas/1?fecha=2026-03-27` | Ver franjas disponibles |
+| GET  | `/api/citas/franjas/{medicoId}?fecha=2026-03-27` | Ver franjas disponibles |
 | GET  | `/api/citas/{id}` | Detalle de una cita |
 
 ### Configuración
