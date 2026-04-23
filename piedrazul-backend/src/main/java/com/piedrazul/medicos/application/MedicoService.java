@@ -35,15 +35,16 @@ public class MedicoService {
 
     @Transactional
     public MedicoResponse crear(MedicoRequest request) {
-        if (medicoRepository.existsByCorreo(request.getCorreo())) {
+        if (medicoRepository.existsByNumeroDocumento(request.getNumeroDocumento())) {
             throw new BusinessException(
-                    "Ya existe un usuario registrado con el correo: " + request.getCorreo());
+                    "Ya existe un usuario registrado con el numero de documento: " + request.getNumeroDocumento());
         }
         Medico medico = Medico.nuevo(
                 request.getNombres(),
                 request.getApellidos(),
                 request.getCorreo(),
                 passwordEncoder.encode(request.getContrasena()),
+                request.getNumeroDocumento(),
                 request.getEspecialidad());
         return toResponse(medicoRepository.save(medico));
     }
@@ -51,6 +52,7 @@ public class MedicoService {
     public MedicoResponse toResponse(Medico m) {
         return MedicoResponse.builder()
                 .id(m.getId())
+                .numeroDocumento(m.getNumeroDocumento())
                 .nombres(m.getNombres())
                 .apellidos(m.getApellidos())
                 .correo(m.getCorreo())

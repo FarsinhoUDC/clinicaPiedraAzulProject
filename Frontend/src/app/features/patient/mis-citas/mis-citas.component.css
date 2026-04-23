@@ -1,0 +1,99 @@
+.mis-citas-page {
+  padding: 28px 34px 34px;
+}
+
+.mis-citas-card {
+  background: #eef4f8;
+  min-height: calc(100vh - 84px);
+  padding: 28px;
+}
+
+.mis-citas-header {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 18px;
+  color: #5b7486;
+}
+
+.mis-citas-header strong {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 2rem;
+  color: #173250;
+}
+
+.loading-state,
+.error-state {
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.loading-state {
+  color: #118a9b;
+}
+
+.error-state {
+  background: #ffeaea;
+  color: #c23b3b;
+}
+
+.empty-state {
+  background: #ffffff;
+  border: 1px dashed #c8d7e0;
+  border-radius: 16px;
+  padding: 40px 20px;
+  text-align: center;
+  color: #7790a0;
+}
+
+.citas-list {
+  display: grid;
+  gap: 16px;
+}
+
+.cita-card {
+  background: #ffffff;
+  border: 1px solid #dce6ed;
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 10px 22px rgba(30, 60, 82, 0.07);
+}
+
+.cita-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.cita-id {
+  font-weight: 700;
+  color: #173250;
+}
+
+.cita-status {
+  background: #e6f7f4;
+  color: #118a9b;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.cita-detail {
+  margin: 6px 0;
+  color: #526f81;
+}
+
+.cita-detail strong {
+  color: #315064;
+}
+
+@media (max-width: 720px) {
+  .mis-citas-page {
+    padding: 18px;
+  }
+
+  .mis-citas-card {
+    padding: 18px;
+  }
+}

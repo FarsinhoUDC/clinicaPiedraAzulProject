@@ -31,11 +31,17 @@ public class GlobalExceptionHandler {
             MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach(error -> {
-            String field = ((FieldError) error).getField();
+            String field = error instanceof FieldError
+                    ? ((FieldError) error).getField()
+                    : error.getObjectName();
             errors.put(field, error.getDefaultMessage());
         });
+        String message = errors.entrySet().stream()
+                .map(e -> e.getKey() + ": " + e.getValue())
+                .reduce((a, b) -> a + "; " + b)
+                .orElse("Errores de validación");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(ApiResponse.ok("Errores de validacion", errors));
+                .body(ApiResponse.error(message));
     }
 
     @ExceptionHandler(Exception.class)

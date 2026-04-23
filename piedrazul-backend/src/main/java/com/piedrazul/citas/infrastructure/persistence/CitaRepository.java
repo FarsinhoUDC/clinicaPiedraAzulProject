@@ -33,4 +33,14 @@ public interface CitaRepository extends JpaRepository<Cita, Long> {
             @Param("fin") LocalDateTime fin);
 
     boolean existsByMedicoIdAndFechaHora(Long medicoId, LocalDateTime fechaHora);
+
+    @Query("SELECT c FROM Cita c " +
+           "WHERE c.paciente.id = :pacienteId " +
+           "AND c.fechaHora >= :inicio " +
+           "AND c.fechaHora < :fin " +
+           "ORDER BY c.fechaHora ASC")
+    List<Cita> findByPacienteIdAndFecha(
+            @Param("pacienteId") Long pacienteId,
+            @Param("inicio") LocalDateTime inicio,
+            @Param("fin") LocalDateTime fin);
 }

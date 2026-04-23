@@ -48,6 +48,7 @@
       <div><strong>Medico:</strong> {{ wizardStore.snapshot.selectedDoctor.nombres }} {{ wizardStore.snapshot.selectedDoctor.apellidos }}</div>
       <div><strong>Fecha:</strong> {{ wizardStore.snapshot.selectedDate }}</div>
       <div><strong>Hora:</strong> {{ wizardStore.snapshot.selectedSlot.hora }}</div>
+      <div class="error-state" *ngIf="confirmError">{{ confirmError }}</div>
       <div class="portal-actions">
         <button class="portal-secondary" type="button" (click)="backToDoctorSelection()">Volver</button>
         <button class="portal-primary" type="button" (click)="confirmAppointment()">Confirmar</button>

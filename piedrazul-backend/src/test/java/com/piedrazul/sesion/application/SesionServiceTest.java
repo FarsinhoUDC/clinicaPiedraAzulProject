@@ -40,8 +40,7 @@ class SesionServiceTest {
 
     @BeforeEach
     void setUp() {
-        // Contraseña almacenada siempre como hash
-        medico = Medico.nuevo("Carlos", "Gomez", "carlos@test.com", HASH, "Medicina General");
+        medico = Medico.nuevo("Carlos", "Gomez", "carlos@test.com", HASH, "1234", "Medicina General");
         medico.setId(1L);
 
         paciente = Paciente.nuevo("Maria", "Lopez", "maria@test.com", HASH,
@@ -49,31 +48,30 @@ class SesionServiceTest {
         paciente.setId(2L);
 
         loginMedico = new LoginRequest();
-        loginMedico.setCorreo("carlos@test.com");
+        loginMedico.setNumeroDocumento("1234");
         loginMedico.setContrasena("clave123");
 
         loginPaciente = new LoginRequest();
-        loginPaciente.setCorreo("maria@test.com");
+        loginPaciente.setNumeroDocumento("12345");
         loginPaciente.setContrasena("clave456");
     }
 
     @Test
     @DisplayName("iniciarSesion - medico con credenciales correctas - retorna response con rol MEDICO")
     void iniciarSesion_medicoCredencialesCorrectas_retornaRolMedico() {
-        when(usuarioRepository.findByCorreo("carlos@test.com")).thenReturn(Optional.of(medico));
+        when(usuarioRepository.findByNumeroDocumento("1234")).thenReturn(Optional.of(medico));
         when(passwordEncoder.matches("clave123", HASH)).thenReturn(true);
 
         UsuarioResponse response = sesionService.iniciarSesion(loginMedico);
 
         assertThat(response.getRol()).isEqualTo(RolUsuario.MEDICO);
         assertThat(response.getNombres()).isEqualTo("Carlos");
-        assertThat(response.getCorreo()).isEqualTo("carlos@test.com");
     }
 
     @Test
     @DisplayName("iniciarSesion - paciente con credenciales correctas - retorna response con rol PACIENTE")
     void iniciarSesion_pacienteCredencialesCorrectas_retornaRolPaciente() {
-        when(usuarioRepository.findByCorreo("maria@test.com")).thenReturn(Optional.of(paciente));
+        when(usuarioRepository.findByNumeroDocumento("12345")).thenReturn(Optional.of(paciente));
         when(passwordEncoder.matches("clave456", HASH)).thenReturn(true);
 
         UsuarioResponse response = sesionService.iniciarSesion(loginPaciente);
@@ -83,12 +81,12 @@ class SesionServiceTest {
     }
 
     @Test
-    @DisplayName("iniciarSesion - correo no registrado - lanza ResourceNotFoundException")
-    void iniciarSesion_correoNoRegistrado_lanzaResourceNotFoundException() {
-        when(usuarioRepository.findByCorreo("desconocido@test.com")).thenReturn(Optional.empty());
+    @DisplayName("iniciarSesion - numero de documento no registrado - lanza ResourceNotFoundException")
+    void iniciarSesion_documentoNoRegistrado_lanzaResourceNotFoundException() {
+        when(usuarioRepository.findByNumeroDocumento("99999")).thenReturn(Optional.empty());
 
         LoginRequest req = new LoginRequest();
-        req.setCorreo("desconocido@test.com");
+        req.setNumeroDocumento("99999");
         req.setContrasena("cualquier");
 
         assertThatThrownBy(() -> sesionService.iniciarSesion(req))
@@ -100,7 +98,7 @@ class SesionServiceTest {
     @Test
     @DisplayName("iniciarSesion - contrasena incorrecta - lanza BusinessException")
     void iniciarSesion_contrasenaIncorrecta_lanzaBusinessException() {
-        when(usuarioRepository.findByCorreo("carlos@test.com")).thenReturn(Optional.of(medico));
+        when(usuarioRepository.findByNumeroDocumento("1234")).thenReturn(Optional.of(medico));
         when(passwordEncoder.matches("WRONG", HASH)).thenReturn(false);
 
         loginMedico.setContrasena("WRONG");
@@ -114,13 +112,12 @@ class SesionServiceTest {
     @DisplayName("iniciarSesion - usuario inactivo - lanza BusinessException antes de verificar contrasena")
     void iniciarSesion_usuarioInactivo_lanzaBusinessExceptionSinVerificarHash() {
         medico.setActivo(false);
-        when(usuarioRepository.findByCorreo("carlos@test.com")).thenReturn(Optional.of(medico));
+        when(usuarioRepository.findByNumeroDocumento("1234")).thenReturn(Optional.of(medico));
 
         assertThatThrownBy(() -> sesionService.iniciarSesion(loginMedico))
                 .isInstanceOf(BusinessException.class)
                 .hasMessageContaining("inactivo");
 
-        // No debe llegar a verificar la contraseña si el usuario está inactivo
         verify(passwordEncoder, never()).matches(anyString(), anyString());
     }
 

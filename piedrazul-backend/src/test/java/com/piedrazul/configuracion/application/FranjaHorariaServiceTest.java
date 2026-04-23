@@ -36,7 +36,7 @@ class FranjaHorariaServiceTest {
     void setUp() {
         // Medico construido con factory method — incluye campos heredados de Usuario
         Medico medico = Medico.nuevo("Carlos", "Gomez",
-                "carlos.gomez@test.com", "pass123", "Medicina General");
+                "carlos.gomez@test.com", "pass123", "1234", "Medicina General");
         medico.setId(1L);
 
         disponibilidad = DisponibilidadMedico.builder()

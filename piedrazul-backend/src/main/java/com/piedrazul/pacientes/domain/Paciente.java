@@ -27,9 +27,6 @@ import java.time.LocalDate;
 @SuperBuilder
 public class Paciente extends Usuario {
 
-    @Column(unique = true, nullable = false)
-    private String numeroDocumento;
-
     @Column(nullable = false)
     private String celular;
 

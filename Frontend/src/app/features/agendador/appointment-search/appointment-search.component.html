@@ -52,6 +52,12 @@
     <div class="loading-state" *ngIf="isLoading">Consultando citas del dia...</div>
     <div class="consult-error" *ngIf="errorMessage">{{ errorMessage }}</div>
 
+    <div class="consult-actions" *ngIf="appointments.length > 0">
+      <button type="button" class="export-button" (click)="downloadCSV()" [disabled]="!canDownload">
+        Descargar CSV
+      </button>
+    </div>
+
     <div class="consult-table-card" *ngIf="appointments.length > 0">
       <table class="consult-table">
         <thead>

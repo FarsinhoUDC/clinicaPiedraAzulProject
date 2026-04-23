@@ -1,7 +1,6 @@
 package com.piedrazul.pacientes.dto;
 
 import com.piedrazul.pacientes.domain.Genero;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -20,11 +19,8 @@ public class PacienteRequest {
     @NotBlank(message = "Los apellidos son requeridos")
     private String apellidos;
 
-    @NotBlank(message = "El correo es requerido")
-    @Email(message = "El correo no tiene un formato válido")
     private String correo;
 
-    @NotBlank(message = "La contraseña es requerida")
     private String contrasena;
 
     @NotBlank(message = "El celular es requerido")

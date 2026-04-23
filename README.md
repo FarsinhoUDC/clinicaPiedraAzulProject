@@ -71,11 +71,12 @@ La aplicación quedará disponible en `http://localhost:4200`.
 
 Al arrancar el backend se crean automáticamente los siguientes usuarios:
 
-| Rol | Correo | Contraseña |
-|---|---|---|
-| Administrador | `admin@piedrazul.com` | `admin1234` |
-| Médico (agendador) | `carlos.gomez@piedrazul.com` | `1234` |
-| Médico (agendador) | `laura.martinez@piedrazul.com` | `1234` |
+| Rol | Usuario | Contraseña |
+|-----|---------|-----------|
+| ADMIN | admin | admin1234 |
+| AGENDADOR | agendador | agendador1234 |
+| MEDICO | 1234 | 1234 |
+| MEDICO | 5678 | 5678 |
 
 Los pacientes se registran directamente desde la aplicación web.
 
@@ -100,7 +101,7 @@ piedrazul-backend/src/main/java/com/piedrazul/
 ├── sesion/                      ← Autenticación y gestión de usuarios
 │   ├── domain/
 │   │   ├── Usuario.java         ← Entidad base (herencia JOINED)
-│   │   └── RolUsuario.java      ← MEDICO | PACIENTE | ADMIN
+│   │   └── RolUsuario.java      ← MEDICO | PACIENTE | ADMIN | AGENDADOR
 │   ├── application/
 │   │   └── SesionService.java
 │   ├── dto/
@@ -209,9 +210,10 @@ Frontend/src/app/
 
 | Rol | Rutas habilitadas | Redirige si no tiene permiso |
 |---|---|---|
-| `MEDICO` (agendador) | `/agendador/consulta` · `/agendador/nuevaCita` | `/paciente/portal` o `/inicio` |
+| `MEDICO` | `/agendador/consulta` · `/agendador/nuevaCita` | `/paciente/portal` o `/inicio` |
+| `AGENDADOR` | `/agendador/consulta` · `/agendador/nuevaCita` | `/paciente/portal` o `/inicio` |
 | `PACIENTE` | `/paciente/portal` | `/agendador/consulta` o `/inicio` |
-| `ADMIN` | `/admin/disponibilidad` | `/agendador/consulta` o `/inicio` |
+| `ADMIN` | `/admin/disponibilidad` · `/agendador/consulta` | `/agendador/consulta` o `/inicio` |
 
 La protección se implementa con route guards funcionales en `auth.guard.ts`.
 
@@ -316,6 +318,7 @@ spring.jpa.hibernate.ddl-auto=validate
 | HU-02 | Agendador crea cita para paciente que contactó por WhatsApp |  Funcional |
 | HU-03 | Paciente agenda su cita directamente desde la web |  Funcional |
 | HU-04 | Administrador configura disponibilidad de médicos |  Funcional |
+| HU-05 | Exportar citas a CSV |  Funcional |
 
 ---
 

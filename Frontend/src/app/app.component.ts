@@ -76,10 +76,13 @@ export class AppComponent {
   }
 
   get brandName(): string {
-    if (this.isAdmin)     return 'Piedrazul Admin';
-    if (this.isAgendador) return 'Piedrazul Agendador';
-    if (this.isPaciente)  return 'Piedrazul Paciente';
-    return 'Piedrazul Agenda';
+    const user = this.getUser();
+    const rol = user?.rol?.toUpperCase() ?? '';
+    if (rol === 'ADMIN')       return 'Admin';
+    if (rol === 'MEDICO')      return 'Medico';
+    if (rol === 'AGENDADOR')   return 'Agendador';
+    if (rol === 'PACIENTE')   return 'Paciente';
+    return 'Agenda';
   }
 
   get userLabel(): string {

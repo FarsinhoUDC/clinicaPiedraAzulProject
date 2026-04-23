@@ -24,17 +24,16 @@ public class Medico extends Usuario {
 
     private String especialidad;
 
-    /**
-     * Factory method de conveniencia para crear un Medico con rol ya asignado.
-     */
     public static Medico nuevo(String nombres, String apellidos,
                                 String correo, String contrasena,
+                                String numeroDocumento,
                                 String especialidad) {
         Medico m = new Medico();
         m.setNombres(nombres);
         m.setApellidos(apellidos);
         m.setCorreo(correo);
         m.setContrasena(contrasena);
+        m.setNumeroDocumento(numeroDocumento);
         m.setRol(RolUsuario.MEDICO);
         m.setActivo(true);
         m.setEspecialidad(especialidad);

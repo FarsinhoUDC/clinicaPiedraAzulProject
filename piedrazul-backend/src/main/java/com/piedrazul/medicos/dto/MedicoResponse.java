@@ -8,6 +8,7 @@ import lombok.Data;
 public class MedicoResponse {
 
     private Long id;
+    private String numeroDocumento;
     private String nombres;
     private String apellidos;
     private String correo;

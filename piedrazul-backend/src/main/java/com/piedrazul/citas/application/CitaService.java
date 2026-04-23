@@ -55,6 +55,15 @@ public class CitaService {
                 .orElseThrow(() -> new ResourceNotFoundException("Cita", id));
     }
 
+    @Transactional(readOnly = true)
+    public List<CitaResponse> listarPorPaciente(Long pacienteId) {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime inicio = now.withHour(0).withMinute(0).withSecond(0);
+        LocalDateTime fin = now.plusMonths(12).withHour(0).withMinute(0).withSecond(0);
+        return citaRepository.findByPacienteIdAndFecha(pacienteId, inicio, fin)
+                .stream().map(this::toResponse).collect(Collectors.toList());
+    }
+
     public CitaResponse toResponse(Cita c) {
         return CitaResponse.builder()
                 .id(c.getId())

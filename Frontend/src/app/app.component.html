@@ -16,13 +16,15 @@
         <a class="app-menu-item" routerLink="/agendador/nuevaCita" routerLinkActive="active" (click)="closeMenu()">Nueva cita</a>
       </ng-container>
 
-      <!-- Menú del PACIENTE: solo su portal de agendamiento -->
+      <!-- Menú del PACIENTE: portal para agendar y mis citas -->
       <ng-container *ngIf="isPaciente">
-        <a class="app-menu-item" routerLink="/paciente/portal" routerLinkActive="active" (click)="closeMenu()">Mis citas</a>
+        <a class="app-menu-item" routerLink="/paciente/portal" routerLinkActive="active" (click)="closeMenu()">Agendar citas</a>
+        <a class="app-menu-item" routerLink="/paciente/mis-citas" routerLinkActive="active" (click)="closeMenu()">Mis citas</a>
       </ng-container>
 
-      <!-- Menú del ADMINISTRADOR: solo configuración del sistema -->
+      <!-- Menú del ADMINISTRADOR: consultar citas y configuración del sistema -->
       <ng-container *ngIf="isAdmin">
+        <a class="app-menu-item" routerLink="/agendador/consulta"  routerLinkActive="active" (click)="closeMenu()">Consultar citas</a>
         <a class="app-menu-item" routerLink="/admin/disponibilidad" routerLinkActive="active" (click)="closeMenu()">Configuración</a>
       </ng-container>
 

@@ -34,7 +34,7 @@ export class RegisterComponent {
     this.error = '';
     this.success = '';
 
-    if (!this.documentNumber || !this.firstName || !this.lastName || !this.phone || !this.email) {
+    if (!this.documentNumber || !this.firstName || !this.lastName || !this.phone) {
       this.error = 'Por favor completa todos los campos requeridos';
       return;
     }

@@ -1,6 +1,5 @@
 package com.piedrazul.medicos.dto;
 
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
@@ -13,8 +12,9 @@ public class MedicoRequest {
     @NotBlank(message = "Los apellidos son requeridos")
     private String apellidos;
 
-    @NotBlank(message = "El correo es requerido")
-    @Email(message = "El correo no tiene un formato válido")
+    @NotBlank(message = "El numero de documento es requerido")
+    private String numeroDocumento;
+
     private String correo;
 
     @NotBlank(message = "La contraseña es requerida")

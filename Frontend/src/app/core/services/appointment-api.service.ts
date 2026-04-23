@@ -19,11 +19,7 @@ export class AppointmentApiService {
   ) {}
 
   searchByDoctorAndDate(medicoId: number, fecha: string): Observable<Appointment[]> {
-    const params = new HttpParams()
-      .set('medicoId', medicoId)
-      .set('fecha', fecha);
-
-    return this.http.get<ApiResponse<Appointment[]>>(`${environment.apiBaseUrl}/citas`, { params }).pipe(
+    return this.http.get<ApiResponse<Appointment[]>>(`${environment.apiBaseUrl}/citas/total/${medicoId}/${fecha}`).pipe(
       map((response) => (response.data ?? []).slice().sort((left, right) => left.fechaHora.localeCompare(right.fechaHora)))
     );
   }
@@ -49,6 +45,12 @@ export class AppointmentApiService {
 
   create(request: AppointmentRequest, origin: AppointmentOrigin): Observable<Appointment> {
     return this.strategyResolver.resolve(origin).create(request);
+  }
+
+  getByPatient(patientId: number): Observable<Appointment[]> {
+    return this.http.get<ApiResponse<Appointment[]>>(`${environment.apiBaseUrl}/citas/paciente/${patientId}`).pipe(
+      map((response) => response.data ?? [])
+    );
   }
 
   private buildFallbackSlots(medicoId: number, fecha: string): Observable<TimeSlot[]> {

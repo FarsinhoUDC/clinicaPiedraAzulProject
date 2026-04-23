@@ -84,4 +84,11 @@ public class CitaController {
     public ResponseEntity<ApiResponse<CitaResponse>> obtener(@PathVariable Long id) {
         return ResponseEntity.ok(ApiResponse.ok(citaService.obtenerPorId(id)));
     }
+
+    @GetMapping("/paciente/{pacienteId}")
+    public ResponseEntity<ApiResponse<List<CitaResponse>>> listarPorPaciente(
+            @PathVariable Long pacienteId) {
+        List<CitaResponse> citas = citaService.listarPorPaciente(pacienteId);
+        return ResponseEntity.ok(ApiResponse.ok("Citas del paciente", citas));
+    }
 }

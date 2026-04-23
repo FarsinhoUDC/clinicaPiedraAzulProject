@@ -33,14 +33,14 @@ export const authGuard: CanActivateFn = () => {
 };
 
 /**
- * Protege rutas exclusivas del agendador (rol MEDICO).
+ * Protege rutas exclusivas del agendador (rol MEDICO, AGENDADOR o ADMIN).
  * Un paciente no puede acceder a la búsqueda o creación de citas del agendador.
  */
 export const agendadorGuard: CanActivateFn = () => {
   const router = inject(Router);
   if (!isAuthenticated()) return router.parseUrl('/inicio');
   const rol = getRole();
-  if (rol === 'MEDICO' || rol === 'AGENDADOR') return true;
+  if (rol === 'MEDICO' || rol === 'AGENDADOR' || rol === 'ADMIN') return true;
   // Paciente autenticado → redirige a su portal
   if (rol === 'PACIENTE') return router.parseUrl('/paciente/portal');
   return router.parseUrl('/inicio');

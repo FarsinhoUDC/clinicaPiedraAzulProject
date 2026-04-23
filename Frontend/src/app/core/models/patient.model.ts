@@ -37,4 +37,5 @@ export interface PatientSession {
   genero: Gender;
   expiresAt: string;
   verified: boolean;
+  patientId: number;
 }

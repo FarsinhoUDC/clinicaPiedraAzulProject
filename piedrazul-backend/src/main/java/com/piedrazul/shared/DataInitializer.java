@@ -34,11 +34,12 @@ public class DataInitializer implements CommandLineRunner {
         log.info("--- Cargando datos iniciales ---");
 
         crearAdmin();
+        crearAgendador();
 
         MedicoResponse medico1 = crearMedico(
-                "Carlos", "Gomez", "carlos.gomez@piedrazul.com", "1234", "Medicina General");
+                "Carlos", "Gomez", "1234", "Medicina General");
         MedicoResponse medico2 = crearMedico(
-                "Laura", "Martinez", "laura.martinez@piedrazul.com", "1234", "Fisioterapia");
+                "Laura", "Martinez", "5678", "Fisioterapia");
 
         configurarDisponibilidad(
                 medico1.getId(),
@@ -56,34 +57,52 @@ public class DataInitializer implements CommandLineRunner {
 
         log.info("--- Datos iniciales cargados. Medico1 id={}, Medico2 id={} ---",
                 medico1.getId(), medico2.getId());
-        log.info("--- Admin: admin@piedrazul.com / admin1234 ---");
+        log.info("--- Admin: admin / admin1234 ---");
+        log.info("--- Agendador: agendador / agendador1234 ---");
     }
 
     private void crearAdmin() {
-        String correo = "admin@piedrazul.com";
-        if (usuarioRepository.existsByCorreo(correo)) {
+        String numeroDocumento = "admin";
+        if (usuarioRepository.existsByNumeroDocumento(numeroDocumento)) {
             log.info("Admin ya existe, omitiendo creacion.");
             return;
         }
         Usuario admin = new Usuario();
         admin.setNombres("Administrador");
         admin.setApellidos("Piedrazul");
-        admin.setCorreo(correo);
+        admin.setNumeroDocumento(numeroDocumento);
         admin.setContrasena(passwordEncoder.encode("admin1234"));
         admin.setRol(RolUsuario.ADMIN);
         admin.setActivo(true);
         usuarioRepository.save(admin);
-        log.info("Admin creado: {}", correo);
+        log.info("Admin creado: {}", numeroDocumento);
+    }
+
+    private void crearAgendador() {
+        String numeroDocumento = "agendador";
+        if (usuarioRepository.existsByNumeroDocumento(numeroDocumento)) {
+            log.info("Agendador ya existe, omitiendo creacion.");
+            return;
+        }
+        Usuario agendador = new Usuario();
+        agendador.setNombres("Recepcionista");
+        agendador.setApellidos("Piedrazul");
+        agendador.setNumeroDocumento(numeroDocumento);
+        agendador.setContrasena(passwordEncoder.encode("agendador1234"));
+        agendador.setRol(RolUsuario.AGENDADOR);
+        agendador.setActivo(true);
+        usuarioRepository.save(agendador);
+        log.info("Agendador creado: {}", numeroDocumento);
     }
 
     private MedicoResponse crearMedico(String nombres, String apellidos,
-                                        String correo, String contrasena,
+                                        String numeroDocumento,
                                         String especialidad) {
         MedicoRequest req = new MedicoRequest();
         req.setNombres(nombres);
         req.setApellidos(apellidos);
-        req.setCorreo(correo);
-        req.setContrasena(contrasena);
+        req.setNumeroDocumento(numeroDocumento);
+        req.setContrasena(numeroDocumento);
         req.setEspecialidad(especialidad);
         return medicoService.crear(req);
     }

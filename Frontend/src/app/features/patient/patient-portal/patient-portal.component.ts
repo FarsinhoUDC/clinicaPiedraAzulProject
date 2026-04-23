@@ -30,6 +30,7 @@ export class PatientPortalComponent implements OnInit {
   maxDate = this.minDate;
   doctorAvailabilities: DoctorAvailability[] = [];
   dayUnavailableMessage = '';
+  confirmError = '';
 
   readonly steps = [
     { index: 1, title: '1. Médico' },
@@ -118,25 +119,26 @@ export class PatientPortalComponent implements OnInit {
     if (!snapshot.selectedDoctor || !snapshot.selectedDate || !snapshot.selectedSlot || !session) {
       return;
     }
-this.appointmentApi.create({
-  paciente: {
-    numeroDocumento: "123123123",
-    nombres: session.nombres,
-    apellidos: session.apellidos,
-    celular: "3001234567",
-    genero: "HOMBRE",
-    correo: session.correo,
-    contrasena: "123456",
-    fechaNacimiento: "2000-01-01"
-  },
-  medicoId: snapshot.selectedDoctor.id,
-  fechaHora: `${snapshot.selectedDate}T${snapshot.selectedSlot.hora}:00`
-}, 'PACIENTE').subscribe({
+    this.confirmError = '';
+    this.appointmentApi.create({
+      paciente: {
+        numeroDocumento: session.numeroDocumento,
+        nombres: session.nombres,
+        apellidos: session.apellidos,
+        celular: session.celular,
+        genero: session.genero,
+        correo: session.correo,
+        fechaNacimiento: null
+      },
+      medicoId: snapshot.selectedDoctor.id,
+      fechaHora: `${snapshot.selectedDate}T${snapshot.selectedSlot.hora}:00`
+    }, 'PACIENTE').subscribe({
       next: (appointment) => {
         this.confirmation = appointment;
       },
-      error: () => {
+      error: (err) => {
         this.confirmation = null;
+        this.confirmError = err.error?.message || 'No se pudo crear la cita. Intenta de nuevo.';
       }
     });
   }

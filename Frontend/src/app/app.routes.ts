@@ -7,6 +7,7 @@ import { NewAppointmentFormComponent } from './features/agendador/new-appointmen
 import { PatientPortalComponent } from './features/patient/patient-portal/patient-portal.component';
 import { PatientRegistrationComponent } from './features/patient/patient-registration/patient-registration.component';
 import { DashboardComponent } from './features/agendador/dashboard/dashboard.component';
+import { MisCitasComponent } from './features/patient/mis-citas/mis-citas.component';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'inicio' },
@@ -21,6 +22,7 @@ export const routes: Routes = [
 
   // Solo PACIENTE
   { path: 'paciente/portal', component: PatientPortalComponent, canActivate: [pacienteGuard] },
+  { path: 'paciente/mis-citas', component: MisCitasComponent, canActivate: [pacienteGuard] },
 
   // Solo ADMIN
   { path: 'admin/disponibilidad', component: AvailabilityConfigComponent, canActivate: [adminGuard] },

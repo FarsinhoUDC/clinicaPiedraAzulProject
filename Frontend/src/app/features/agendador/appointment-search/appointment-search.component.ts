@@ -95,6 +95,41 @@ export class AppointmentSearchComponent implements OnInit {
     }
   }
 
+  downloadCSV(): void {
+    if (this.appointments.length === 0) return;
+
+    const headers = ['ID', 'Paciente', 'Documento', 'Celular', 'Médico', 'Fecha', 'Hora', 'Estado', 'Origen'];
+    const rows = this.appointments.map(apt => [
+      apt.id,
+      apt.nombrePaciente,
+      apt.documentoPaciente,
+      apt.celularPaciente,
+      apt.nombreMedico,
+      apt.fechaHora.split('T')[0],
+      apt.fechaHora.split('T')[1]?.slice(0, 5),
+      apt.estado,
+      apt.origen
+    ]);
+
+    const csvContent = [headers, ...rows]
+      .map(row => row.map(cell => `"${cell ?? ''}"`).join(','))
+      .join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', `citas_${this.searchForm.value.fecha}_${this.searchForm.value.medicoId}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }
+
+  get canDownload(): boolean {
+    return this.appointments.length > 0;
+  }
+
   trackByAppointment(_: number, appointment: Appointment): number {
     return appointment.id;
   }

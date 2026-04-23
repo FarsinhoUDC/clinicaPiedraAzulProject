@@ -24,13 +24,13 @@
       
       <form (ngSubmit)="onLogin()">
         <div class="form-field">
-          <label for="correo">Usuario</label>
+          <label for="numeroDocumento">Número de Documento</label>
           <input 
             type="text" 
-            id="correo" 
-            [(ngModel)]="correo" 
-            name="correo"
-            placeholder="Ingresa tu usuario"
+            id="numeroDocumento" 
+            [(ngModel)]="numeroDocumento" 
+            name="numeroDocumento"
+            placeholder="Ingresa tu número de documento"
             [disabled]="cargando"
             required
           >

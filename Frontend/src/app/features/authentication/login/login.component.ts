@@ -17,7 +17,7 @@ export class LoginComponent {
   @Output() loginSuccess = new EventEmitter<void>();
   @Output() switchToRegister = new EventEmitter<void>();
   
-  correo: string = '';
+  numeroDocumento: string = '';
   contrasena: string = '';
   mostrarContrasena: boolean = false;
   cargando: boolean = false;
@@ -29,10 +29,10 @@ export class LoginComponent {
   ) {}
 
   onLogin(): void {
-    const correoTrimmed = this.correo ? this.correo.trim() : '';
+    const documentoTrimmed = this.numeroDocumento ? this.numeroDocumento.trim() : '';
     
-    if (!correoTrimmed || !this.contrasena) {
-      this.error = 'Por favor ingresa tu usuario y contraseña';
+    if (!documentoTrimmed || !this.contrasena) {
+      this.error = 'Por favor ingresa tu número de documento y contraseña';
       return;
     }
 
@@ -40,7 +40,7 @@ export class LoginComponent {
     this.error = '';
 
     const request: LoginRequest = {
-      correo: correoTrimmed,
+      numeroDocumento: documentoTrimmed,
       contrasena: this.contrasena
     };
 
@@ -62,7 +62,7 @@ export class LoginComponent {
       error: (err) => {
         this.cargando = false;
         if (err.status === 401 || err.status === 400) {
-          this.error = 'Usuario o contraseña incorrectos';
+          this.error = 'Número de documento o contraseña incorrectos';
         } else {
           this.error = 'Error al conectar con el servidor. Intenta más tarde.';
         }
@@ -71,13 +71,19 @@ export class LoginComponent {
   }
 
   private guardarSesion(user: LoginResponse): void {
+    const pacienteId = user.rol === 'PACIENTE' ? user.id : null;
     const sessionData = {
       id: user.id,
+      numeroDocumento: user.numeroDocumento,
       nombres: user.nombres,
       apellidos: user.apellidos,
       correo: user.correo,
       rol: user.rol,
-      activo: user.activo
+      activo: user.activo,
+      patientId: pacienteId,
+      patientName: `${user.nombres} ${user.apellidos}`,
+      celular: user.celular || '',
+      genero: (user.genero || 'HOMBRE') as 'HOMBRE' | 'MUJER' | 'OTRO'
     };
     localStorage.setItem('piedrazul_user', JSON.stringify(sessionData));
   }

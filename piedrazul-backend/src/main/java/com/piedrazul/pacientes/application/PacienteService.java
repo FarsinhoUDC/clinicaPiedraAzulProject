@@ -23,44 +23,27 @@ public class PacienteService {
     @Transactional
     public PacienteResponse crearOActualizar(PacienteRequest request) {
 
-        // 1. Buscar por documento
-        Paciente paciente = pacienteRepository
-                .findByNumeroDocumento(request.getNumeroDocumento())
-                .orElse(null);
+        Optional<Paciente> existente = pacienteRepository
+                .findByNumeroDocumento(request.getNumeroDocumento());
 
-        if (paciente == null) {
-
-            Optional<Paciente> existentePorCorreo =
-                    pacienteRepository.findByCorreo(request.getCorreo());
-
-            if (existentePorCorreo.isPresent()) {
-
-
-                paciente = existentePorCorreo.get();
-
-            } else {
-
-    
-                paciente = Paciente.nuevo(
-                        request.getNombres(),
-                        request.getApellidos(),
-                        request.getCorreo(),
-                        passwordEncoder.encode(request.getContrasena()),
-                        request.getNumeroDocumento(),
-                        request.getCelular(),
-                        request.getGenero(),
-                        request.getFechaNacimiento()
-                );
-            }
-
-        } else {
-
-            paciente.setNombres(request.getNombres());
-            paciente.setApellidos(request.getApellidos());
-            paciente.setCelular(request.getCelular());
-            paciente.setGenero(request.getGenero());
-            paciente.setFechaNacimiento(request.getFechaNacimiento());
+        if (existente.isPresent()) {
+            return toResponse(existente.get());
         }
+
+        String encodedPassword = request.getContrasena() != null
+                ? passwordEncoder.encode(request.getContrasena())
+                : passwordEncoder.encode("DEFAULT_PASS");
+
+        Paciente paciente = Paciente.nuevo(
+                    request.getNombres(),
+                    request.getApellidos(),
+                    request.getCorreo(),
+                    encodedPassword,
+                    request.getNumeroDocumento(),
+                    request.getCelular(),
+                    request.getGenero(),
+                    request.getFechaNacimiento()
+            );
 
         return toResponse(pacienteRepository.save(paciente));
     }

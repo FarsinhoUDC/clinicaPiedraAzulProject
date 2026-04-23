@@ -43,13 +43,15 @@ tipo de usuario sin depender de los módulos `medicos` o `pacientes`.
   - JDBC URL: `jdbc:h2:mem:piedrazuldb`
   - User: `sa` / Password: (vacío)
 
-Al arrancar, `DataInitializer` crea dos médicos de prueba con disponibilidad
-configurada y credenciales de acceso:
+Al arrancar, `DataInitializer` crea usuarios de prueba con disponibilidad
+configurada para médicos y credenciales de acceso:
 
-| Correo                          | Contraseña | Especialidad      |
-|---------------------------------|------------|-------------------|
-| carlos.gomez@piedrazul.com      | 1234       | Medicina General  |
-| laura.martinez@piedrazul.com    | 1234       | Fisioterapia      |
+| Rol | Usuario | Contraseña |
+|-----|---------|----------|
+| ADMIN | admin | admin1234 |
+| AGENDADOR | agendador | agendador1234 |
+| MEDICO | 1234 | 1234 |
+| MEDICO | 5678 | 5678 |
 
 ---
 
@@ -58,8 +60,16 @@ configurada y credenciales de acceso:
 ### Sesión
 | Método | URL | Descripción |
 |--------|-----|-------------|
-| POST | `/api/sesion/login` | Iniciar sesión (médico o paciente) |
+| POST | `/api/sesion/login` | Iniciar sesión (admin, agendador, médico o paciente) |
 | GET  | `/api/sesion/usuario/{id}` | Consultar datos básicos de un usuario |
+
+### Roles de usuario
+| Rol | Descripción |
+|-----|-------------|
+| ADMIN | Configuración del sistema |
+| AGENDADOR | Crear y consultar citas |
+| MEDICO | Crear y consultar citas |
+| PACIENTE | Agendar sus propias citas |
 
 ### Reportes
 | Método | URL | Descripción |
@@ -102,7 +112,7 @@ configurada y credenciales de acceso:
 
 ```json
 {
-  "correo": "carlos.gomez@piedrazul.com",
+  "numeroDocumento": "1234",
   "contrasena": "1234"
 }
 ```

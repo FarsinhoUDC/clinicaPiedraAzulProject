@@ -40,7 +40,7 @@ class CitaServiceTest {
     void setUp() {
         // Medico construido con factory method — incluye campos heredados de Usuario
         medico = Medico.nuevo("Juan", "Perez",
-                "juan.perez@test.com", "pass123", "General");
+                "juan.perez@test.com", "pass123", "1234", "General");
         medico.setId(1L);
 
         // Paciente construido con factory method — incluye campos heredados de Usuario

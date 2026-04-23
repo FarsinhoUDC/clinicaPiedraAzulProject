@@ -37,10 +37,13 @@ public class Usuario {
     @Column(nullable = false)
     private String apellidos;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
+    private String numeroDocumento;
+
+    @Column(nullable = true)
     private String correo;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String contrasena;
 
     @Enumerated(EnumType.STRING)

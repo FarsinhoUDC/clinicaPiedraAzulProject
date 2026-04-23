@@ -68,15 +68,17 @@ export class PatientRegistrationComponent {
       correo: value.correo ?? '',
       fechaNacimiento: null
     }).subscribe({
-      next: () => {
+      next: (patient) => {
         this.sessionService.saveSession({
+          id: patient.id,
           correo: value.correo ?? '',
           patientName: `${value.nombres} ${value.apellidos}`,
           numeroDocumento: value.numeroDocumento ?? '',
           nombres: value.nombres ?? '',
           apellidos: value.apellidos ?? '',
           celular: value.celular ?? '',
-          genero: (value.genero ?? 'OTRO') as 'HOMBRE' | 'MUJER' | 'OTRO'
+          genero: (value.genero ?? 'OTRO') as 'HOMBRE' | 'MUJER' | 'OTRO',
+          patientId: patient.id
         });
         this.message = 'Cuenta registrada. ';
         void this.router.navigateByUrl('/paciente/portal');

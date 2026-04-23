@@ -12,11 +12,13 @@ interface UserSession {
   correo: string;
   rol: string;
   activo: boolean;
+  patientId?: number | null;
 }
 
 @Injectable({ providedIn: 'root' })
 export class SessionService {
   saveSession(sessionInput: {
+    id: number;
     correo: string;
     patientName: string;
     numeroDocumento: string;
@@ -24,12 +26,14 @@ export class SessionService {
     apellidos: string;
     celular: string;
     genero: Gender;
+    patientId?: number | null;
   }): void {
     const expiresAt = new Date(Date.now() + (environment.sessionHours * 60 * 60 * 1000)).toISOString();
     const session: PatientSession = {
       ...sessionInput,
       expiresAt,
-      verified: true
+      verified: true,
+      patientId: sessionInput.patientId ?? sessionInput.id
     };
     localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(session));
   }

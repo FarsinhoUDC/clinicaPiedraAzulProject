@@ -3,11 +3,12 @@
 Single Page Application en Angular organizada por capas para el sprint funcional de:
 
 - HU-01 Consulta de citas por médico y fecha
-- HU-02 Creación de cita desde WhatsApp
+- HU-02 Creación de cita desde agendador
 - HU-03a Registro del paciente
 - HU-03b Portal de autoagendamiento en 3 pasos
 - HU-04a Configuración de ventana de agendamiento
 - HU-04b Configuración de disponibilidad médica
+- HU-05 Exportar citas a CSV
 
 ## Arquitectura
 
