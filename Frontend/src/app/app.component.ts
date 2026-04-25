@@ -1,130 +1,130 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './core/components/header/header.component';
 import { LoginComponent } from './features/authentication/login/login.component';
 import { RegisterComponent } from './features/authentication/register/register.component';
-
-const SESSION_KEY = 'piedrazul_user';
-
-interface UserSession {
-  id: number;
-  nombres: string;
-  apellidos: string;
-  correo: string;
-  rol: string;
-  activo: boolean;
-}
+import { AuthService } from './core/services/auth.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive, HeaderComponent, LoginComponent, RegisterComponent],
+  imports: [
+    CommonModule,
+    RouterOutlet,
+    RouterLink,
+    RouterLinkActive,
+    HeaderComponent,
+    LoginComponent,
+    RegisterComponent
+  ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   menuOpen = false;
-  showLoginModal = false;
+  showLoginModal    = false;
   showRegisterModal = false;
 
-  constructor(private router: Router) {}
+  constructor(
+    private readonly auth: AuthService,
+    private readonly router: Router
+  ) {}
 
-  // ── Helpers de sesión ──────────────────────────────────────────
-
-  private getUser(): UserSession | null {
-    const raw = localStorage.getItem(SESSION_KEY);
-    if (!raw) return null;
-    try { return JSON.parse(raw) as UserSession; } catch { return null; }
+  /**
+   * Al arrancar la app, si Keycloak ya detectó una sesión SSO activa,
+   * redirigimos directamente al dashboard del rol — elimina la pantalla blanca.
+   */
+  ngOnInit(): void {
+    if (this.auth.isAuthenticated()) {
+      this.auth.redirectToRoleHome();
+    }
   }
 
-  private getRol(): string {
-    return this.getUser()?.rol?.toUpperCase() ?? '';
-  }
-
-  // ── Propiedades de rol ─────────────────────────────────────────
+  // ── Propiedades de sesión (Keycloak, NO localStorage) ────────────────────
 
   get isLoggedIn(): boolean {
-    const user = this.getUser();
-    return !!(user?.id && user?.activo === true);
+    return this.auth.isAuthenticated();
   }
 
-  /** Solo el médico/agendador ve las opciones de consulta y creación de citas */
-  get isAgendador(): boolean {
-    const rol = this.getRol();
-    return rol === 'MEDICO' || rol === 'AGENDADOR';
-  }
-
-  /** Solo el administrador ve la configuración del sistema */
-  get isAdmin(): boolean {
-    return this.getRol() === 'ADMIN';
-  }
-
-  /** Solo el paciente ve el portal de agendamiento propio */
-  get isPaciente(): boolean {
-    return this.getRol() === 'PACIENTE';
-  }
-
-  // ── UI helpers ─────────────────────────────────────────────────
-
+  /** El sidebar solo se muestra cuando hay sesión activa */
   get showSidebar(): boolean {
-    return this.isLoggedIn;
+    return this.auth.isAuthenticated();
   }
 
+  /** El header siempre es visible */
   get showHeader(): boolean {
     return true;
   }
 
+  /** MEDICO y AGENDADOR comparten la vista de gestión de citas */
+  get isAgendador(): boolean {
+    const rol = this.auth.getRole();
+    return rol === 'MEDICO' || rol === 'AGENDADOR';
+  }
+
+  get isAdmin(): boolean {
+    return this.auth.getRole() === 'ADMIN';
+  }
+
+  get isPaciente(): boolean {
+    return this.auth.getRole() === 'PACIENTE';
+  }
+
+  get isMedico(): boolean {
+    return this.auth.getRole() === 'MEDICO';
+  }
+
   get brandName(): string {
-    const user = this.getUser();
-    const rol = user?.rol?.toUpperCase() ?? '';
-    if (rol === 'ADMIN')       return 'Admin';
-    if (rol === 'MEDICO')      return 'Medico';
-    if (rol === 'AGENDADOR')   return 'Agendador';
-    if (rol === 'PACIENTE')   return 'Paciente';
-    return 'Agenda';
+    const rol = this.auth.getRole();
+    if (rol === 'ADMIN')     return 'Admin';
+    if (rol === 'MEDICO')    return 'Médico';
+    if (rol === 'AGENDADOR') return 'Agendador';
+    if (rol === 'PACIENTE')  return 'Paciente';
+    return 'Piedrazul';
   }
 
   get userLabel(): string {
-    const user = this.getUser();
-    if (!user) return '';
-    return `${user.nombres} ${user.apellidos}`;
+    return this.auth.getFullName() || this.auth.getUsername();
   }
 
   get userInitials(): string {
-    const user = this.getUser();
-    if (!user) return '';
-    const nombre  = user.nombres.split(' ').map(n => n.charAt(0).toUpperCase()).join('');
-    const apellido = user.apellidos.split(' ')[0]?.charAt(0).toUpperCase() ?? '';
-    return nombre + apellido;
+    const name = this.auth.getFullName();
+    if (!name) return this.auth.getUsername().substring(0, 2).toUpperCase();
+    return name
+      .split(' ')
+      .filter(w => w.length > 0)
+      .map(w => w[0].toUpperCase())
+      .join('')
+      .substring(0, 3);
   }
 
-  // ── Acciones ───────────────────────────────────────────────────
+  
 
-  toggleMenu():  void { this.menuOpen = !this.menuOpen; }
-  closeMenu():   void { this.menuOpen = false; }
+  toggleMenu(): void { this.menuOpen = !this.menuOpen; }
+  closeMenu():  void { this.menuOpen = false; }
+
+ 
 
   openLoginModal():    void { this.showLoginModal = true; }
   closeLoginModal():   void { this.showLoginModal = false; }
   openRegisterModal(): void { this.showRegisterModal = true; }
-  closeRegisterModal():void { this.showRegisterModal = false; }
+  closeRegisterModal(): void { this.showRegisterModal = false; }
 
+  /** Llamado cuando LoginComponent emite loginSuccess. */
   onLoginSuccess(): void {
     this.showLoginModal = false;
-    const rol = this.getRol();
-    if (rol === 'PACIENTE')                      this.router.navigate(['/paciente/portal']);
-    else if (rol === 'ADMIN')                    this.router.navigate(['/admin/disponibilidad']);
-    else /* MEDICO / AGENDADOR */                this.router.navigate(['/agendador/consulta']);
+    this.auth.redirectToRoleHome();
   }
 
+  /** Llamado cuando RegisterComponent emite registerSuccess. */
   onRegisterSuccess(): void {
     this.showRegisterModal = false;
     this.router.navigate(['/inicio']);
   }
 
-  logout(): void {
-    localStorage.removeItem(SESSION_KEY);
-    localStorage.removeItem('piedrazul.patient.session');
-    window.location.href = '/inicio';
-  }
+
+
+  login():  void { this.auth.login(); }
+  logout(): void { this.auth.logout(); }
 }

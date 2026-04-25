@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <!--
+      Este archivo es requerido por keycloak-js para renovar el token
+      silenciosamente mediante un iframe, sin redirigir al usuario.
+      Debe estar en src/assets/ y ser accesible desde el navegador.
+    -->
+    <script>
+      parent.postMessage(location.href, location.origin);
+    </script>
+  </body>
+</html>

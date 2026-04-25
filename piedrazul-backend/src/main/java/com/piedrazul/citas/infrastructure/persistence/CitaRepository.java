@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
+
 import java.util.List;
 
 public interface CitaRepository extends JpaRepository<Cita, Long> {
