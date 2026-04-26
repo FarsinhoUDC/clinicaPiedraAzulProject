@@ -4,9 +4,9 @@ import { Router } from '@angular/router';
 import { Appointment } from '../../../core/models/appointment.model';
 import { Doctor, TimeSlot, DoctorAvailability } from '../../../core/models/doctor.model';
 import { AppointmentApiService } from '../../../core/services/appointment-api.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { ConfigurationApiService } from '../../../core/services/configuration-api.service';
 import { DoctorApiService } from '../../../core/services/doctor-api.service';
-import { SessionService } from '../../../core/services/session.service';
 import { BookingWizardStore } from '../../../core/state/booking-wizard.store';
 import { calculateWindowEndDate } from '../../../core/utils/slot-calculator.util';
 
@@ -43,12 +43,13 @@ export class PatientPortalComponent implements OnInit {
     private readonly doctorApi: DoctorApiService,
     private readonly appointmentApi: AppointmentApiService,
     private readonly configurationApi: ConfigurationApiService,
-    private readonly sessionService: SessionService,
-    private readonly router: Router 
+    private readonly auth: AuthService,
+    private readonly router: Router
   ) {}
 
   ngOnInit(): void {
-    this.sessionName = this.sessionService.getSession()?.patientName ?? 'Paciente';
+    // Nombre del paciente desde el JWT (preferred_username = nro. documento)
+    this.sessionName = this.auth.getFullName() || this.auth.getUsername() || 'Paciente';
     this.doctorApi.list().subscribe((doctors) => {
       this.doctors = doctors;
       this.filteredDoctors = doctors;
@@ -115,19 +116,23 @@ export class PatientPortalComponent implements OnInit {
 
   confirmAppointment(): void {
     const snapshot = this.wizardStore.snapshot;
-    const session = this.sessionService.getSession();
-    if (!snapshot.selectedDoctor || !snapshot.selectedDate || !snapshot.selectedSlot || !session) {
+    // Leer datos del paciente directamente del JWT de Keycloak
+    const numeroDocumento = this.auth.getUsername();  // preferred_username = nro. documento
+    const nombres         = this.auth.getFirstName(); // given_name de Keycloak
+    const apellidos       = this.auth.getLastName();  // family_name de Keycloak
+
+    if (!snapshot.selectedDoctor || !snapshot.selectedDate || !snapshot.selectedSlot || !numeroDocumento) {
       return;
     }
     this.confirmError = '';
     this.appointmentApi.create({
       paciente: {
-        numeroDocumento: session.numeroDocumento,
-        nombres: session.nombres,
-        apellidos: session.apellidos,
-        celular: session.celular,
-        genero: session.genero,
-        correo: session.correo,
+        numeroDocumento,
+        nombres:         nombres   || numeroDocumento, // fallback: usar documento si no hay nombre
+        apellidos:       apellidos || '',
+        celular:         null as any,
+        genero:          null as any,
+        correo:          '',
         fechaNacimiento: null
       },
       medicoId: snapshot.selectedDoctor.id,

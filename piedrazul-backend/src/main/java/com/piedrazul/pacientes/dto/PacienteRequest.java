@@ -2,11 +2,17 @@ package com.piedrazul.pacientes.dto;
 
 import com.piedrazul.pacientes.domain.Genero;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.time.LocalDate;
 
+/**
+ * DTO para crear/identificar un paciente al agendar una cita.
+ *
+ * Con Keycloak, los usuarios solo tienen first_name y last_name;
+ * los campos celular y genero son opcionales para no bloquear
+ * el agendamiento. El backend los preserva si ya existen en BD.
+ */
 @Data
 public class PacienteRequest {
 
@@ -23,10 +29,10 @@ public class PacienteRequest {
 
     private String contrasena;
 
-    @NotBlank(message = "El celular es requerido")
+    // Opcional — no disponible en el JWT de Keycloak
     private String celular;
 
-    @NotNull(message = "El genero es requerido")
+    // Opcional — no disponible en el JWT de Keycloak
     private Genero genero;
 
     private LocalDate fechaNacimiento;

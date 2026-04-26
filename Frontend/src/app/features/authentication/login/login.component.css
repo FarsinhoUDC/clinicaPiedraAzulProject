@@ -167,26 +167,67 @@
 
 .login-button {
   width: 100%;
-  min-height: 48px;
+  min-height: 54px;
   border: none;
   border-radius: 10px;
   background: var(--color-accent-green);
   color: var(--color-white);
-  font-size: clamp(0.875rem, 0.6vw + 0.7rem, 1rem);
+  font-size: clamp(1rem, 0.8vw + 0.8rem, 1.1rem);
   font-weight: 700;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
   margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 15px rgba(92, 184, 92, 0.35);
 }
 
 .login-button:hover:not(:disabled) {
   background: var(--color-accent-green-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(92, 184, 92, 0.45);
 }
 
 .login-button:disabled {
   opacity: 0.7;
   cursor: not-allowed;
 }
+
+/* ── Info box (credenciales para adultos mayores) ─────────────── */
+.info-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+  background: #f0f7ff;
+  border: 1px solid #c3daf9;
+  border-radius: 8px;
+  padding: 0.875rem 1rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  color: #305064;
+  line-height: 1.5;
+}
+
+.info-icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* ── Spinner ─────────────────────────────────────────────────── */
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255,255,255,0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
 
 .register-prompt {
   margin-top: 24px;

@@ -66,10 +66,17 @@ public class ConfiguracionService {
 
     private DisponibilidadMedicoResponse toResponse(DisponibilidadMedico d) {
         Medico m = d.getMedico();
+        // Null-safety: el médico puede estar ausente si hay registros huérfanos
+        String nombreMedico = (m != null)
+                ? ((m.getNombres() != null ? m.getNombres() : "") + " "
+                   + (m.getApellidos() != null ? m.getApellidos() : "")).trim()
+                : "Médico no asignado";
+        Long medicoId = (m != null) ? m.getId() : null;
+
         return DisponibilidadMedicoResponse.builder()
                 .id(d.getId())
-                .medicoId(m.getId())
-                .nombreMedico(m.getNombres() + " " + m.getApellidos())
+                .medicoId(medicoId)
+                .nombreMedico(nombreMedico)
                 .diasSemana(d.getDiasSemana())
                 .horaInicio(d.getHoraInicio())
                 .horaFin(d.getHoraFin())

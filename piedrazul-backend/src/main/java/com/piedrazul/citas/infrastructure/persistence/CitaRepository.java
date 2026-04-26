@@ -43,4 +43,14 @@ public interface CitaRepository extends JpaRepository<Cita, Long> {
             @Param("pacienteId") Long pacienteId,
             @Param("inicio") LocalDateTime inicio,
             @Param("fin") LocalDateTime fin);
+
+    /**
+     * Busca citas por número de documento del paciente.
+     * Usado en el endpoint /api/citas/mis-citas con JWT de Keycloak.
+     */
+    @Query("SELECT c FROM Cita c " +
+           "WHERE c.paciente.numeroDocumento = :numeroDocumento " +
+           "ORDER BY c.fechaHora ASC")
+    List<Cita> findByPacienteNumeroDocumento(
+            @Param("numeroDocumento") String numeroDocumento);
 }

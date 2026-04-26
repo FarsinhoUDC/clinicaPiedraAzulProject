@@ -53,6 +53,17 @@ export class AppointmentApiService {
     );
   }
 
+  /**
+   * Obtiene las citas del paciente autenticado.
+   * El backend extrae el número de documento del JWT (preferred_username),
+   * por lo que no se requiere ningún ID numérico interno.
+   */
+  getMisCitas(): Observable<Appointment[]> {
+    return this.http.get<ApiResponse<Appointment[]>>(`${environment.apiBaseUrl}/citas/mis-citas`).pipe(
+      map((response) => response.data ?? [])
+    );
+  }
+
   private buildFallbackSlots(medicoId: number, fecha: string): Observable<TimeSlot[]> {
     return this.configurationApi.listDoctorAvailability().pipe(
       switchMap((items) => {

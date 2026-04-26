@@ -64,6 +64,16 @@ public class CitaService {
                 .stream().map(this::toResponse).collect(Collectors.toList());
     }
 
+    /**
+     * Busca las citas de un paciente por su número de documento (preferred_username de Keycloak).
+     * Incluye citas pasadas y futuras en una ventana de 12 meses hacia atrás y adelante.
+     */
+    @Transactional(readOnly = true)
+    public List<CitaResponse> listarPorDocumentoPaciente(String numeroDocumento) {
+        return citaRepository.findByPacienteNumeroDocumento(numeroDocumento)
+                .stream().map(this::toResponse).collect(Collectors.toList());
+    }
+
     public CitaResponse toResponse(Cita c) {
         return CitaResponse.builder()
                 .id(c.getId())

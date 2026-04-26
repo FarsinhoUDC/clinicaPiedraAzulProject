@@ -4,6 +4,7 @@ import com.piedrazul.pacientes.domain.Paciente;
 import com.piedrazul.pacientes.dto.PacienteRequest;
 import com.piedrazul.pacientes.dto.PacienteResponse;
 import com.piedrazul.pacientes.infrastructure.persistence.PacienteRepository;
+import com.piedrazul.pacientes.infrastructure.KeycloakService;
 import com.piedrazul.shared.exception.BusinessException;
 import com.piedrazul.shared.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ public class PacienteService {
 
     private final PacienteRepository pacienteRepository;
     private final PasswordEncoder passwordEncoder;
+    private final KeycloakService keycloakService;
 
     @Transactional
     public PacienteResponse crearOActualizar(PacienteRequest request) {
@@ -45,7 +47,12 @@ public class PacienteService {
                     request.getFechaNacimiento()
             );
 
-        return toResponse(pacienteRepository.save(paciente));
+        Paciente saved = pacienteRepository.save(paciente);
+        
+        // Crear usuario en Keycloak
+        keycloakService.crearUsuario(request);
+        
+        return toResponse(saved);
     }
 
     @Transactional(readOnly = true)

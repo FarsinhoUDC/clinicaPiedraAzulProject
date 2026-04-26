@@ -1,4 +1,5 @@
 <div class="login-container">
+  <!-- Panel izquierdo — Branding -->
   <div class="login-left">
     <div class="logo-container">
       <div class="logo">
@@ -12,60 +13,40 @@
     </div>
     <p class="tagline">Tu salud es nuestra prioridad. Agenda tus citas médicas de forma rápida y sencilla.</p>
   </div>
-  
+
+  <!-- Panel derecho — Acción de login -->
   <div class="login-right">
     <div class="login-card">
-      <h2>Iniciar Sesión</h2>
-      <p class="subtitle">Ingresa tus credenciales para continuar</p>
-      
-      <div *ngIf="error" class="error-message">
-        {{ error }}
+      <h2>Bienvenido</h2>
+      <p class="subtitle">Accede de forma segura con tus credenciales institucionales</p>
+
+      <!-- Explicación amigable para adultos mayores -->
+      <div class="info-box">
+        <span class="info-icon">ℹ️</span>
+        <p>
+          Tu usuario y contraseña son tu
+          <strong>número de documento de identidad</strong>.
+        </p>
       </div>
-      
-      <form (ngSubmit)="onLogin()">
-        <div class="form-field">
-          <label for="numeroDocumento">Número de Documento</label>
-          <input 
-            type="text" 
-            id="numeroDocumento" 
-            [(ngModel)]="numeroDocumento" 
-            name="numeroDocumento"
-            placeholder="Ingresa tu número de documento"
-            [disabled]="cargando"
-            required
-          >
-        </div>
-        
-        <div class="form-field">
-          <label for="contrasena">Contraseña</label>
-          <div class="password-input-wrapper">
-            <input 
-              [type]="mostrarContrasena ? 'text' : 'password'" 
-              id="contrasena" 
-              [(ngModel)]="contrasena" 
-              name="contrasena"
-              placeholder="Ingresa tu contraseña"
-              [disabled]="cargando"
-              required
-            >
-            <button 
-              type="button" 
-              class="toggle-password"
-              (click)="toggleMostrarContrasena()"
-            >
-              {{ mostrarContrasena ? 'OCULTAR' : 'VER' }}
-            </button>
-          </div>
-        </div>
-        
-        <button type="submit" class="login-button" [disabled]="cargando">
-          <span *ngIf="!cargando">Iniciar Sesión</span>
-          <span *ngIf="cargando">Cargando...</span>
-        </button>
-      </form>
-      
+
+      <!-- Botón principal — Delega en Keycloak -->
+      <button
+        id="btn-iniciar-sesion"
+        class="login-button"
+        (click)="onLogin()"
+        [disabled]="cargando"
+        type="button">
+        @if (cargando) {
+          <span class="spinner"></span>
+          Redirigiendo…
+        } @else {
+          🔐 Iniciar Sesión
+        }
+      </button>
+
       <p class="register-prompt">
-        ¿No tienes una cuenta? <a (click)="onSwitchToRegister()">Regístrate aquí</a>
+        ¿No tienes una cuenta?
+        <a (click)="onSwitchToRegister()" role="button" tabindex="0">Regístrate aquí</a>
       </p>
     </div>
   </div>

@@ -27,11 +27,15 @@ import java.time.LocalDate;
 @SuperBuilder
 public class Paciente extends Usuario {
 
-    @Column(nullable = false)
+    /**
+     * Con Keycloak, los pacientes se crean automáticamente al agendar su primera cita.
+     * El celular y género son opcionales — Keycloak solo provee nombre y documento.
+     */
+    @Column(nullable = true)
     private String celular;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Genero genero;
 
     private LocalDate fechaNacimiento;
@@ -51,8 +55,9 @@ public class Paciente extends Usuario {
         p.setRol(RolUsuario.PACIENTE);
         p.setActivo(true);
         p.setNumeroDocumento(numeroDocumento);
-        p.setCelular(celular);
-        p.setGenero(genero);
+        // Valores opcionales — pueden ser null cuando el registro viene de Keycloak
+        p.setCelular(celular != null ? celular : "");
+        p.setGenero(genero); // null permitido en la BD
         p.setFechaNacimiento(fechaNacimiento);
         return p;
     }

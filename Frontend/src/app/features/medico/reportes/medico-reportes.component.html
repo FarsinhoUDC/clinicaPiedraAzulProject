@@ -1,0 +1,130 @@
+ ╚════════════════════════════════════════════════════════
+<section class="mr-page" id="medico-reportes-page">
+
+ 
+  <header class="mr-header">
+    <div class="mr-header__icon">📊</div>
+    <div>
+      <h1 class="mr-header__h1">Exportación de Reportes</h1>
+      <p class="mr-header__sub">
+        Bienvenido, <strong>{{ nombreMedico() }}</strong> —
+        Descarga reportes de citas en formato CSV
+      </p>
+    </div>
+  </header>
+
+ 
+  @if (successMsg()) {
+    <div class="alert alert--success" role="status">{{ successMsg() }}</div>
+  }
+  @if (errorMsg()) {
+    <div class="alert alert--error" role="alert">{{ errorMsg() }}</div>
+  }
+
+
+  <div class="mr-grid">
+
+    <!-- Formulario -->
+    <div class="mr-card mr-card--form">
+      <div class="mr-card__header">
+        <span class="mr-card__icon">📋</span>
+        <h2 class="mr-card__title">Parámetros del Reporte</h2>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="exportarCSV()" class="mr-form" id="form-exportar" novalidate>
+
+        <!-- Médico -->
+        <div class="mr-form__group">
+          <label for="sel-medico" class="mr-form__label">Médico *</label>
+
+          @if (loading()) {
+            <div class="mr-loading-hint">
+              <span class="spinner"></span> Cargando médicos…
+            </div>
+          } @else if (medicos().length > 0) {
+            <select id="sel-medico" formControlName="medicoId" class="mr-form__select"
+                    [class.mr-form__select--error]="isInvalidField('medicoId')">
+              <option [value]="0" disabled>-- Seleccionar médico --</option>
+              @for (m of medicos(); track m.id) {
+                <option [value]="m.id">
+                  {{ m.nombre }} @if (m.especialidad) { — {{ m.especialidad }} }
+                </option>
+              }
+            </select>
+          } @else {
+            <input id="inp-medico-id" type="number" formControlName="medicoId"
+                   class="mr-form__input" [class.mr-form__input--error]="isInvalidField('medicoId')"
+                   placeholder="ID del médico" min="1">
+          }
+
+          @if (isInvalidField('medicoId')) {
+            <span class="mr-form__error">Selecciona un médico</span>
+          }
+        </div>
+
+        <!-- Fecha -->
+        <div class="mr-form__group">
+          <label for="inp-fecha" class="mr-form__label">Fecha *</label>
+          <input id="inp-fecha" type="date" formControlName="fecha"
+                 class="mr-form__input" [class.mr-form__input--error]="isInvalidField('fecha')"
+                 [max]="hoy">
+          @if (isInvalidField('fecha')) {
+            <span class="mr-form__error">La fecha es requerida</span>
+          }
+        </div>
+
+        <!-- Acciones -->
+        <div class="mr-form__actions">
+          <button type="submit" id="btn-exportar" class="btn btn--export"
+                  [disabled]="descargando() || loading()">
+            @if (descargando()) {
+              <span class="spinner"></span> Generando…
+            } @else {
+              ⬇ Descargar CSV
+            }
+          </button>
+          <button type="button" class="btn btn--ghost" (click)="resetForm()">
+            Limpiar
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Info lateral -->
+    <div class="mr-card mr-card--info">
+      <div class="mr-card__header">
+        <span class="mr-card__icon">ℹ️</span>
+        <h2 class="mr-card__title">¿Qué incluye el reporte?</h2>
+      </div>
+      <ul class="mr-info-list">
+        <li>📅 Fecha y hora de cada cita</li>
+        <li>👤 Nombre y documento del paciente</li>
+        <li>🏥 Médico asignado y especialidad</li>
+        <li>🔖 Estado de la cita (Agendada, Cancelada, etc.)</li>
+        <li>📝 Observaciones registradas</li>
+      </ul>
+
+      <div class="mr-badge-secure">
+        <span class="lock-icon">🔒</span>
+        <div>
+          <strong>Acceso restringido</strong>
+          <p>Solo usuarios con rol <code>MEDICO</code> pueden descargar reportes.</p>
+        </div>
+      </div>
+
+      <div class="mr-user-info">
+        <p class="mr-user-info__label">Tu ID de sesión (auditoría)</p>
+        <code class="mr-user-info__sub">{{ userId() || 'No disponible' }}</code>
+      </div>
+    </div>
+
+  </div>
+
+ 
+  <div class="mr-card mr-card--hint">
+    <p>💡 <strong>Consejo:</strong> El archivo CSV generado puede abrirse directamente en
+       Excel o Google Sheets. Usa el filtro de fecha para generar reportes diarios
+       de atención médica para auditorías clínicas.</p>
+  </div>
+
+</section>

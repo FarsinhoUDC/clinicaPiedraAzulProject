@@ -51,16 +51,28 @@ public class SecurityConfig {
                 // ── Reportes CSV — EXCLUSIVO MEDICO ───────────────────────
                 .requestMatchers("/api/reportes/**").hasRole("MEDICO")
 
-                // ── Configuración del sistema — EXCLUSIVO ADMIN ────────────
-                .requestMatchers("/api/configuracion/**").hasRole("ADMIN")
+                // ── Configuración del sistema ──────────────────────────────
+                // Escritura (POST/PUT/DELETE): solo ADMIN
+                .requestMatchers(HttpMethod.POST,   "/api/configuracion/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PUT,    "/api/configuracion/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/api/configuracion/**").hasRole("ADMIN")
+                // Lectura (GET): ADMIN y PACIENTE (necesario para ventana de citas y disponibilidad)
+                .requestMatchers(HttpMethod.GET, "/api/configuracion/**")
+                    .hasAnyRole("ADMIN", "AGENDADOR", "MEDICO", "PACIENTE")
 
-                // ── Citas — AGENDADOR, MEDICO o ADMIN ─────────────────────
+                // ── Citas ──────────────────────────────────────────────────
+                // PACIENTE puede crear y consultar sus propias citas
                 .requestMatchers("/api/citas/**")
-                    .hasAnyRole("AGENDADOR", "MEDICO", "ADMIN")
+                    .hasAnyRole("AGENDADOR", "MEDICO", "ADMIN", "PACIENTE")
 
-                // ── Médicos — AGENDADOR, MEDICO o ADMIN ───────────────────
-                .requestMatchers("/api/medicos/**")
-                    .hasAnyRole("AGENDADOR", "MEDICO", "ADMIN")
+                // ── Médicos (lectura) — necesario para el agendamiento ─────
+                // PACIENTE necesita ver la lista de médicos para elegir
+                .requestMatchers(HttpMethod.GET, "/api/medicos/**")
+                    .hasAnyRole("AGENDADOR", "MEDICO", "ADMIN", "PACIENTE")
+                // Escritura sobre médicos: solo roles de gestión
+                .requestMatchers(HttpMethod.POST,   "/api/medicos/**").hasAnyRole("AGENDADOR", "MEDICO", "ADMIN")
+                .requestMatchers(HttpMethod.PUT,    "/api/medicos/**").hasAnyRole("AGENDADOR", "MEDICO", "ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/api/medicos/**").hasAnyRole("AGENDADOR", "MEDICO", "ADMIN")
 
                 // ── Pacientes (lectura) — cualquier rol autenticado ────────
                 .requestMatchers(HttpMethod.GET, "/api/pacientes/**")

@@ -59,6 +59,7 @@ export class RegisterComponent {
       fechaNacimiento: this.birthDate || null
     };
 
+    
     this.http.post<any>(`${environment.apiBaseUrl}/pacientes`, request).subscribe({
       next: (response) => {
         this.cargando = false;
@@ -73,7 +74,13 @@ export class RegisterComponent {
       },
       error: (err) => {
         this.cargando = false;
-        this.error = err.error?.message || 'Error al conectar con el servidor';
+        if (err && err.error && err.error.message) {
+          this.error = err.error.message;
+        } else if (err && err.message) {
+          this.error = err.message;
+        } else {
+          this.error = 'Error al conectar con el servidor';
+        }
       }
     });
   }

@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -90,5 +92,19 @@ public class CitaController {
             @PathVariable Long pacienteId) {
         List<CitaResponse> citas = citaService.listarPorPaciente(pacienteId);
         return ResponseEntity.ok(ApiResponse.ok("Citas del paciente", citas));
+    }
+
+    /**
+     * Retorna las citas del paciente autenticado, leyendo su número de documento
+     * directamente del JWT (preferred_username). Patrón seguro con Keycloak:
+     * el paciente no puede ver citas de otros usuarios.
+     * GET /api/citas/mis-citas
+     */
+    @GetMapping("/mis-citas")
+    public ResponseEntity<ApiResponse<List<CitaResponse>>> misCitas(
+            @AuthenticationPrincipal Jwt jwt) {
+        String numeroDocumento = jwt.getClaimAsString("preferred_username");
+        List<CitaResponse> citas = citaService.listarPorDocumentoPaciente(numeroDocumento);
+        return ResponseEntity.ok(ApiResponse.ok("Mis citas", citas));
     }
 }

@@ -110,6 +110,7 @@ export const roleRedirectGuard: CanActivateFn = () => {
   const rol = auth.getRole();
   switch (rol) {
     case 'MEDICO':
+      return router.parseUrl('/medico/reportes');
     case 'AGENDADOR':
       return router.parseUrl('/agendador/consulta');
     case 'ADMIN':

@@ -10,13 +10,16 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     return next(req);
   }
 
+  // Si no está autenticado, simplemente pasa la petición (ej. login, registro)
+  if (!keycloak.authenticated) {
+    return next(req);
+  }
+
   // Renueva el token si quedan menos de 30 segundos de vida
   return from(keycloak.updateToken(30)).pipe(
     switchMap(() => {
       const token = keycloak.token;
 
-      // Si no hay token (usuario no autenticado), deja pasar la petición
-      // y el backend responderá 401 si la ruta lo requiere.
       if (!token) return next(req);
 
       const authReq = req.clone({

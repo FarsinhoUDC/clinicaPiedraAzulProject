@@ -4,16 +4,7 @@ import { keycloak } from './keycloak-init';
 
 export type AppRole = 'ADMIN' | 'AGENDADOR' | 'MEDICO' | 'PACIENTE';
 
-/**
- * Servicio centralizado de autenticación basado en Keycloak.
- *
- * Reemplaza al SessionService para el manejo de la sesión.
- * Todos los datos se leen directamente del JWT (tokenParsed),
- * por lo que no se requiere localStorage ni sessionStorage propios.
- *
- * El token es almacenado en memoria por keycloak-js y renovado
- * automáticamente por el authInterceptor antes de cada petición HTTP.
- */
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
 
@@ -55,14 +46,35 @@ export class AuthService {
     return keycloak.tokenParsed?.['preferred_username'] ?? '';
   }
 
-  /** Nombre completo del usuario desde el token. */
+  /** Nombre completo del usuario desde el token (claim 'name'). */
   getFullName(): string {
     return keycloak.tokenParsed?.['name'] ?? '';
+  }
+
+  /**
+   * Primer nombre / nombres del usuario (claim 'given_name' de Keycloak).
+   * Corresponde al campo "First Name" en la consola de Keycloak.
+   */
+  getFirstName(): string {
+    return keycloak.tokenParsed?.['given_name'] ?? '';
+  }
+
+  /**
+   * Apellidos del usuario (claim 'family_name' de Keycloak).
+   * Corresponde al campo "Last Name" en la consola de Keycloak.
+   */
+  getLastName(): string {
+    return keycloak.tokenParsed?.['family_name'] ?? '';
   }
 
   /** Token de acceso JWT actual. Usar en interceptores HTTP. */
   getToken(): string | undefined {
     return keycloak.token;
+  }
+
+    /** ID único del usuario (claim 'sub' en Keycloak). */
+  getUserId(): string {
+    return keycloak.tokenParsed?.['sub'] ?? '';
   }
 
   /** Redirige al login de Keycloak (en español). */
