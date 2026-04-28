@@ -1,9 +1,6 @@
-<!-- ╔══════════════════════════════════════════════════════════╗ -->
-<!-- ║  Panel de Gestión de Usuarios — Solo ADMIN               ║ -->
-<!-- ╚══════════════════════════════════════════════════════════╝ -->
 <section class="um-page" id="user-management-page">
 
-  <!-- ── Header ──────────────────────────────────────────────── -->
+
   <header class="um-header">
     <div class="um-header__title">
       <div class="um-header__icon">👥</div>
@@ -17,165 +14,155 @@
     </button>
   </header>
 
-  <!-- ── Mensajes ─────────────────────────────────────────────── -->
+
   @if (successMsg()) {
-    <div class="alert alert--success" role="alert">{{ successMsg() }}</div>
+  <div class="alert alert--success" role="alert">{{ successMsg() }}</div>
   }
   @if (errorMsg()) {
-    <div class="alert alert--error" role="alert">{{ errorMsg() }}</div>
+  <div class="alert alert--error" role="alert">{{ errorMsg() }}</div>
   }
 
-  <!-- ── Formulario de creación ──────────────────────────────── -->
+
   @if (showForm()) {
-    <div class="um-card um-form-card">
-      <h2 class="um-section-title">Crear Nuevo Usuario</h2>
-      <p class="um-form-hint">
-        El número de documento será el <strong>usuario</strong> y la
-        <strong>contraseña inicial</strong> del nuevo acceso.
-      </p>
+  <div class="um-card um-form-card">
+    <h2 class="um-section-title">Crear Nuevo Usuario</h2>
+    <p class="um-form-hint">
+      El número de documento será el <strong>usuario</strong> y la
+      <strong>contraseña inicial</strong> del nuevo acceso.
+    </p>
 
-      <form [formGroup]="form" (ngSubmit)="crearUsuario()" class="um-form" id="form-nuevo-usuario" novalidate>
-        <div class="um-form__grid">
+    <form [formGroup]="form" (ngSubmit)="crearUsuario()" class="um-form" id="form-nuevo-usuario" novalidate>
+      <div class="um-form__grid">
 
-          <div class="um-form__group">
-            <label for="inp-username" class="um-form__label">Nº Documento *</label>
-            <input id="inp-username" type="text" formControlName="username"
-                   class="um-form__input" [class.um-form__input--error]="isInvalidField('username')"
-                   placeholder="Ej: 1020304050" autocomplete="off">
-            @if (isInvalidField('username')) {
-              <span class="um-form__error">Mínimo 5 caracteres requeridos</span>
-            }
-          </div>
-
-          <div class="um-form__group">
-            <label for="inp-firstname" class="um-form__label">Nombre(s) *</label>
-            <input id="inp-firstname" type="text" formControlName="firstName"
-                   class="um-form__input" [class.um-form__input--error]="isInvalidField('firstName')"
-                   placeholder="Ej: Carlos">
-            @if (isInvalidField('firstName')) {
-              <span class="um-form__error">Campo requerido</span>
-            }
-          </div>
-
-          <div class="um-form__group">
-            <label for="inp-lastname" class="um-form__label">Apellido(s) *</label>
-            <input id="inp-lastname" type="text" formControlName="lastName"
-                   class="um-form__input" [class.um-form__input--error]="isInvalidField('lastName')"
-                   placeholder="Ej: García López">
-            @if (isInvalidField('lastName')) {
-              <span class="um-form__error">Campo requerido</span>
-            }
-          </div>
-
-          <div class="um-form__group">
-            <label for="inp-email" class="um-form__label">Correo Electrónico</label>
-            <input id="inp-email" type="email" formControlName="email"
-                   class="um-form__input" [class.um-form__input--error]="isInvalidField('email')"
-                   placeholder="correo@ejemplo.com">
-            @if (isInvalidField('email')) {
-              <span class="um-form__error">Formato de correo inválido</span>
-            }
-          </div>
-
-          <div class="um-form__group">
-            <label for="sel-rol" class="um-form__label">Rol *</label>
-            <select id="sel-rol" formControlName="rol" class="um-form__select">
-              @for (rol of appRoles; track rol) {
-                <option [value]="rol">{{ rol }}</option>
-              }
-            </select>
-          </div>
-
+        <div class="um-form__group">
+          <label for="inp-username" class="um-form__label">Nº Documento *</label>
+          <input id="inp-username" type="text" formControlName="username" class="um-form__input"
+            [class.um-form__input--error]="isInvalidField('username')" placeholder="Ej: 1020304050" autocomplete="off">
+          @if (isInvalidField('username')) {
+          <span class="um-form__error">Mínimo 5 caracteres requeridos</span>
+          }
         </div>
 
-        <div class="um-form__actions">
-          <button type="submit" id="btn-crear-usuario" class="btn btn--primary"
-                  [disabled]="loading()">
-            @if (loading()) { <span class="spinner"></span> } Crear Usuario
-          </button>
-          <button type="button" class="btn btn--ghost" (click)="toggleForm()">Cancelar</button>
+        <div class="um-form__group">
+          <label for="inp-firstname" class="um-form__label">Nombre(s) *</label>
+          <input id="inp-firstname" type="text" formControlName="firstName" class="um-form__input"
+            [class.um-form__input--error]="isInvalidField('firstName')" placeholder="Ej: Carlos">
+          @if (isInvalidField('firstName')) {
+          <span class="um-form__error">Campo requerido</span>
+          }
         </div>
-      </form>
-    </div>
+
+        <div class="um-form__group">
+          <label for="inp-lastname" class="um-form__label">Apellido(s) *</label>
+          <input id="inp-lastname" type="text" formControlName="lastName" class="um-form__input"
+            [class.um-form__input--error]="isInvalidField('lastName')" placeholder="Ej: García López">
+          @if (isInvalidField('lastName')) {
+          <span class="um-form__error">Campo requerido</span>
+          }
+        </div>
+
+        <div class="um-form__group">
+          <label for="inp-email" class="um-form__label">Correo Electrónico</label>
+          <input id="inp-email" type="email" formControlName="email" class="um-form__input"
+            [class.um-form__input--error]="isInvalidField('email')" placeholder="correo@ejemplo.com">
+          @if (isInvalidField('email')) {
+          <span class="um-form__error">Formato de correo inválido</span>
+          }
+        </div>
+
+        <div class="um-form__group">
+          <label for="sel-rol" class="um-form__label">Rol *</label>
+          <select id="sel-rol" formControlName="rol" class="um-form__select">
+            @for (rol of appRoles; track rol) {
+            <option [value]="rol">{{ rol }}</option>
+            }
+          </select>
+        </div>
+
+      </div>
+
+      <div class="um-form__actions">
+        <button type="submit" id="btn-crear-usuario" class="btn btn--primary" [disabled]="loading()">
+          @if (loading()) { <span class="spinner"></span> } Crear Usuario
+        </button>
+        <button type="button" class="btn btn--ghost" (click)="toggleForm()">Cancelar</button>
+      </div>
+    </form>
+  </div>
   }
 
-  <!-- ── Tabla de usuarios ────────────────────────────────────── -->
+
   <div class="um-card">
     <div class="um-table-header">
       <h2 class="um-section-title">Usuarios del Sistema</h2>
       <div class="um-search">
         <span class="um-search__icon">🔍</span>
-        <input id="inp-buscar" type="text" class="um-search__input"
-               placeholder="Buscar por documento o nombre..."
-               (input)="buscar($event)">
+        <input id="inp-buscar" type="text" class="um-search__input" placeholder="Buscar por documento o nombre..."
+          (input)="buscar($event)">
       </div>
     </div>
 
     @if (loading() && usuarios().length === 0) {
-      <div class="um-empty">
-        <div class="spinner spinner--lg"></div>
-        <p>Cargando usuarios de Keycloak…</p>
-      </div>
+    <div class="um-empty">
+      <div class="spinner spinner--lg"></div>
+      <p>Cargando usuarios de Keycloak…</p>
+    </div>
     } @else if (usuariosFiltrados.length === 0) {
-      <div class="um-empty">
-        <p>No se encontraron usuarios.</p>
-      </div>
+    <div class="um-empty">
+      <p>No se encontraron usuarios.</p>
+    </div>
     } @else {
-      <div class="um-table-wrapper">
-        <table class="um-table" aria-label="Lista de usuarios">
-          <thead>
-            <tr>
-              <th>Documento</th>
-              <th>Nombre Completo</th>
-              <th>Rol Actual</th>
-              <th>Estado</th>
-              <th>Cambiar Rol</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (usuario of usuariosFiltrados; track usuario.id) {
-              <tr class="um-table__row" [class.um-table__row--disabled]="!usuario.enabled">
-                <td class="um-table__doc">{{ usuario.username }}</td>
-                <td>{{ getNombreCompleto(usuario) }}</td>
-                <td>
-                  <span [class]="getRolBadgeClass(usuario.rolActual)">
-                    {{ usuario.rolActual ?? 'Sin rol' }}
-                  </span>
-                </td>
-                <td>
-                  <span class="status-dot" [class.status-dot--active]="usuario.enabled"
-                        [title]="usuario.enabled ? 'Activo' : 'Inactivo'">
-                    {{ usuario.enabled ? 'Activo' : 'Inactivo' }}
-                  </span>
-                </td>
-                <td>
-                  <select class="um-rol-select"
-                          [value]="usuario.rolActual ?? ''"
-                          (change)="cambiarRol(usuario, $any($event.target).value)"
-                          [disabled]="loading()"
-                          [attr.aria-label]="'Cambiar rol de ' + usuario.username">
-                    <option value="" disabled>-- Seleccionar --</option>
-                    @for (rol of appRoles; track rol) {
-                      <option [value]="rol" [selected]="usuario.rolActual === rol">{{ rol }}</option>
-                    }
-                  </select>
-                </td>
-                <td>
-                  <button class="btn-icon"
-                          [title]="usuario.enabled ? 'Deshabilitar usuario' : 'Habilitar usuario'"
-                          (click)="toggleEstado(usuario)"
-                          [disabled]="loading()">
-                    {{ usuario.enabled ? '🔒' : '🔓' }}
-                  </button>
-                </td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      </div>
+    <div class="um-table-wrapper">
+      <table class="um-table" aria-label="Lista de usuarios">
+        <thead>
+          <tr>
+            <th>Documento</th>
+            <th>Nombre Completo</th>
+            <th>Rol Actual</th>
+            <th>Estado</th>
+            <th>Cambiar Rol</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (usuario of usuariosFiltrados; track usuario.id) {
+          <tr class="um-table__row" [class.um-table__row--disabled]="!usuario.enabled">
+            <td class="um-table__doc">{{ usuario.username }}</td>
+            <td>{{ getNombreCompleto(usuario) }}</td>
+            <td>
+              <span [class]="getRolBadgeClass(usuario.rolActual)">
+                {{ usuario.rolActual ?? 'Sin rol' }}
+              </span>
+            </td>
+            <td>
+              <span class="status-dot" [class.status-dot--active]="usuario.enabled"
+                [title]="usuario.enabled ? 'Activo' : 'Inactivo'">
+                {{ usuario.enabled ? 'Activo' : 'Inactivo' }}
+              </span>
+            </td>
+            <td>
+              <select class="um-rol-select" [value]="usuario.rolActual ?? ''"
+                (change)="cambiarRol(usuario, $any($event.target).value)" [disabled]="loading()"
+                [attr.aria-label]="'Cambiar rol de ' + usuario.username">
+                <option value="" disabled>-- Seleccionar --</option>
+                @for (rol of appRoles; track rol) {
+                <option [value]="rol" [selected]="usuario.rolActual === rol">{{ rol }}</option>
+                }
+              </select>
+            </td>
+            <td>
+              <button class="btn-icon" [title]="usuario.enabled ? 'Deshabilitar usuario' : 'Habilitar usuario'"
+                (click)="toggleEstado(usuario)" [disabled]="loading()">
+                {{ usuario.enabled ? '🔒' : '🔓' }}
+              </button>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
 
-      <p class="um-count">Total: {{ usuariosFiltrados.length }} usuario(s)</p>
+    <p class="um-count">Total: {{ usuariosFiltrados.length }} usuario(s)</p>
     }
   </div>
 

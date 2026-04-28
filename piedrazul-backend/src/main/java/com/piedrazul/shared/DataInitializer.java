@@ -102,7 +102,6 @@ public class DataInitializer implements CommandLineRunner {
         req.setNombres(nombres);
         req.setApellidos(apellidos);
         req.setNumeroDocumento(numeroDocumento);
-        req.setContrasena(numeroDocumento);
         req.setEspecialidad(especialidad);
         return medicoService.crear(req);
     }

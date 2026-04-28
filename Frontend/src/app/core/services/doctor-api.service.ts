@@ -16,4 +16,13 @@ export class DoctorApiService {
       map((response) => response.data ?? [])
     );
   }
+
+  create(doctorData: any): Observable<Doctor> {
+    return this.http.post<ApiResponse<Doctor>>(`${environment.apiBaseUrl}/medicos`, doctorData).pipe(
+      map((response) => {
+        if (!response.data) throw new Error('No se recibió la data del médico');
+        return response.data;
+      })
+    );
+  }
 }

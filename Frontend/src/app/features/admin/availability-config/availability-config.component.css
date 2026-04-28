@@ -269,7 +269,7 @@
 }
 
 .dialog-card {
-  width: min(380px, 100%);
+  width: min(420px, 100%);
   background: #ffffff;
   border-radius: 16px;
   padding: 22px;
@@ -277,6 +277,14 @@
   display: grid;
   gap: 14px;
   color: #173250;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.dialog-card.form-dialog {
+  width: min(600px, 100%);
+  padding: 0;
+  gap: 0;
 }
 
 .dialog-card.error strong {
@@ -317,6 +325,94 @@
   }
 
   .time-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Patient Form Styles */
+.patient-register-panel {
+  background: #ffffff;
+  border: none;
+  border-radius: 16px;
+  padding: 26px;
+}
+
+.patient-register-intro {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 22px;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #7a92a2;
+  font-size: 0.82rem;
+}
+
+.patient-register-intro strong {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.7rem;
+  color: #173250;
+}
+
+.patient-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 16px;
+}
+
+.patient-field {
+  display: grid;
+  gap: 8px;
+}
+
+.patient-field label {
+  font-weight: 700;
+  color: #305064;
+  font-size: 0.9rem;
+}
+
+.patient-field input {
+  min-height: 42px;
+  border: 1px solid #c8d7e0;
+  border-radius: 10px;
+  padding: 10px 14px;
+  background: #fbfdff;
+  width: 100%;
+}
+
+.patient-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.patient-primary,
+.patient-secondary {
+  min-height: 42px;
+  border-radius: 10px;
+  padding: 10px 18px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.patient-primary {
+  border: none;
+  background: #118a9b;
+  color: #ffffff;
+}
+
+.patient-secondary {
+  border: 1px solid #d4dfe7;
+  background: #ffffff;
+  color: #526f81;
+}
+
+@media (max-width: 860px) {
+  .patient-grid {
     grid-template-columns: 1fr;
   }
 }

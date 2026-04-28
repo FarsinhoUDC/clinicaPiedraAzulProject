@@ -26,7 +26,7 @@
     <div class="availability-panel">
       <div class="availability-head">
         <h3>Disponibilidad por medico / terapista</h3>
-        <button type="button" class="save-button secondary">+ Agregar profesional</button>
+        <button type="button" class="save-button secondary" (click)="toggleMedicoForm()">+ Agregar profesional</button>
       </div>
 
       <form [formGroup]="form" class="availability-grid">
@@ -153,6 +153,75 @@
         <button type="button" class="save-button" (click)="confirmDialogAction()">Si</button>
       </div>
       <button type="button" class="save-button" *ngIf="dialogMode === 'result'" (click)="closeDialog()">Aceptar</button>
+    </div>
+  </div>
+
+  <div class="dialog-backdrop" *ngIf="showMedicoForm" (click)="toggleMedicoForm()">
+    <div class="dialog-card patient-card form-dialog" (click)="$event.stopPropagation()">
+      <div class="patient-register-panel">
+        <div class="patient-register-intro">
+          <strong>Crear Cuenta</strong>
+          <span style="font-size: 0.9rem; color: #7a92a2;">Completa tus datos para registrarte</span>
+        </div>
+
+        <form [formGroup]="medicoForm" class="patient-form" (ngSubmit)="submitMedicoForm()">
+          <div class="patient-grid">
+            <div class="patient-field">
+              <label>Número de Documento *</label>
+              <input formControlName="numeroDocumento" placeholder="C.C., T.I., etc.">
+            </div>
+            <div class="patient-field">
+              <label>Tipo de Documento</label>
+              <select>
+                <option>Cédula de Ciudadanía</option>
+              </select>
+            </div>
+            
+            <div class="patient-field">
+              <label>Nombre *</label>
+              <input formControlName="nombres" placeholder="Tu nombre">
+            </div>
+            <div class="patient-field">
+              <label>Apellido *</label>
+              <input formControlName="apellidos" placeholder="Tu apellido">
+            </div>
+
+            <div class="patient-field">
+              <label>Celular *</label>
+              <input formControlName="celular" placeholder="Número de celular">
+            </div>
+            <div class="patient-field">
+              <label>Género</label>
+              <select formControlName="genero">
+                <option value="">Seleccionar</option>
+                <option *ngFor="let option of genderOptions" [value]="option.value">{{ option.label }}</option>
+              </select>
+            </div>
+
+            <div class="patient-field">
+              <label>Fecha de Nacimiento</label>
+              <input type="date" formControlName="fechaNacimiento">
+            </div>
+            <div class="patient-field">
+              <label>Especialidad</label>
+              <input formControlName="especialidad" placeholder="Ej: Pediatría (opcional)">
+            </div>
+            
+            <div class="patient-field" style="grid-column: span 2;">
+              <label>Correo Electrónico</label>
+              <input type="email" formControlName="correo" placeholder="tu@correo.com (opcional)">
+            </div>
+          </div>
+
+          <div class="patient-help" style="margin-top: 18px; padding: 14px; background: #e8f5e9; color: #1f8d49; border-radius: 8px; font-size: 0.85rem;">
+            <strong>Nota:</strong> Tu número de documento será utilizado como contraseña temporal. Se recomienda cambiar la contraseña después del primer inicio de sesión.
+          </div>
+
+          <div class="patient-actions" style="justify-content: stretch; margin-top: 24px;">
+            <button class="patient-primary" type="submit" style="width: 100%;">Crear Cuenta</button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 </section>

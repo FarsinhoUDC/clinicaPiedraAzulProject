@@ -9,6 +9,7 @@ import { ConfigurationApiService } from '../../../core/services/configuration-ap
 import { DoctorApiService } from '../../../core/services/doctor-api.service';
 import { calculateDailySlots, calculateWindowEndDate } from '../../../core/utils/slot-calculator.util';
 import { timeRangeValidator } from '../../../shared/validators/custom-validators';
+import { GENDER_OPTIONS } from '../../../core/constants/day-options';
 
 @Component({
   selector: 'app-availability-config',
@@ -42,6 +43,19 @@ export class AvailabilityConfigComponent implements OnInit {
   dialogVariant: 'success' | 'error' = 'success';
   dialogMessage = '';
   pendingAction: 'save-window' | 'save-availability' | 'cancel' | null = null;
+  readonly genderOptions = GENDER_OPTIONS;
+
+  showMedicoForm = false;
+  readonly medicoForm = this.formBuilder.group({
+    numeroDocumento: ['', [Validators.required, Validators.minLength(5)]],
+    nombres: ['', Validators.required],
+    apellidos: ['', Validators.required],
+    celular: ['', Validators.required],
+    genero: ['', Validators.required],
+    fechaNacimiento: ['', Validators.required],
+    correo: ['', [Validators.email]],
+    especialidad: ['']
+  });
 
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -223,6 +237,46 @@ export class AvailabilityConfigComponent implements OnInit {
       this.updatePreview();
       this.openResultDialog('success', 'La accion de cancelar se realizo correctamente.');
     }
+  }
+
+  toggleMedicoForm(): void {
+    this.showMedicoForm = !this.showMedicoForm;
+    if (this.showMedicoForm) {
+      this.medicoForm.reset();
+    }
+  }
+
+  submitMedicoForm(): void {
+    this.message = '';
+    this.errorMessage = '';
+
+    if (this.medicoForm.invalid) {
+      this.medicoForm.markAllAsTouched();
+      return;
+    }
+
+    const { numeroDocumento, nombres, apellidos, celular, genero, fechaNacimiento, correo, especialidad } = this.medicoForm.getRawValue();
+
+    this.doctorApi.create({
+      numeroDocumento,
+      nombres,
+      apellidos,
+      celular,
+      genero,
+      fechaNacimiento,
+      correo,
+      especialidad
+    }).subscribe({
+      next: (newDoctor) => {
+        this.doctors.push(newDoctor);
+        this.showMedicoForm = false;
+        this.openResultDialog('success', `El profesional ${nombres} ${apellidos} fue registrado exitosamente.`);
+      },
+      error: (err) => {
+        console.error(err);
+        this.openResultDialog('error', 'Error al registrar el profesional. Verifique que no exista un usuario con ese número de documento.');
+      }
+    });
   }
 
   closeDialog(): void {

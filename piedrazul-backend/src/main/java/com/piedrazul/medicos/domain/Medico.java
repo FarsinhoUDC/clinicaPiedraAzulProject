@@ -23,11 +23,23 @@ import lombok.experimental.SuperBuilder;
 public class Medico extends Usuario {
 
     private String especialidad;
+    
+    @Column(nullable = true)
+    private String celular;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = true)
+    private com.piedrazul.pacientes.domain.Genero genero;
+
+    private java.time.LocalDate fechaNacimiento;
 
     public static Medico nuevo(String nombres, String apellidos,
                                 String correo, String contrasena,
                                 String numeroDocumento,
-                                String especialidad) {
+                                String especialidad,
+                                String celular,
+                                com.piedrazul.pacientes.domain.Genero genero,
+                                java.time.LocalDate fechaNacimiento) {
         Medico m = new Medico();
         m.setNombres(nombres);
         m.setApellidos(apellidos);
@@ -37,6 +49,9 @@ public class Medico extends Usuario {
         m.setRol(RolUsuario.MEDICO);
         m.setActivo(true);
         m.setEspecialidad(especialidad);
+        m.setCelular(celular != null ? celular : "");
+        m.setGenero(genero);
+        m.setFechaNacimiento(fechaNacimiento);
         return m;
     }
 }

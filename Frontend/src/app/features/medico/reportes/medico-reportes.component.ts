@@ -1,152 +1,136 @@
-import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { AuthService } from '../../../core/services/auth.service';
-import { environment } from '../../../../environments/environment';
-import { keycloak } from '../../../core/services/keycloak-init';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
-interface MedicoOption {
-  id: number;
-  nombre: string;
-  especialidad?: string;
-}
-
+import { Appointment, AppointmentSummaryItem } from '../../../core/models/appointment.model';
+import { Doctor } from '../../../core/models/doctor.model';
+import { AppointmentSummaryFactory } from '../../../core/factories/appointment-summary.factory';
+import { AppointmentApiService } from '../../../core/services/appointment-api.service';
+import { DoctorApiService } from '../../../core/services/doctor-api.service';
+import { UiMappersService } from '../../../core/services/ui-mappers.service';
+import { formatDateLabel, toHourLabel } from '../../../core/utils/date-time.utils';
 
 @Component({
   selector: 'app-medico-reportes',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './medico-reportes.component.html',
-  styleUrl:    './medico-reportes.component.css'
+  styleUrl: './medico-reportes.component.css'
 })
 export class MedicoReportesComponent implements OnInit {
-
-  // ── Estado ────────────────────────────────────────────────────────────────
-  readonly medicos      = signal<MedicoOption[]>([]);
-  readonly loading      = signal(false);
-  readonly descargando  = signal(false);
-  readonly errorMsg     = signal('');
-  readonly successMsg   = signal('');
-  readonly nombreMedico = signal('');
-  readonly userId       = signal('');
-
-  // Controla la fecha máxima (hoy) para el selector
-  readonly hoy = new Date().toISOString().split('T')[0];
-
-  // ── Formulario ─────────────────────────────────────────────────────────────
-  readonly form = this.fb.nonNullable.group({
-    medicoId: [0, [Validators.required, Validators.min(1)]],
-    fecha:    ['', Validators.required]
+  readonly searchForm = this.formBuilder.group({
+    medicoId: ['', Validators.required],
+    fecha: ['', Validators.required]
   });
 
+  doctors: Doctor[] = [];
+  appointments: Appointment[] = [];
+  summary: AppointmentSummaryItem[] = [];
+  isLoading = false;
+  searchExecuted = false;
+  errorMessage = '';
+
   constructor(
-    private readonly fb:   FormBuilder,
-    private readonly http: HttpClient,
-    private readonly auth: AuthService
+    private readonly formBuilder: FormBuilder,
+    private readonly appointmentApi: AppointmentApiService,
+    private readonly doctorApi: DoctorApiService,
+    private readonly uiMappers: UiMappersService
   ) {}
 
   ngOnInit(): void {
-    // Extraer info del médico logueado desde el JWT
-    this.nombreMedico.set(this.auth.getFullName() || this.auth.getUsername());
-    this.userId.set(this.auth.getUserId());
-
-    this.cargarMedicos();
-  }
-
-  // ── Cargar médicos ─────────────────────────────────────────────────────────
-  cargarMedicos(): void {
-    this.loading.set(true);
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${keycloak.token ?? ''}`
+    this.doctorApi.list().subscribe((doctors) => {
+      this.doctors = doctors;
     });
-
-    this.http.get<any[]>(`${environment.apiBaseUrl}/medicos`, { headers })
-      .subscribe({
-        next: (data) => {
-          const opts: MedicoOption[] = data.map(m => ({
-            id:           m.id ?? m.medicoId,
-            nombre:       `${m.nombre ?? ''} ${m.apellido ?? m.apellidos ?? ''}`.trim(),
-            especialidad: m.especialidad
-          }));
-          this.medicos.set(opts);
-          this.loading.set(false);
-        },
-        error: () => {
-          // Si falla la carga de médicos, mostramos un mensaje pero no bloqueamos
-          this.errorMsg.set('No se pudieron cargar los médicos. Puedes ingresar el ID manualmente.');
-          this.loading.set(false);
-        }
-      });
   }
 
-  // ── Exportar CSV ───────────────────────────────────────────────────────────
-  exportarCSV(): void {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
+  search(): void {
+    this.searchExecuted = true;
+    this.errorMessage = '';
+    this.appointments = [];
+    this.summary = [];
+
+    if (this.searchForm.invalid) {
+      this.searchForm.markAllAsTouched();
       return;
     }
 
-    const { medicoId, fecha } = this.form.getRawValue();
-    this.descargando.set(true);
-    this.errorMsg.set('');
-    this.successMsg.set('');
+    const medicoId = Number(this.searchForm.value.medicoId);
+    const fecha = this.searchForm.value.fecha ?? '';
+    this.isLoading = true;
 
-    const url = `${environment.apiBaseUrl}/reportes/citas/${medicoId}/${fecha}`;
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${keycloak.token ?? ''}`
-    });
-
-    this.http.get(url, {
-      headers,
-      responseType: 'blob',
-      observe: 'response'
-    }).subscribe({
-      next: (response) => {
-        if (response.status === 204 || !response.body) {
-          this.successMsg.set('ℹ No hay citas registradas para ese médico en esa fecha.');
-          this.descargando.set(false);
-          return;
-        }
-
-        // Extraer nombre del archivo del header Content-Disposition
-        const cd = response.headers.get('Content-Disposition') ?? '';
-        const filename = cd.match(/filename="(.+)"/)?.[1] ?? `reporte_${fecha}.csv`;
-
-        // Descargar el blob automáticamente
-        const blob = new Blob([response.body], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = filename;
-        link.click();
-        URL.revokeObjectURL(link.href);
-
-        this.successMsg.set(`✓ Reporte "${filename}" descargado correctamente.`);
-        this.descargando.set(false);
+    this.appointmentApi.searchByDoctorAndDate(medicoId, fecha).subscribe({
+      next: (appointments) => {
+        this.appointments = this.uiMappers.hydrateStatus(appointments);
+        this.summary = AppointmentSummaryFactory.create(this.appointments);
+        this.isLoading = false;
       },
-      error: (err) => {
-        if (err.status === 403) {
-          this.errorMsg.set('Acceso denegado. Solo los médicos pueden exportar reportes.');
-        } else if (err.status === 404) {
-          this.errorMsg.set('No se encontró el médico especificado.');
-        } else {
-          this.errorMsg.set('Error al generar el reporte. Intenta nuevamente.');
-        }
-        this.descargando.set(false);
-        console.error(err);
+      error: () => {
+        this.errorMessage = 'No fue posible consultar las citas. Verifica la conexión con la API.';
+        this.isLoading = false;
       }
     });
   }
 
-  // ── Helpers ────────────────────────────────────────────────────────────────
-  isInvalidField(field: string): boolean {
-    const ctrl = this.form.get(field);
-    return !!(ctrl?.invalid && ctrl.touched);
+  get selectedDateLabel(): string {
+    const fecha = this.searchForm.value.fecha;
+    return fecha ? formatDateLabel(fecha) : '';
   }
 
-  resetForm(): void {
-    this.form.reset({ medicoId: 0, fecha: '' });
-    this.successMsg.set('');
-    this.errorMsg.set('');
+  hourLabel(dateTime: string): string {
+    return toHourLabel(dateTime);
+  }
+
+  getMetricValue(label: string): number {
+    return this.summary.find((item) => item.label === label)?.total ?? 0;
+  }
+
+  statusClass(status?: string): string {
+    switch (status) {
+      case 'CONFIRMADA':
+        return 'status-confirmed';
+      case 'CANCELADA':
+        return 'status-cancelled';
+      default:
+        return 'status-pending';
+    }
+  }
+
+  downloadCSV(): void {
+    if (this.appointments.length === 0) return;
+
+    const headers = ['ID', 'Paciente', 'Documento', 'Celular', 'Médico', 'Fecha', 'Hora', 'Estado', 'Origen'];
+    const rows = this.appointments.map(apt => [
+      apt.id,
+      apt.nombrePaciente,
+      apt.documentoPaciente,
+      apt.celularPaciente,
+      apt.nombreMedico,
+      apt.fechaHora.split('T')[0],
+      apt.fechaHora.split('T')[1]?.slice(0, 5),
+      apt.estado,
+      apt.origen
+    ]);
+
+    const csvContent = [headers, ...rows]
+      .map(row => row.map(cell => `"${cell ?? ''}"`).join(','))
+      .join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', `citas_${this.searchForm.value.fecha}_${this.searchForm.value.medicoId}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }
+
+  get canDownload(): boolean {
+    return this.appointments.length > 0;
+  }
+
+  trackByAppointment(_: number, appointment: Appointment): number {
+    return appointment.id;
   }
 }

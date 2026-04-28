@@ -22,46 +22,46 @@ interface UserWithRole extends KeycloakUser {
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './user-management.component.html',
-  styleUrl:    './user-management.component.css'
+  styleUrl: './user-management.component.css'
 })
 export class UserManagementComponent implements OnInit {
 
-  // ── Estado ────────────────────────────────────────────────────────────────
-  readonly usuarios   = signal<UserWithRole[]>([]);
-  readonly allRoles   = signal<KeycloakRole[]>([]);
-  readonly appRoles   = APP_ROLES;
-  readonly loading    = signal(false);
-  readonly errorMsg   = signal('');
+
+  readonly usuarios = signal<UserWithRole[]>([]);
+  readonly allRoles = signal<KeycloakRole[]>([]);
+  readonly appRoles = APP_ROLES;
+  readonly loading = signal(false);
+  readonly errorMsg = signal('');
   readonly successMsg = signal('');
-  readonly showForm   = signal(false);
+  readonly showForm = signal(false);
   readonly searchTerm = signal('');
 
-  // ── Formulario de creación ─────────────────────────────────────────────────
+
   readonly form = this.fb.nonNullable.group({
-    username:  ['', [Validators.required, Validators.minLength(5)]],
+    username: ['', [Validators.required, Validators.minLength(5)]],
     firstName: ['', Validators.required],
-    lastName:  ['', Validators.required],
-    email:     ['', Validators.email],
-    rol:       ['PACIENTE' as AppRoleName, Validators.required]
+    lastName: ['', Validators.required],
+    email: ['', Validators.email],
+    rol: ['PACIENTE' as AppRoleName, Validators.required]
   });
 
   constructor(
     private readonly kcAdmin: KeycloakAdminService,
     private readonly fb: FormBuilder
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.cargarDatos();
   }
 
-  // ── Carga inicial ──────────────────────────────────────────────────────────
+
   cargarDatos(): void {
     this.loading.set(true);
     this.errorMsg.set('');
 
     forkJoin({
       usuarios: this.kcAdmin.listarUsuarios(),
-      roles:    this.kcAdmin.listarRoles()
+      roles: this.kcAdmin.listarRoles()
     }).subscribe({
       next: ({ usuarios, roles }) => {
         // Filtrar solo los roles de negocio
@@ -99,7 +99,7 @@ export class UserManagementComponent implements OnInit {
     });
   }
 
-  // ── Búsqueda ───────────────────────────────────────────────────────────────
+
   buscar(event: Event): void {
     const term = (event.target as HTMLInputElement).value;
     this.searchTerm.set(term);
@@ -111,11 +111,11 @@ export class UserManagementComponent implements OnInit {
     return this.usuarios().filter(u =>
       u.username.toLowerCase().includes(term) ||
       (u.firstName ?? '').toLowerCase().includes(term) ||
-      (u.lastName  ?? '').toLowerCase().includes(term)
+      (u.lastName ?? '').toLowerCase().includes(term)
     );
   }
 
-  // ── Crear usuario ──────────────────────────────────────────────────────────
+
   toggleForm(): void {
     this.showForm.update(v => !v);
     this.form.reset({ rol: 'PACIENTE' });
@@ -155,13 +155,13 @@ export class UserManagementComponent implements OnInit {
             if (rolObj) {
               this.kcAdmin.asignarRol(nuevoUsuario.id, [rolObj]).subscribe({
                 next: () => {
-                  this.successMsg.set(`✓ Usuario "${username}" creado con rol ${rol}.`);
+                  this.successMsg.set(` Usuario "${username}" creado con rol ${rol}.`);
                   this.showForm.set(false);
                   this.loading.set(false);
                   this.cargarDatos();
                 },
                 error: () => {
-                  this.successMsg.set(`⚠ Usuario creado pero no se pudo asignar el rol. Asígnalo manualmente.`);
+                  this.successMsg.set(` Usuario creado pero no se pudo asignar el rol. Asígnalo manualmente.`);
                   this.loading.set(false);
                   this.cargarDatos();
                 }
@@ -182,7 +182,7 @@ export class UserManagementComponent implements OnInit {
     });
   }
 
-  // ── Cambiar rol ────────────────────────────────────────────────────────────
+
   cambiarRol(usuario: UserWithRole, nuevoRolNombre: string): void {
     const nuevoRol = this.allRoles().find(r => r.name === nuevoRolNombre);
     if (!nuevoRol) return;
@@ -228,7 +228,7 @@ export class UserManagementComponent implements OnInit {
     });
   }
 
-  // ── Habilitar / Deshabilitar ───────────────────────────────────────────────
+
   toggleEstado(usuario: UserWithRole): void {
     this.loading.set(true);
     this.kcAdmin.toggleUsuario(usuario.id, !usuario.enabled).subscribe({
@@ -244,17 +244,17 @@ export class UserManagementComponent implements OnInit {
     });
   }
 
-  // ── Helpers ────────────────────────────────────────────────────────────────
+
   getNombreCompleto(u: KeycloakUser): string {
     return `${u.firstName ?? ''} ${u.lastName ?? ''}`.trim() || '—';
   }
 
   getRolBadgeClass(rol?: string): string {
     const map: Record<string, string> = {
-      ADMIN:     'badge badge--admin',
-      MEDICO:    'badge badge--medico',
+      ADMIN: 'badge badge--admin',
+      MEDICO: 'badge badge--medico',
       AGENDADOR: 'badge badge--agendador',
-      PACIENTE:  'badge badge--paciente'
+      PACIENTE: 'badge badge--paciente'
     };
     return rol ? (map[rol] ?? 'badge badge--default') : 'badge badge--default';
   }

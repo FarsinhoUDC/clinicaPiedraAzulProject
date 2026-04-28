@@ -4,6 +4,7 @@ import com.piedrazul.medicos.domain.Medico;
 import com.piedrazul.medicos.dto.MedicoRequest;
 import com.piedrazul.medicos.dto.MedicoResponse;
 import com.piedrazul.medicos.infrastructure.persistence.MedicoRepository;
+import com.piedrazul.pacientes.infrastructure.KeycloakService;
 import com.piedrazul.shared.exception.BusinessException;
 import com.piedrazul.shared.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ public class MedicoService {
 
     private final MedicoRepository medicoRepository;
     private final PasswordEncoder passwordEncoder;
+    private final KeycloakService keycloakService;
 
     @Transactional(readOnly = true)
     public List<MedicoResponse> listarActivos() {
@@ -43,10 +45,18 @@ public class MedicoService {
                 request.getNombres(),
                 request.getApellidos(),
                 request.getCorreo(),
-                passwordEncoder.encode(request.getContrasena()),
+                passwordEncoder.encode(request.getNumeroDocumento()),
                 request.getNumeroDocumento(),
-                request.getEspecialidad());
-        return toResponse(medicoRepository.save(medico));
+                request.getEspecialidad(),
+                request.getCelular(),
+                request.getGenero() != null && !request.getGenero().isEmpty() ? com.piedrazul.pacientes.domain.Genero.valueOf(request.getGenero()) : null,
+                request.getFechaNacimiento());
+        Medico saved = medicoRepository.save(medico);
+
+        // Crear medico en Keycloak
+        keycloakService.crearMedico(request);
+
+        return toResponse(saved);
     }
 
     public MedicoResponse toResponse(Medico m) {

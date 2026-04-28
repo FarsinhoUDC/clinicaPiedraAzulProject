@@ -12,6 +12,7 @@ import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
+import com.piedrazul.medicos.dto.MedicoRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -69,12 +70,18 @@ public class KeycloakService {
             user.setUsername(req.getNumeroDocumento());
             user.setFirstName(req.getNombres());
             user.setLastName(req.getApellidos());
-            user.setEmail(req.getCorreo());
+            
+            // Asignar un correo ficticio si el paciente no lo proporciona, 
+            // para evitar que Keycloak exija el campo "Update Account Information"
+            String email = (req.getCorreo() != null && !req.getCorreo().trim().isEmpty()) 
+                    ? req.getCorreo() 
+                    : req.getNumeroDocumento() + "@sin-correo.com";
+            user.setEmail(email);
             user.setEmailVerified(true);
 
             // Asignar credencial (contraseña)
             CredentialRepresentation credential = new CredentialRepresentation();
-            credential.setTemporary(true); // El paciente deberá cambiarla al primer inicio
+            credential.setTemporary(false); // La contraseña es definitiva, no requiere cambio al primer inicio
             credential.setType(CredentialRepresentation.PASSWORD);
             credential.setValue(req.getNumeroDocumento()); // Contraseña por defecto es el documento
             user.setCredentials(Collections.singletonList(credential));
@@ -110,6 +117,69 @@ public class KeycloakService {
         } catch (Exception e) {
             log.error("Error al asignar rol PACIENTE al usuario {}", userId, e);
             throw new BusinessException("El usuario se creó, pero falló la asignación de roles.");
+        }
+    }
+
+    public void crearMedico(MedicoRequest req) {
+        try (Keycloak keycloak = getInstance()) {
+            RealmResource realmResource = keycloak.realm(realm);
+            UsersResource usersResource = realmResource.users();
+
+            // Verificar si el usuario ya existe
+            List<UserRepresentation> existingUsers = usersResource.search(req.getNumeroDocumento());
+            if (!existingUsers.isEmpty()) {
+                log.warn("El medico {} ya existe en Keycloak", req.getNumeroDocumento());
+                return;
+            }
+
+            // Crear el usuario
+            UserRepresentation user = new UserRepresentation();
+            user.setEnabled(true);
+            user.setUsername(req.getNumeroDocumento());
+            user.setFirstName(req.getNombres());
+            user.setLastName(req.getApellidos());
+            
+            String email = (req.getCorreo() != null && !req.getCorreo().trim().isEmpty()) 
+                    ? req.getCorreo() 
+                    : req.getNumeroDocumento() + "@sin-correo.com";
+            user.setEmail(email);
+            user.setEmailVerified(true);
+
+            // Asignar credencial (contraseña)
+            CredentialRepresentation credential = new CredentialRepresentation();
+            credential.setTemporary(false);
+            credential.setType(CredentialRepresentation.PASSWORD);
+            credential.setValue(req.getNumeroDocumento());
+            user.setCredentials(Collections.singletonList(credential));
+
+            Response response = usersResource.create(user);
+            if (response.getStatus() == 201) {
+                log.info("Medico {} creado exitosamente en Keycloak", req.getNumeroDocumento());
+
+                String userId = response.getLocation().getPath().replaceAll(".*/([^/]+)$", "$1");
+
+                asignarRolMedico(realmResource, userId);
+            } else if (response.getStatus() == 409) {
+                log.warn("Conflicto al crear medico {} en Keycloak (ya existe)", req.getNumeroDocumento());
+            } else {
+                log.error("Error al crear medico en Keycloak. HTTP Status: {}", response.getStatus());
+                throw new BusinessException("Error de integración: no se pudo registrar el medico en el sistema de autenticación.");
+            }
+        } catch (Exception e) {
+            log.error("Excepción al intentar crear el medico en Keycloak", e);
+            throw new BusinessException("No fue posible comunicarse con el servicio de autenticación.");
+        }
+    }
+
+    private void asignarRolMedico(RealmResource realmResource, String userId) {
+        try {
+            RoleRepresentation medicoRole = realmResource.roles().get("MEDICO").toRepresentation();
+            UserResource userResource = realmResource.users().get(userId);
+            userResource.roles().realmLevel().add(Collections.singletonList(medicoRole));
+            log.info("Rol MEDICO asignado al usuario con ID {}", userId);
+        } catch (Exception e) {
+            log.error("Error al asignar rol MEDICO al usuario {}", userId, e);
+            throw new BusinessException("El medico se creó, pero falló la asignación de roles.");
         }
     }
 }

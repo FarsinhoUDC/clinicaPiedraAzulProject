@@ -17,8 +17,11 @@ public class MedicoRequest {
 
     private String correo;
 
-    @NotBlank(message = "La contraseña es requerida")
-    private String contrasena;
+    private String celular;
+
+    private String genero;
+
+    private java.time.LocalDate fechaNacimiento;
 
     private String especialidad;
 }
