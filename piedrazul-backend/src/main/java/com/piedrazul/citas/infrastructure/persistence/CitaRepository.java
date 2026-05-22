@@ -34,6 +34,8 @@ public interface CitaRepository extends JpaRepository<Cita, Long> {
 
     boolean existsByMedicoIdAndFechaHora(Long medicoId, LocalDateTime fechaHora);
 
+    boolean existsByMedicoIdAndFechaHoraAndIdNot(Long medicoId, LocalDateTime fechaHora, Long id);
+
     @Query("SELECT c FROM Cita c " +
            "WHERE c.paciente.id = :pacienteId " +
            "AND c.fechaHora >= :inicio " +

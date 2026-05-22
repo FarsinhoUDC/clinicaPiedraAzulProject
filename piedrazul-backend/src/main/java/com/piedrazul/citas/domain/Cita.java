@@ -38,6 +38,15 @@ public class Cita {
     @Column(nullable = false)
     private OrigenCita origen;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @Builder.Default
+    private EstadoCita estado = EstadoCita.PROGRAMADA;
+
+    @OneToMany(mappedBy = "cita", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private java.util.List<HistorialCita> historiales = new java.util.ArrayList<>();
+
     @Column(nullable = false, updatable = false)
     private LocalDateTime creadoEn;
 

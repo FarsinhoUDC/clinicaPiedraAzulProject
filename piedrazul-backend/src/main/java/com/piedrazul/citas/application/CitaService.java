@@ -23,8 +23,13 @@ public class CitaService {
 
     @Transactional
     public Cita guardar(Cita cita) {
-        if (citaRepository.existsByMedicoIdAndFechaHora(
-                cita.getMedico().getId(), cita.getFechaHora())) {
+        boolean existe;
+        if (cita.getId() == null) {
+            existe = citaRepository.existsByMedicoIdAndFechaHora(cita.getMedico().getId(), cita.getFechaHora());
+        } else {
+            existe = citaRepository.existsByMedicoIdAndFechaHoraAndIdNot(cita.getMedico().getId(), cita.getFechaHora(), cita.getId());
+        }
+        if (existe) {
             throw new BusinessException(
                     "Ya existe una cita para el medico en esa fecha y hora");
         }
@@ -50,8 +55,12 @@ public class CitaService {
 
     @Transactional(readOnly = true)
     public CitaResponse obtenerPorId(Long id) {
+        return toResponse(obtenerEntidadPorId(id));
+    }
+
+    @Transactional(readOnly = true)
+    public Cita obtenerEntidadPorId(Long id) {
         return citaRepository.findById(id)
-                .map(this::toResponse)
                 .orElseThrow(() -> new ResourceNotFoundException("Cita", id));
     }
 

@@ -107,4 +107,14 @@ public class CitaController {
         List<CitaResponse> citas = citaService.listarPorDocumentoPaciente(numeroDocumento);
         return ResponseEntity.ok(ApiResponse.ok("Mis citas", citas));
     }
+    @PutMapping("/{id}/reagendar")
+    @org.springframework.security.access.prepost.PreAuthorize("hasAnyRole('MEDICO', 'TERAPISTA', 'ADMIN')")
+    public ResponseEntity<ApiResponse<CitaResponse>> reagendar(
+            @PathVariable Long id,
+            @Valid @RequestBody com.piedrazul.citas.dto.ReagendarCitaRequest request,
+            @AuthenticationPrincipal Jwt jwt) {
+        String usuario = jwt.getClaimAsString("preferred_username");
+        CitaResponse response = agendamientoService.reagendarCita(id, request, usuario);
+        return ResponseEntity.ok(ApiResponse.ok("Cita reagendada exitosamente", response));
+    }
 }

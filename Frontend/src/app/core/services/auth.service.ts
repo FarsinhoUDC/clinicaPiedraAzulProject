@@ -32,6 +32,12 @@ export class AuthService {
     return null;
   }
 
+  /** Token de acceso JWT actual. Usar en interceptores HTTP. */
+  getToken(): string | undefined {
+    return keycloak.token;
+  }
+
+
   /** Verifica si el usuario tiene un rol específico. */
   hasRole(role: AppRole): boolean {
     const realmAccess = keycloak.tokenParsed?.['realm_access'] as { roles?: string[] } | undefined;
@@ -67,11 +73,7 @@ export class AuthService {
     return keycloak.tokenParsed?.['family_name'] ?? '';
   }
 
-  /** Token de acceso JWT actual. Usar en interceptores HTTP. */
-  getToken(): string | undefined {
-    return keycloak.token;
-  }
-
+  
     /** ID único del usuario (claim 'sub' en Keycloak). */
   getUserId(): string {
     return keycloak.tokenParsed?.['sub'] ?? '';
