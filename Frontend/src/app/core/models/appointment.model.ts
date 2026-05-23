@@ -1,7 +1,7 @@
 import { PatientRequest } from './patient.model';
 
 export type AppointmentOrigin = 'AGENDADOR' | 'PACIENTE';
-export type AppointmentStatus = 'CONFIRMADA' | 'PENDIENTE' | 'CANCELADA';
+export type AppointmentStatus = 'CONFIRMADA' | 'PENDIENTE' | 'CANCELADA' | 'REAGENDADA' | 'FINALIZADA';
 
 export interface Appointment {
   id: number;
@@ -21,6 +21,11 @@ export interface AppointmentRequest {
   paciente: PatientRequest;
   medicoId: number;
   fechaHora: string;
+}
+
+export interface RescheduleRequest {
+  nuevaFechaHora: string;
+  motivo?: string;
 }
 
 export interface AppointmentSearchFilters {

@@ -36,6 +36,10 @@ public class DataInitializer implements CommandLineRunner {
         crearAdmin();
         crearAgendador();
 
+        // Usuarios de sesión para los médicos (rol MEDICO en Keycloak / JWT)
+        crearUsuarioMedico("carlos.gomez",  "medico1234", "Carlos",  "Gomez");
+        crearUsuarioMedico("laura.martinez", "medico1234", "Laura",   "Martinez");
+
         MedicoResponse medico1 = crearMedico(
                 "Carlos", "Gomez", "1234", "Medicina General");
         MedicoResponse medico2 = crearMedico(
@@ -57,8 +61,10 @@ public class DataInitializer implements CommandLineRunner {
 
         log.info("--- Datos iniciales cargados. Medico1 id={}, Medico2 id={} ---",
                 medico1.getId(), medico2.getId());
-        log.info("--- Admin: admin / admin1234 ---");
+        log.info("--- Admin:     admin / admin1234 ---");
         log.info("--- Agendador: agendador / agendador1234 ---");
+        log.info("--- Medico 1:  carlos.gomez / medico1234 ---");
+        log.info("--- Medico 2:  laura.martinez / medico1234 ---");
     }
 
     private void crearAdmin() {
@@ -93,6 +99,28 @@ public class DataInitializer implements CommandLineRunner {
         agendador.setActivo(true);
         usuarioRepository.save(agendador);
         log.info("Agendador creado: {}", numeroDocumento);
+    }
+
+    /**
+     * Crea un usuario de sesión con rol MEDICO.
+     * El numeroDocumento actúa como preferred_username en Keycloak,
+     * por lo que debe coincidir con el username configurado allí.
+     */
+    private void crearUsuarioMedico(String numeroDocumento, String contrasena,
+                                     String nombres, String apellidos) {
+        if (usuarioRepository.existsByNumeroDocumento(numeroDocumento)) {
+            log.info("Usuario médico '{}' ya existe, omitiendo creacion.", numeroDocumento);
+            return;
+        }
+        Usuario medico = new Usuario();
+        medico.setNombres(nombres);
+        medico.setApellidos(apellidos);
+        medico.setNumeroDocumento(numeroDocumento);
+        medico.setContrasena(passwordEncoder.encode(contrasena));
+        medico.setRol(RolUsuario.MEDICO);
+        medico.setActivo(true);
+        usuarioRepository.save(medico);
+        log.info("Usuario médico creado: {}", numeroDocumento);
     }
 
     private MedicoResponse crearMedico(String nombres, String apellidos,

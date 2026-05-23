@@ -4,6 +4,7 @@ import com.piedrazul.configuracion.domain.DisponibilidadMedico;
 import com.piedrazul.configuracion.dto.FranjaHorariaResponse;
 import com.piedrazul.configuracion.infrastructure.persistence.DisponibilidadMedicoRepository;
 import com.piedrazul.medicos.domain.Medico;
+import com.piedrazul.pacientes.domain.Genero;
 import com.piedrazul.shared.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -36,7 +37,7 @@ class FranjaHorariaServiceTest {
     void setUp() {
         // Medico construido con factory method — incluye campos heredados de Usuario
         Medico medico = Medico.nuevo("Carlos", "Gomez",
-                "carlos.gomez@test.com", "pass123", "1234", "Medicina General");
+                "carlos.gomez@test.com", "pass123", "1234", "Medicina General", "3212123212",Genero.HOMBRE, LocalDate.now());
         medico.setId(1L);
 
         disponibilidad = DisponibilidadMedico.builder()

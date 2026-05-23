@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 
 import { ApiResponse } from '../api/api-response.model';
-import { Appointment, AppointmentOrigin, AppointmentRequest } from '../models/appointment.model';
+import { Appointment, AppointmentOrigin, AppointmentRequest, RescheduleRequest } from '../models/appointment.model';
 import { DoctorAvailability, TimeSlot } from '../models/doctor.model';
 import { ConfigurationApiService } from './configuration-api.service';
 import { AppointmentStrategyResolver } from '../strategies/appointment-creation.strategy';
@@ -53,15 +53,20 @@ export class AppointmentApiService {
     );
   }
 
-  /**
-   * Obtiene las citas del paciente autenticado.
-   * El backend extrae el número de documento del JWT (preferred_username),
-   * por lo que no se requiere ningún ID numérico interno.
-   */
   getMisCitas(): Observable<Appointment[]> {
     return this.http.get<ApiResponse<Appointment[]>>(`${environment.apiBaseUrl}/citas/mis-citas`).pipe(
       map((response) => response.data ?? [])
     );
+  }
+
+  /**
+   * RE-AGENDAMIENTO: PUT /api/citas/{id}/reagendar
+   * Solo accesible por roles MEDICO, TERAPISTA, ADMIN.
+   */
+  reschedule(citaId: number, body: RescheduleRequest): Observable<Appointment> {
+    return this.http
+      .put<ApiResponse<Appointment>>(`${environment.apiBaseUrl}/citas/${citaId}/reagendar`, body)
+      .pipe(map((response) => response.data as Appointment));
   }
 
   private buildFallbackSlots(medicoId: number, fecha: string): Observable<TimeSlot[]> {

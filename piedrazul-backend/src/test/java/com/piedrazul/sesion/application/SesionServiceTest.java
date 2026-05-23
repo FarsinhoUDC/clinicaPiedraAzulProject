@@ -18,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
@@ -40,7 +41,7 @@ class SesionServiceTest {
 
     @BeforeEach
     void setUp() {
-        medico = Medico.nuevo("Carlos", "Gomez", "carlos@test.com", HASH, "1234", "Medicina General");
+        medico = Medico.nuevo("Carlos", "Gomez", "carlos@test.com", HASH, "1234", "Medicina General","3123123123", Genero.HOMBRE, LocalDate.now());
         medico.setId(1L);
 
         paciente = Paciente.nuevo("Maria", "Lopez", "maria@test.com", HASH,

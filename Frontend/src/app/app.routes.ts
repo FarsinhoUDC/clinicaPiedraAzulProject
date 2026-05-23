@@ -6,6 +6,7 @@ import { UserManagementComponent } from './features/admin/user-management/user-m
 import { AppointmentSearchComponent } from './features/agendador/appointment-search/appointment-search.component';
 import { NewAppointmentFormComponent } from './features/agendador/new-appointment-form/new-appointment-form.component';
 import { MedicoReportesComponent } from './features/medico/reportes/medico-reportes.component';
+import { ReagendarCitaComponent } from './features/medico/reagendar/reagendar-cita.component';
 import { PatientPortalComponent } from './features/patient/patient-portal/patient-portal.component';
 import { PatientRegistrationComponent } from './features/patient/patient-registration/patient-registration.component';
 import { DashboardComponent } from './features/agendador/dashboard/dashboard.component';
@@ -25,6 +26,9 @@ export const routes: Routes = [
   // Solo MEDICO — Exportación CSV
   { path: 'medico/reportes', component: MedicoReportesComponent, canActivate: [medicoGuard] },
 
+  // Solo MEDICO — Re-agendamiento de citas
+  { path: 'medico/reagendar', component: ReagendarCitaComponent, canActivate: [medicoGuard] },
+
   // Solo PACIENTE
   { path: 'paciente/portal',    component: PatientPortalComponent,      canActivate: [pacienteGuard] },
   { path: 'paciente/mis-citas', component: MisCitasComponent,           canActivate: [pacienteGuard] },
@@ -35,4 +39,3 @@ export const routes: Routes = [
 
   { path: '**', redirectTo: 'inicio' }
 ];
-

@@ -60,7 +60,7 @@ export class AppComponent implements OnInit {
   /** MEDICO y AGENDADOR comparten la vista de gestión de citas */
   get isAgendador(): boolean {
     const rol = this.auth.getRole();
-    return rol === 'MEDICO' || rol === 'AGENDADOR';
+    return rol === 'AGENDADOR';
   }
 
   get isAdmin(): boolean {

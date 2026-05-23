@@ -12,6 +12,11 @@ export class UiMappersService {
   }
 
   private resolveStatus(item: Appointment): AppointmentStatus {
+    // Si el backend ya devuelve un estado real, lo respetamos
+    if (item.estado && item.estado !== 'PENDIENTE') {
+      return item.estado;
+    }
+
     if (item.origen === 'PACIENTE') {
       return 'CONFIRMADA';
     }

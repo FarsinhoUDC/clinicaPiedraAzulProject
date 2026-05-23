@@ -1,0 +1,336 @@
+<section class="reagendar-page">
+  <div class="reagendar-card">
+
+    <!-- ══════════════════════════════════════════════════════
+         ENCABEZADO
+    ══════════════════════════════════════════════════════ -->
+    <div class="reagendar-header">
+      <h2>Re-agendamiento de Citas</h2>
+      <p>Busque una cita existente, seleccione el nuevo horario y confirme el cambio.</p>
+
+      <!-- Indicador de pasos -->
+      <nav class="step-trail" aria-label="Pasos del re-agendamiento">
+        <span class="step-dot" [class.active]="viewState === 'search'"
+              [class.done]="viewState === 'select-slot' || viewState === 'confirm' || viewState === 'success'">
+          <span class="step-num">1</span>
+          <span class="step-label">Buscar cita</span>
+        </span>
+        <span class="step-connector"></span>
+        <span class="step-dot" [class.active]="viewState === 'select-slot'"
+              [class.done]="viewState === 'confirm' || viewState === 'success'">
+          <span class="step-num">2</span>
+          <span class="step-label">Nuevo horario</span>
+        </span>
+        <span class="step-connector"></span>
+        <span class="step-dot" [class.active]="viewState === 'confirm'"
+              [class.done]="viewState === 'success'">
+          <span class="step-num">3</span>
+          <span class="step-label">Confirmar</span>
+        </span>
+      </nav>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════
+         PASO 1 — BUSCAR CITA
+    ══════════════════════════════════════════════════════ -->
+    <div *ngIf="viewState === 'search'">
+
+      <form [formGroup]="searchForm" class="search-bar" (ngSubmit)="searchAppointments()">
+        <div class="form-field">
+          <label for="medicoId">Médico / Terapista *</label>
+          <select id="medicoId" formControlName="medicoId">
+            <option value="">Seleccione un médico</option>
+            <option *ngFor="let doctor of doctors" [value]="doctor.id">
+              {{ doctor.nombres }} {{ doctor.apellidos }}
+              <ng-container *ngIf="doctor.especialidad"> — {{ doctor.especialidad }}</ng-container>
+            </option>
+          </select>
+          <span class="field-error"
+                *ngIf="searchForm.controls.medicoId.touched && searchForm.controls.medicoId.invalid">
+            Seleccione un médico.
+          </span>
+        </div>
+
+        <div class="form-field">
+          <label for="fecha">Fecha *</label>
+          <input id="fecha" type="date" formControlName="fecha">
+          <span class="field-error"
+                *ngIf="searchForm.controls.fecha.touched && searchForm.controls.fecha.invalid">
+            Seleccione una fecha.
+          </span>
+        </div>
+
+        <button type="submit" class="btn-primary" [disabled]="isLoadingAppointments">
+          <span *ngIf="!isLoadingAppointments">Buscar citas</span>
+          <span *ngIf="isLoadingAppointments" class="spinner-inline"></span>
+        </button>
+      </form>
+
+      <!-- Error de búsqueda -->
+      <div class="alert alert-error" *ngIf="searchError">{{ searchError }}</div>
+
+      <!-- Loading -->
+      <div class="state-box loading" *ngIf="isLoadingAppointments">
+        Consultando citas...
+      </div>
+
+      <!-- Tabla de resultados -->
+      <div class="results-table-wrap" *ngIf="!isLoadingAppointments && appointments.length > 0">
+        <div class="results-count">
+          {{ appointments.length }} cita{{ appointments.length !== 1 ? 's' : '' }} encontrada{{ appointments.length !== 1 ? 's' : '' }}
+          para <strong>{{ selectedDoctor?.nombres }} {{ selectedDoctor?.apellidos }}</strong>
+          el <strong>{{ dateLabel(searchForm.value.fecha + 'T00:00:00') }}</strong>
+        </div>
+
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Paciente</th>
+              <th>Documento</th>
+              <th>Hora actual</th>
+              <th>Estado</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let apt of appointments; let i = index; trackBy: trackByAppointment">
+              <td>{{ i + 1 }}</td>
+              <td class="patient-name">{{ apt.nombrePaciente }}</td>
+              <td>{{ apt.documentoPaciente }}</td>
+              <td class="hour-cell">{{ hourLabel(apt.fechaHora) }}</td>
+              <td>
+                <span class="status-pill" [ngClass]="statusClass(apt.estado)">
+                  {{ statusLabel(apt.estado) }}
+                </span>
+              </td>
+              <td>
+                <button type="button" class="btn-reschedule"
+                        (click)="selectAppointment(apt)"
+                        title="Re-agendar esta cita">
+                  Reagendar
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Sin resultados -->
+      <div class="state-box empty"
+           *ngIf="searchExecuted && !isLoadingAppointments && appointments.length === 0 && !searchError">
+        No se encontraron citas para los criterios seleccionados.
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════
+         PASO 2 — SELECCIONAR NUEVO HORARIO
+    ══════════════════════════════════════════════════════ -->
+    <div *ngIf="viewState === 'select-slot'">
+
+      <!-- Info de la cita seleccionada -->
+      <div class="selected-appointment-card" *ngIf="selectedAppointment">
+        <div class="sac-label">Cita a re-agendar</div>
+        <div class="sac-body">
+          <div class="sac-field">
+            <span class="sac-key">Paciente</span>
+            <span class="sac-val">{{ selectedAppointment.nombrePaciente }}</span>
+          </div>
+          <div class="sac-field">
+            <span class="sac-key">Documento</span>
+            <span class="sac-val">{{ selectedAppointment.documentoPaciente }}</span>
+          </div>
+          <div class="sac-field">
+            <span class="sac-key">Fecha y hora actual</span>
+            <span class="sac-val chip-date">
+              {{ dateLabel(selectedAppointment.fechaHora) }} — {{ hourLabel(selectedAppointment.fechaHora) }}
+            </span>
+          </div>
+          <div class="sac-field">
+            <span class="sac-key">Médico</span>
+            <span class="sac-val">{{ selectedAppointment.nombreMedico }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Formulario de nueva fecha + slots -->
+      <form [formGroup]="reagendarForm" class="slot-form" (ngSubmit)="proceedToConfirm()">
+
+        <div class="form-field date-field">
+          <label for="nuevaFecha">Nueva fecha *</label>
+          <input id="nuevaFecha" type="date" formControlName="nuevaFecha"
+                 (change)="onDateChange()">
+          <span class="field-error"
+                *ngIf="reagendarForm.controls.nuevaFecha.touched && reagendarForm.controls.nuevaFecha.errors?.['required']">
+            Seleccione una fecha.
+          </span>
+          <span class="field-error"
+                *ngIf="reagendarForm.controls.nuevaFecha.touched && reagendarForm.controls.nuevaFecha.errors?.['pastDate']">
+            La fecha debe ser hoy o en el futuro.
+          </span>
+        </div>
+
+        <!-- Franjas horarias -->
+        <div class="slots-section">
+          <div class="slots-label">
+            Horarios disponibles
+            <span class="slots-date-hint" *ngIf="selectedDateLabel"> — {{ selectedDateLabel }}</span>
+          </div>
+
+          <div class="loading-slots" *ngIf="isLoadingSlots">
+            <span class="spinner-inline"></span> Cargando horarios...
+          </div>
+
+          <div class="alert alert-warning" *ngIf="!isLoadingSlots && slotError">{{ slotError }}</div>
+
+          <div class="slots-grid" *ngIf="!isLoadingSlots && availableSlots.length > 0">
+            <button
+              type="button"
+              class="slot-chip"
+              *ngFor="let slot of availableSlots; trackBy: trackBySlot"
+              [class.selected]="reagendarForm.value.horario === slot.hora"
+              (click)="selectSlot(slot.hora)">
+              {{ slot.hora }}
+            </button>
+          </div>
+
+          <span class="field-error"
+                *ngIf="reagendarForm.controls.horario.touched && reagendarForm.controls.horario.invalid">
+            Seleccione un horario.
+          </span>
+        </div>
+
+        <!-- Motivo (opcional) -->
+        <div class="form-field">
+          <label for="motivo">Motivo del re-agendamiento <span class="optional-hint">(opcional)</span></label>
+          <textarea id="motivo" formControlName="motivo" rows="3"
+                    placeholder="Ej.: El paciente solicitó cambio de horario por compromisos laborales...">
+          </textarea>
+          <span class="field-hint">Máximo 300 caracteres.</span>
+          <span class="field-error"
+                *ngIf="reagendarForm.controls.motivo.touched && reagendarForm.controls.motivo.errors?.['maxlength']">
+            El motivo no puede superar los 300 caracteres.
+          </span>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn-secondary" (click)="goBackToSearch()">
+            ← Volver
+          </button>
+          <button type="submit" class="btn-primary"
+                  [disabled]="reagendarForm.value.horario === '' || isLoadingSlots">
+            Continuar →
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════
+         PASO 3 — CONFIRMAR
+    ══════════════════════════════════════════════════════ -->
+    <div *ngIf="viewState === 'confirm'" class="confirm-view">
+
+      <div class="confirm-icon">📋</div>
+      <h3 class="confirm-title">Confirma el re-agendamiento</h3>
+      <p class="confirm-subtitle">Revisa los datos antes de guardar el cambio.</p>
+
+      <div class="confirm-table" *ngIf="selectedAppointment">
+        <div class="ct-row">
+          <span class="ct-key">Paciente</span>
+          <span class="ct-val">{{ selectedAppointment.nombrePaciente }}</span>
+        </div>
+        <div class="ct-row">
+          <span class="ct-key">Documento</span>
+          <span class="ct-val">{{ selectedAppointment.documentoPaciente }}</span>
+        </div>
+        <div class="ct-row">
+          <span class="ct-key">Médico</span>
+          <span class="ct-val">{{ selectedAppointment.nombreMedico }}</span>
+        </div>
+        <div class="ct-row highlight-change">
+          <span class="ct-key">Fecha anterior</span>
+          <span class="ct-val old-val">
+            {{ dateLabel(selectedAppointment.fechaHora) }} — {{ hourLabel(selectedAppointment.fechaHora) }}
+          </span>
+        </div>
+        <div class="ct-row highlight-change">
+          <span class="ct-key">Nueva fecha</span>
+          <span class="ct-val new-val">
+            {{ dateLabel(reagendarForm.value.nuevaFecha + 'T00:00:00') }} — {{ reagendarForm.value.horario }}
+          </span>
+        </div>
+        <div class="ct-row" *ngIf="reagendarForm.value.motivo">
+          <span class="ct-key">Motivo</span>
+          <span class="ct-val">{{ reagendarForm.value.motivo }}</span>
+        </div>
+      </div>
+
+      <div class="form-actions confirm-actions">
+        <button type="button" class="btn-secondary" (click)="goBackToSlots()" [disabled]="isSubmitting">
+          ← Editar
+        </button>
+        <button type="button" class="btn-confirm" (click)="confirmReschedule()" [disabled]="isSubmitting">
+          <span *ngIf="!isSubmitting">Confirmar re-agendamiento</span>
+          <span *ngIf="isSubmitting" class="spinner-inline"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════
+         ESTADO — ÉXITO
+    ══════════════════════════════════════════════════════ -->
+    <div *ngIf="viewState === 'success'" class="result-view success-view">
+      <div class="result-icon success-icon">✓</div>
+      <h3>¡Cita re-agendada exitosamente!</h3>
+      <p>El cambio ha sido registrado en el sistema.</p>
+
+      <div class="confirm-table" *ngIf="confirmedAppointment">
+        <div class="ct-row">
+          <span class="ct-key">Paciente</span>
+          <span class="ct-val">{{ confirmedAppointment.nombrePaciente }}</span>
+        </div>
+        <div class="ct-row">
+          <span class="ct-key">Médico</span>
+          <span class="ct-val">{{ confirmedAppointment.nombreMedico }}</span>
+        </div>
+        <div class="ct-row">
+          <span class="ct-key">Nueva fecha y hora</span>
+          <span class="ct-val new-val">
+            {{ dateLabel(confirmedAppointment.fechaHora) }} — {{ hourLabel(confirmedAppointment.fechaHora) }}
+          </span>
+        </div>
+        <div class="ct-row">
+          <span class="ct-key">Estado</span>
+          <span class="ct-val">
+            <span class="status-pill status-rescheduled">Reagendada</span>
+          </span>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-primary" (click)="startOver()">
+          Re-agendar otra cita
+        </button>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════
+         ESTADO — ERROR
+    ══════════════════════════════════════════════════════ -->
+    <div *ngIf="viewState === 'error'" class="result-view error-view">
+      <div class="result-icon error-icon">✕</div>
+      <h3>No fue posible reagendar la cita</h3>
+      <p class="error-message">{{ submitError }}</p>
+
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" (click)="goBackToSlots()">
+          ← Intentar de nuevo
+        </button>
+        <button type="button" class="btn-primary" (click)="startOver()">
+          Nueva búsqueda
+        </button>
+      </div>
+    </div>
+
+  </div>
+</section>
