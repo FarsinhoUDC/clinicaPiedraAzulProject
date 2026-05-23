@@ -29,7 +29,14 @@ public class PacienteService {
                 .findByNumeroDocumento(request.getNumeroDocumento());
 
         if (existente.isPresent()) {
-            return toResponse(existente.get());
+            Paciente p = existente.get();
+            p.setNombres(request.getNombres());
+            p.setApellidos(request.getApellidos());
+            p.setCorreo(request.getCorreo());
+            p.setCelular(request.getCelular());
+            p.setGenero(request.getGenero());
+            p.setFechaNacimiento(request.getFechaNacimiento());
+            return toResponse(pacienteRepository.save(p));
         }
 
         String encodedPassword = request.getContrasena() != null

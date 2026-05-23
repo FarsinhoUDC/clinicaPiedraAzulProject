@@ -1,3 +1,6 @@
+/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar)/piedrazul-backend/src/test/java/com/piedrazul/configuracion/application/ConfiguracionServiceTest.java
+/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar)/piedrazul-backend/src/test/java/com/piedrazul/medicos/application/MedicoServiceTest.java
+/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar)/piedrazul-backend/src/test/java/com/piedrazul/citas/application/AgendamientoServiceTest.java
 /home/cjor/Documentos/clinicaPiedraAzulProject (Copiar)/piedrazul-backend/src/test/java/com/piedrazul/sesion/application/SesionServiceTest.java
 /home/cjor/Documentos/clinicaPiedraAzulProject (Copiar)/piedrazul-backend/src/test/java/com/piedrazul/configuracion/application/FranjaHorariaServiceTest.java
 /home/cjor/Documentos/clinicaPiedraAzulProject (Copiar)/piedrazul-backend/src/test/java/com/piedrazul/pacientes/application/PacienteServiceTest.java

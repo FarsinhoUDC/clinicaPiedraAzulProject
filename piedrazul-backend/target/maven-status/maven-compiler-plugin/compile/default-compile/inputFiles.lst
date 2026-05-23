@@ -1,4 +1,5 @@
 /home/cjor/Documentos/clinicaPiedraAzulProject (Copiar)/piedrazul-backend/src/main/java/com/piedrazul/citas/dto/CitaResponse.java
+/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar)/piedrazul-backend/src/main/java/com/piedrazul/shared/AuditAspect.java
 /home/cjor/Documentos/clinicaPiedraAzulProject (Copiar)/piedrazul-backend/src/main/java/com/piedrazul/sesion/dto/UsuarioResponse.java
 /home/cjor/Documentos/clinicaPiedraAzulProject (Copiar)/piedrazul-backend/src/main/java/com/piedrazul/medicos/domain/Medico.java
 /home/cjor/Documentos/clinicaPiedraAzulProject (Copiar)/piedrazul-backend/src/main/java/com/piedrazul/citas/infrastructure/web/CitaController.java
@@ -8,11 +9,15 @@
 /home/cjor/Documentos/clinicaPiedraAzulProject (Copiar)/piedrazul-backend/src/main/java/com/piedrazul/configuracion/dto/ConfiguracionSistemaRequest.java
 /home/cjor/Documentos/clinicaPiedraAzulProject (Copiar)/piedrazul-backend/src/main/java/com/piedrazul/pacientes/infrastructure/persistence/PacienteRepository.java
 /home/cjor/Documentos/clinicaPiedraAzulProject (Copiar)/piedrazul-backend/src/main/java/com/piedrazul/pacientes/application/PacienteService.java
+/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar)/piedrazul-backend/src/main/java/com/piedrazul/pacientes/infrastructure/KeycloakService.java
 /home/cjor/Documentos/clinicaPiedraAzulProject (Copiar)/piedrazul-backend/src/main/java/com/piedrazul/configuracion/infrastructure/persistence/DisponibilidadMedicoRepository.java
 /home/cjor/Documentos/clinicaPiedraAzulProject (Copiar)/piedrazul-backend/src/main/java/com/piedrazul/sesion/domain/RolUsuario.java
 /home/cjor/Documentos/clinicaPiedraAzulProject (Copiar)/piedrazul-backend/src/main/java/com/piedrazul/reports/infrastructure/web/ReportController.java
 /home/cjor/Documentos/clinicaPiedraAzulProject (Copiar)/piedrazul-backend/src/main/java/com/piedrazul/sesion/infrastructure/web/SesionController.java
 /home/cjor/Documentos/clinicaPiedraAzulProject (Copiar)/piedrazul-backend/src/main/java/com/piedrazul/shared/CorsConfig.java
+/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar)/piedrazul-backend/src/main/java/com/piedrazul/shared/KeycloakRoleConverter.java
+/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar)/piedrazul-backend/src/main/java/com/piedrazul/citas/domain/EstadoCita.java
+/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar)/piedrazul-backend/src/main/java/com/piedrazul/citas/dto/ReagendarCitaRequest.java
 /home/cjor/Documentos/clinicaPiedraAzulProject (Copiar)/piedrazul-backend/src/main/java/com/piedrazul/configuracion/dto/DisponibilidadMedicoRequest.java
 /home/cjor/Documentos/clinicaPiedraAzulProject (Copiar)/piedrazul-backend/src/main/java/com/piedrazul/configuracion/dto/DisponibilidadMedicoResponse.java
 /home/cjor/Documentos/clinicaPiedraAzulProject (Copiar)/piedrazul-backend/src/main/java/com/piedrazul/reports/infrastructure/converter/CSVConverter.java
@@ -28,6 +33,7 @@
 /home/cjor/Documentos/clinicaPiedraAzulProject (Copiar)/piedrazul-backend/src/main/java/com/piedrazul/sesion/domain/Usuario.java
 /home/cjor/Documentos/clinicaPiedraAzulProject (Copiar)/piedrazul-backend/src/main/java/com/piedrazul/configuracion/infrastructure/persistence/ConfiguracionSistemaRepository.java
 /home/cjor/Documentos/clinicaPiedraAzulProject (Copiar)/piedrazul-backend/src/main/java/com/piedrazul/pacientes/domain/Paciente.java
+/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar)/piedrazul-backend/src/main/java/com/piedrazul/citas/infrastructure/persistence/HistorialCitaRepository.java
 /home/cjor/Documentos/clinicaPiedraAzulProject (Copiar)/piedrazul-backend/src/main/java/com/piedrazul/configuracion/domain/DisponibilidadMedico.java
 /home/cjor/Documentos/clinicaPiedraAzulProject (Copiar)/piedrazul-backend/src/main/java/com/piedrazul/shared/response/ApiResponse.java
 /home/cjor/Documentos/clinicaPiedraAzulProject (Copiar)/piedrazul-backend/src/main/java/com/piedrazul/pacientes/domain/Genero.java
@@ -38,6 +44,7 @@
 /home/cjor/Documentos/clinicaPiedraAzulProject (Copiar)/piedrazul-backend/src/main/java/com/piedrazul/shared/exception/ResourceNotFoundException.java
 /home/cjor/Documentos/clinicaPiedraAzulProject (Copiar)/piedrazul-backend/src/main/java/com/piedrazul/citas/dto/CrearCitaRequest.java
 /home/cjor/Documentos/clinicaPiedraAzulProject (Copiar)/piedrazul-backend/src/main/java/com/piedrazul/medicos/infrastructure/persistence/MedicoRepository.java
+/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar)/piedrazul-backend/src/main/java/com/piedrazul/citas/domain/HistorialCita.java
 /home/cjor/Documentos/clinicaPiedraAzulProject (Copiar)/piedrazul-backend/src/main/java/com/piedrazul/PiedrazulApplication.java
 /home/cjor/Documentos/clinicaPiedraAzulProject (Copiar)/piedrazul-backend/src/main/java/com/piedrazul/shared/exception/BusinessException.java
 /home/cjor/Documentos/clinicaPiedraAzulProject (Copiar)/piedrazul-backend/src/main/java/com/piedrazul/shared/SecurityConfig.java

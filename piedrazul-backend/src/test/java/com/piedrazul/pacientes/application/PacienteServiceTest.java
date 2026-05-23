@@ -5,6 +5,7 @@ import com.piedrazul.pacientes.domain.Paciente;
 import com.piedrazul.pacientes.dto.PacienteRequest;
 import com.piedrazul.pacientes.dto.PacienteResponse;
 import com.piedrazul.pacientes.infrastructure.persistence.PacienteRepository;
+import com.piedrazul.pacientes.infrastructure.KeycloakService;
 import com.piedrazul.shared.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -26,6 +27,7 @@ class PacienteServiceTest {
 
     @Mock private PacienteRepository pacienteRepository;
     @Mock private PasswordEncoder passwordEncoder;
+    @Mock private KeycloakService keycloakService;
     @InjectMocks private PacienteService pacienteService;
 
     private Paciente paciente;
@@ -59,6 +61,7 @@ class PacienteServiceTest {
         assertThat(response).isNotNull();
         assertThat(response.getNombres()).isEqualTo("Maria");
         verify(pacienteRepository).save(any(Paciente.class));
+        verify(keycloakService).crearUsuario(any(PacienteRequest.class));
     }
 
     @Test

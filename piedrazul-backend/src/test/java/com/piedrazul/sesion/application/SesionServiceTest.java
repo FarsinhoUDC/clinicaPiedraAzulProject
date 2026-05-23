@@ -3,6 +3,7 @@ package com.piedrazul.sesion.application;
 import com.piedrazul.medicos.domain.Medico;
 import com.piedrazul.pacientes.domain.Genero;
 import com.piedrazul.pacientes.domain.Paciente;
+import com.piedrazul.pacientes.infrastructure.persistence.PacienteRepository;
 import com.piedrazul.sesion.domain.RolUsuario;
 import com.piedrazul.sesion.dto.LoginRequest;
 import com.piedrazul.sesion.dto.UsuarioResponse;
@@ -18,7 +19,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
@@ -29,6 +29,7 @@ import static org.mockito.Mockito.*;
 class SesionServiceTest {
 
     @Mock private UsuarioRepository usuarioRepository;
+    @Mock private PacienteRepository pacienteRepository;
     @Mock private PasswordEncoder passwordEncoder;
     @InjectMocks private SesionService sesionService;
 
@@ -41,7 +42,7 @@ class SesionServiceTest {
 
     @BeforeEach
     void setUp() {
-        medico = Medico.nuevo("Carlos", "Gomez", "carlos@test.com", HASH, "1234", "Medicina General","3123123123", Genero.HOMBRE, LocalDate.now());
+        medico = Medico.nuevo("Carlos", "Gomez", "carlos@test.com", HASH, "1234", "Medicina General", null, null, null);
         medico.setId(1L);
 
         paciente = Paciente.nuevo("Maria", "Lopez", "maria@test.com", HASH,

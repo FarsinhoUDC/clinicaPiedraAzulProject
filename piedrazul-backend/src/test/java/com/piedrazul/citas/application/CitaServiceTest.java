@@ -40,7 +40,7 @@ class CitaServiceTest {
     void setUp() {
         // Medico construido con factory method — incluye campos heredados de Usuario
         medico = Medico.nuevo("Juan", "Perez",
-                "juan.perez@test.com", "pass123", "1234", "General","3213213232", Genero.HOMBRE, LocalDate.now());
+                "juan.perez@test.com", "pass123", "1234", "General", null, null, null);
         medico.setId(1L);
 
         // Paciente construido con factory method — incluye campos heredados de Usuario
@@ -53,7 +53,7 @@ class CitaServiceTest {
                 .withHour(9).withMinute(0).withSecond(0).withNano(0);
 
         cita = Cita.builder()
-                .id(1L).medico(medico).paciente(paciente)
+                .medico(medico).paciente(paciente)
                 .fechaHora(fechaHora).origen(OrigenCita.AGENDADOR)
                 .build();
     }
@@ -62,7 +62,11 @@ class CitaServiceTest {
     @DisplayName("guardar - cita valida - retorna cita guardada")
     void guardar_citaValida_retornaCitaGuardada() {
         when(citaRepository.existsByMedicoIdAndFechaHora(anyLong(), any())).thenReturn(false);
-        when(citaRepository.save(any(Cita.class))).thenReturn(cita);
+        Cita citaGuardada = Cita.builder()
+                .id(1L).medico(medico).paciente(paciente)
+                .fechaHora(fechaHora).origen(OrigenCita.AGENDADOR)
+                .build();
+        when(citaRepository.save(any(Cita.class))).thenReturn(citaGuardada);
 
         Cita resultado = citaService.guardar(cita);
 
