@@ -65,7 +65,6 @@ export class RegisterFormOrganism {
         this.cargando = false;
         if (response.success) {
           this.success = 'Registro exitoso. Ya puedes iniciar sesión.';
-          setTimeout(() => this.registerSuccess.emit(), 1500);
         } else {
           this.error = response.message || 'Error al registrar';
         }
@@ -75,6 +74,10 @@ export class RegisterFormOrganism {
         this.error = err?.error?.message || err?.message || 'Error al conectar con el servidor';
       }
     });
+  }
+
+  onSuccessClose(): void {
+    this.registerSuccess.emit();
   }
 
   onSwitchToLogin(): void {

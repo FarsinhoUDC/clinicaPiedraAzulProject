@@ -13,81 +13,96 @@
 
   <div class="col-lg-6 d-flex align-items-center justify-content-center p-4 bg-white register-form-right">
     <div class="w-100" style="max-width: 500px;">
-      <h2 style="font-family: Georgia, 'Times New Roman', serif; color: #173250; font-size: 1.6rem;">Crear Cuenta</h2>
-      <p class="text-secondary mb-3" style="font-size: 0.9rem;">Completa tus datos para registrarte</p>
+      <!-- Vista de éxito -->
+      <div *ngIf="success" class="text-center py-4">
+        <div class="mb-3" style="font-size: 4rem;">✅</div>
+        <h3 class="mb-3" style="font-family: Georgia, 'Times New Roman', serif; color: #173250;">Registro Exitoso</h3>
+        <p class="mb-4" style="color: #2da35a; font-size: 1rem;">{{ success }}</p>
+        <atom-button variant="primary" (onClick)="onSuccessClose()">Cerrar</atom-button>
+      </div>
 
-      <div *ngIf="error" class="alert alert-danger py-2 px-3" style="font-size: 0.85rem;">{{ error }}</div>
-      <div *ngIf="success" class="alert alert-success py-2 px-3" style="font-size: 0.85rem;">{{ success }}</div>
+      <!-- Formulario -->
+      <ng-container *ngIf="!success">
+        <h2 style="font-family: Georgia, 'Times New Roman', serif; color: #173250; font-size: 1.6rem;">Crear Cuenta</h2>
+        <p class="text-secondary mb-3" style="font-size: 0.9rem;">Completa tus datos para registrarte</p>
 
-      <form (ngSubmit)="onRegister()" class="row row-cols-1 row-cols-md-2 g-3">
-        <div class="col">
-          <label class="form-label" for="reg-documentNumber">Número de Documento *</label>
-          <atom-input id="reg-documentNumber" [(ngModel)]="documentNumber" name="documentNumber" placeholder="C.C., T.I., etc."></atom-input>
-        </div>
+        <div *ngIf="error" class="alert alert-danger py-2 px-3" style="font-size: 0.85rem;">{{ error }}</div>
 
-        <div class="col">
-          <label class="form-label" for="reg-documentType">Tipo de Documento</label>
-          <atom-select id="reg-documentType" [(ngModel)]="documentType" name="documentType" [options]="[
-            {label: 'Cédula de Ciudadanía', value: 'CC'},
-            {label: 'Tarjeta de Identidad', value: 'TI'},
-            {label: 'Cédula de Extranjería', value: 'CE'},
-            {label: 'Registro Civil', value: 'RC'},
-            {label: 'Pasaporte', value: 'PASAPORTE'}
-          ]"></atom-select>
-        </div>
-
-        <div class="col">
-          <label class="form-label" for="reg-firstName">Nombre *</label>
-          <atom-input id="reg-firstName" [(ngModel)]="firstName" name="firstName" placeholder="Tu nombre"></atom-input>
-        </div>
-
-        <div class="col">
-          <label class="form-label" for="reg-lastName">Apellido *</label>
-          <atom-input id="reg-lastName" [(ngModel)]="lastName" name="lastName" placeholder="Tu apellido"></atom-input>
-        </div>
-
-        <div class="col">
-          <label class="form-label" for="reg-phone">Celular *</label>
-          <atom-input id="reg-phone" type="text" [(ngModel)]="phone" name="phone" placeholder="Número de celular"></atom-input>
-        </div>
-
-        <div class="col">
-          <label class="form-label" for="reg-gender">Género</label>
-          <atom-select id="reg-gender" [(ngModel)]="gender" name="gender" placeholder="Seleccionar" [options]="[
-            {label: 'Masculino', value: 'M'},
-            {label: 'Femenino', value: 'F'},
-            {label: 'Prefiero no decir', value: 'PND'}
-          ]"></atom-select>
-        </div>
-
-        <div class="col">
-          <label class="form-label" for="reg-birthDate">Fecha de Nacimiento</label>
-          <atom-input id="reg-birthDate" type="date" [(ngModel)]="birthDate" name="birthDate"></atom-input>
-        </div>
-
-        <div class="col-12">
-          <label class="form-label" for="reg-email">Correo Electrónico</label>
-          <atom-input id="reg-email" type="email" [(ngModel)]="email" name="email" placeholder="tu@correo.com (opcional)"></atom-input>
-        </div>
-
-        <div class="col-12">
-          <div class="alert alert-success d-flex align-items-start gap-2 py-3 px-3" style="font-size: 0.82rem;" role="alert">
-            <strong>Nota:</strong> Tu número de documento será utilizado como contraseña temporal. Se recomienda cambiar la contraseña después del primer inicio de sesión.
+        <form (ngSubmit)="onRegister()" class="row row-cols-1 row-cols-md-2 g-3">
+          <div class="col">
+            <label class="form-label" for="reg-documentNumber">Número de Documento *</label>
+            <atom-input id="reg-documentNumber" [(ngModel)]="documentNumber" name="documentNumber" placeholder="C.C., T.I., etc."></atom-input>
           </div>
-        </div>
 
-        <div class="col-12">
-          <atom-button type="submit" variant="primary" [block]="true" [disabled]="cargando">
-            <atom-spinner *ngIf="cargando" size="sm"></atom-spinner>
-            <span *ngIf="!cargando">Crear Cuenta</span>
-            <span *ngIf="cargando">Registrando...</span>
-          </atom-button>
-        </div>
+          <div class="col">
+            <label class="form-label" for="reg-documentType">Tipo de Documento</label>
+            <atom-select id="reg-documentType" [(ngModel)]="documentType" name="documentType" [options]="[
+              {label: 'Cédula de Ciudadanía', value: 'CC'},
+              {label: 'Tarjeta de Identidad', value: 'TI'},
+              {label: 'Cédula de Extranjería', value: 'CE'},
+              {label: 'Registro Civil', value: 'RC'},
+              {label: 'Pasaporte', value: 'PASAPORTE'}
+            ]"></atom-select>
+          </div>
 
-        <p class="col-12 text-center mt-2 mb-0" style="color: #71889a; font-size: 0.87rem;">
-          ¿Ya tienes una cuenta? <a (click)="onSwitchToLogin()" class="fw-semibold" style="color: #118a9b; text-decoration: none; cursor: pointer;">Inicia sesión aquí</a>
-        </p>
-      </form>
+          <div class="col">
+            <label class="form-label" for="reg-firstName">Nombre *</label>
+            <atom-input id="reg-firstName" [(ngModel)]="firstName" name="firstName" placeholder="Tu nombre"></atom-input>
+          </div>
+
+          <div class="col">
+            <label class="form-label" for="reg-lastName">Apellido *</label>
+            <atom-input id="reg-lastName" [(ngModel)]="lastName" name="lastName" placeholder="Tu apellido"></atom-input>
+          </div>
+
+          <div class="col">
+            <label class="form-label" for="reg-phone">Celular *</label>
+            <atom-input id="reg-phone" type="text" [(ngModel)]="phone" name="phone" placeholder="Número de celular"></atom-input>
+          </div>
+
+          <div class="col">
+            <label class="form-label" for="reg-gender">Género</label>
+            <atom-select id="reg-gender" [(ngModel)]="gender" name="gender" placeholder="Seleccionar" [options]="[
+              {label: 'Masculino', value: 'M'},
+              {label: 'Femenino', value: 'F'},
+              {label: 'Prefiero no decir', value: 'PND'}
+            ]"></atom-select>
+          </div>
+
+          <div class="col">
+            <label class="form-label" for="reg-birthDate">Fecha de Nacimiento</label>
+            <atom-input id="reg-birthDate" type="date" [(ngModel)]="birthDate" name="birthDate"></atom-input>
+          </div>
+
+          <div class="col-12">
+            <label class="form-label" for="reg-email">Correo Electrónico</label>
+            <atom-input id="reg-email" type="email" [(ngModel)]="email" name="email" placeholder="tu@correo.com (opcional)"></atom-input>
+          </div>
+
+          <div class="col-12">
+            <div class="alert alert-success d-flex align-items-start gap-2 py-3 px-3" style="font-size: 0.82rem;" role="alert">
+              <strong>Nota:</strong> Tu número de documento será utilizado como contraseña temporal. Se recomienda cambiar la contraseña después del primer inicio de sesión.
+            </div>
+          </div>
+
+          <!-- Error al final del formulario, junto al botón -->
+          <div *ngIf="error" class="col-12">
+            <div class="alert alert-danger py-2 px-3 mb-0" style="font-size: 0.85rem;">{{ error }}</div>
+          </div>
+
+          <div class="col-12">
+            <atom-button type="submit" variant="primary" [block]="true" [disabled]="cargando">
+              <atom-spinner *ngIf="cargando" size="sm"></atom-spinner>
+              <span *ngIf="!cargando">Crear Cuenta</span>
+              <span *ngIf="cargando">Registrando...</span>
+            </atom-button>
+          </div>
+
+          <p class="col-12 text-center mt-2 mb-0" style="color: #71889a; font-size: 0.87rem;">
+            ¿Ya tienes una cuenta? <a (click)="onSwitchToLogin()" class="fw-semibold" style="color: #118a9b; text-decoration: none; cursor: pointer;">Inicia sesión aquí</a>
+          </p>
+        </form>
+      </ng-container>
     </div>
   </div>
 </div>
