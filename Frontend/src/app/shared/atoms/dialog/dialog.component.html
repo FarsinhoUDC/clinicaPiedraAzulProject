@@ -1,20 +1,22 @@
 <div class="atom-dialog-backdrop" *ngIf="visible" (click)="onBackdropClick.emit()">
-  <div class="atom-dialog-card" [class.dialog-error]="variant === 'error'" (click)="$event.stopPropagation()">
-    <div class="atom-dialog-header" *ngIf="title">
-      <h3 class="atom-dialog-title">{{ title }}</h3>
-      <button type="button" class="atom-dialog-close" (click)="onClose.emit()">&times;</button>
-    </div>
-    <div class="atom-dialog-body">
-      <ng-content></ng-content>
-    </div>
-    <div class="atom-dialog-actions" *ngIf="showActions">
-      <ng-content select="[dialog-actions]"></ng-content>
-      <atom-button *ngIf="!customActions" variant="secondary" size="sm" (onClick)="onCancel.emit()">
-        {{ cancelText }}
-      </atom-button>
-      <atom-button *ngIf="!customActions" [variant]="variant === 'error' ? 'danger' : 'primary'" size="sm" (onClick)="onConfirm.emit()">
-        {{ confirmText }}
-      </atom-button>
+  <div class="modal-dialog modal-dialog-centered m-0" style="max-width: 420px;" (click)="$event.stopPropagation()">
+    <div class="modal-content" style="border-radius: 16px; max-height: 90vh; overflow-y: auto;" [class.border-top-4]="variant === 'error'" [class.border-danger]="variant === 'error'">
+      <div class="modal-header border-0 pb-0" *ngIf="title">
+        <h5 class="modal-title fw-bold" style="color: #173250;">{{ title }}</h5>
+        <button type="button" class="btn-close" (click)="onClose.emit()" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body" style="color: #5d7485; font-size: 0.9rem; line-height: 1.5;">
+        <ng-content></ng-content>
+      </div>
+      <div class="modal-footer border-0 pt-0" *ngIf="showActions">
+        <ng-content select="[dialog-actions]"></ng-content>
+        <atom-button *ngIf="!customActions" variant="secondary" size="sm" (onClick)="onCancel.emit()">
+          {{ cancelText }}
+        </atom-button>
+        <atom-button *ngIf="!customActions" [variant]="variant === 'error' ? 'danger' : 'primary'" size="sm" (onClick)="onConfirm.emit()">
+          {{ confirmText }}
+        </atom-button>
+      </div>
     </div>
   </div>
 </div>

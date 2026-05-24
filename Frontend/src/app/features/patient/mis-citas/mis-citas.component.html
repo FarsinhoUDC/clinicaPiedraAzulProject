@@ -1,33 +1,27 @@
-<section class="mis-citas-page">
-  <div class="mis-citas-card">
-    <div class="mis-citas-header">
-      <span>{{ sessionName }}</span>
-      <strong>Mis Citas</strong>
+<section class="p-4">
+  <div class="bg-body-tertiary p-4 rounded-3" style="min-height: calc(100vh - 84px);">
+    <div class="mb-3" style="color: #5b7486;">
+      <div>{{ sessionName }}</div>
+      <strong style="font-family: Georgia, 'Times New Roman', serif; font-size: 2rem; color: #173250;">Mis Citas</strong>
     </div>
 
-    <div class="loading-state" *ngIf="isLoading"><atom-spinner text="Cargando citas..."></atom-spinner></div>
-    <div class="error-state" *ngIf="errorMessage">{{ errorMessage }}</div>
+    <div class="text-center py-4" style="color: #118a9b;" *ngIf="isLoading"><atom-spinner text="Cargando citas..."></atom-spinner></div>
+    <div class="alert alert-danger text-center py-3" role="alert" *ngIf="errorMessage">{{ errorMessage }}</div>
 
-    <div class="empty-state" *ngIf="!isLoading && !errorMessage && citas.length === 0">
-      <p>No tienes citas programadas.</p>
-      <p>Puedes agendar una cita en la opción "Agendar citas" del menú.</p>
+    <div class="card border-dashed text-center p-5" style="border-style: dashed; color: #7790a0;" *ngIf="!isLoading && !errorMessage && citas.length === 0">
+      <p class="mb-2">No tienes citas programadas.</p>
+      <p class="mb-0">Puedes agendar una cita en la opción "Agendar citas" del menú.</p>
     </div>
 
-    <div class="citas-list" *ngIf="!isLoading && !errorMessage && citas.length > 0">
-      <article class="cita-card" *ngFor="let cita of citas">
-        <div class="cita-header">
-          <span class="cita-id">#{{ cita.id }}</span>
+    <div class="d-grid gap-3" *ngIf="!isLoading && !errorMessage && citas.length > 0">
+      <article class="card p-3 shadow-sm" style="border-radius: 16px;" *ngFor="let cita of citas">
+        <div class="d-flex justify-content-between mb-2">
+          <span class="fw-bold" style="color: #173250;">#{{ cita.id }}</span>
           <atom-badge [variant]="getBadgeVariant(cita.estado)">{{ cita.estado }}</atom-badge>
         </div>
-        <div class="cita-detail">
-          <strong>Médico:</strong> {{ cita.nombreMedico }}
-        </div>
-        <div class="cita-detail">
-          <strong>Fecha:</strong> {{ cita.fechaHora | date:'dd/MM/yyyy' }}
-        </div>
-        <div class="cita-detail">
-          <strong>Hora:</strong> {{ cita.fechaHora | date:'HH:mm' }}
-        </div>
+        <div class="mb-1" style="color: #526f81;"><strong style="color: #315064;">Médico:</strong> {{ cita.nombreMedico }}</div>
+        <div class="mb-1" style="color: #526f81;"><strong style="color: #315064;">Fecha:</strong> {{ cita.fechaHora | date:'dd/MM/yyyy' }}</div>
+        <div style="color: #526f81;"><strong style="color: #315064;">Hora:</strong> {{ cita.fechaHora | date:'HH:mm' }}</div>
       </article>
     </div>
   </div>

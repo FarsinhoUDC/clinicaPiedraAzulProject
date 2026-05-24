@@ -18,9 +18,10 @@ export class AtomButtonComponent {
 
   get btnClass(): string {
     return [
+      'btn',
       `btn-${this.variant}`,
       this.size !== 'md' ? `btn-${this.size}` : '',
-      this.block ? 'btn-block' : ''
+      this.block ? 'w-100' : ''
     ].filter(Boolean).join(' ');
   }
 }

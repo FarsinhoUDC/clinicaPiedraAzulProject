@@ -1,33 +1,10 @@
-.atom-select-wrapper {
-  display: grid;
-  gap: 0.35rem;
-}
-.atom-select-label {
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: #305064;
-}
-.atom-select {
-  min-height: 42px;
-  border: 1px solid #c8d7e0;
+.form-select {
   border-radius: 10px;
-  padding: 10px 14px;
-  background: #fbfdff;
-  font-size: 0.9rem;
-  transition: border-color 0.2s, box-shadow 0.2s;
-  outline: none;
-  width: 100%;
-  cursor: pointer;
-  appearance: auto;
 }
-.atom-select:focus {
+.form-select:focus {
   border-color: #118a9b;
   box-shadow: 0 0 0 3px rgba(17, 138, 155, 0.12);
 }
-.has-error .atom-select {
+.form-select.is-invalid {
   border-color: #d64545;
-}
-.atom-select-error {
-  font-size: 0.75rem;
-  color: #d64545;
 }

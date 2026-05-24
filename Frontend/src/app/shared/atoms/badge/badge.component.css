@@ -1,11 +1,5 @@
-.atom-badge {
-  display: inline-block;
-  padding: 0.2rem 0.6rem;
-  border-radius: 2rem;
-  font-size: 0.72rem;
-  font-weight: 700;
+.badge {
   letter-spacing: 0.04em;
-  text-transform: uppercase;
   line-height: 1.4;
 }
 .badge-admin {

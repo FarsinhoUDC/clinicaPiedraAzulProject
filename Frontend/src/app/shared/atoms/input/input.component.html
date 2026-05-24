@@ -1,5 +1,5 @@
-<div class="atom-input-wrapper" [class.has-error]="hasError">
-  <label class="atom-input-label" *ngIf="label" [for]="id">{{ label }}</label>
+<div class="mb-3">
+  <label class="form-label" *ngIf="label" [for]="id">{{ label }}</label>
   <input
     #innerInput
     [id]="id"
@@ -10,8 +10,9 @@
     [value]="value"
     (input)="handleInput($event)"
     (blur)="onBlur()"
-    class="atom-input"
-    [class.input-sm]="size === 'sm'"
-    [class.input-lg]="size === 'lg'">
-  <span class="atom-input-error" *ngIf="hasError && errorMessage">{{ errorMessage }}</span>
+    class="form-control"
+    [class.form-control-sm]="size === 'sm'"
+    [class.form-control-lg]="size === 'lg'"
+    [class.is-invalid]="hasError">
+  <div class="invalid-feedback" *ngIf="hasError && errorMessage">{{ errorMessage }}</div>
 </div>

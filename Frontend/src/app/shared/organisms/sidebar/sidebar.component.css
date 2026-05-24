@@ -1,7 +1,18 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 226px;
+}
+@media (max-width: 980px) {
+  :host {
+    flex: 0 0 0;
+  }
+}
 .organismo-sidebar {
   background: #132634;
   color: #dce8ef;
   padding-top: 18px;
+  flex: 1;
 }
 .organismo-brand {
   display: flex;

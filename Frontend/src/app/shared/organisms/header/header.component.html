@@ -1,20 +1,18 @@
 <header class="organismo-topbar">
-  <div class="topbar-left">
-    <button type="button" class="organismo-menu-toggle" (click)="toggleMenu.emit()">
-      <span></span>
-      <span></span>
-      <span></span>
+  <div class="d-flex align-items-center gap-3">
+    <button type="button" class="navbar-toggler d-lg-none border-0 p-2" style="background: rgba(255,255,255,0.08); border-radius: 10px; color: #fff;" (click)="toggleMenu.emit()">
+      <span class="navbar-toggler-icon"></span>
     </button>
-    <a routerLink="/inicio" class="organismo-brand-text">Piedra Azul</a>
+    <a routerLink="/inicio" class="navbar-brand fw-bold" style="font-family: Georgia, 'Times New Roman', serif;">Piedra Azul</a>
   </div>
-  <div class="organismo-user-area">
+  <div class="d-flex align-items-center gap-3">
     <ng-container *ngIf="isLoggedIn; else authLinks">
-      <span class="user-name">{{ userLabel }}</span>
+      <span class="text-white fw-medium">{{ userLabel }}</span>
       <span class="organismo-user-badge">{{ userInitials }}</span>
     </ng-container>
     <ng-template #authLinks>
-      <a class="auth-link" (click)="login.emit()">Iniciar Sesión</a>
-      <a class="auth-link register" (click)="register.emit()">Regístrate</a>
+      <a class="nav-link px-3 py-2 rounded-3 fw-semibold" style="color: #5cb85c; cursor: pointer;" (click)="login.emit()">Iniciar Sesión</a>
+      <a class="nav-link px-3 py-2 rounded-3 fw-semibold" style="color: #b7c8d2; cursor: pointer;" (click)="register.emit()">Regístrate</a>
     </ng-template>
   </div>
 </header>

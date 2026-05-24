@@ -1,5 +1,5 @@
-<div class="atom-select-wrapper" [class.has-error]="hasError">
-  <label class="atom-select-label" *ngIf="label" [for]="id">{{ label }}</label>
+<div class="mb-3">
+  <label class="form-label" *ngIf="label" [for]="id">{{ label }}</label>
   <select
     [id]="id"
     [required]="required"
@@ -7,9 +7,10 @@
     [value]="value"
     (change)="handleSelectChange($event)"
     (blur)="onBlur()"
-    class="atom-select">
+    class="form-select"
+    [class.is-invalid]="hasError">
     <option value="" disabled *ngIf="placeholder">{{ placeholder }}</option>
     <option *ngFor="let opt of options" [value]="opt.value">{{ opt.label }}</option>
   </select>
-  <span class="atom-select-error" *ngIf="hasError && errorMessage">{{ errorMessage }}</span>
+  <div class="invalid-feedback" *ngIf="hasError && errorMessage">{{ errorMessage }}</div>
 </div>
