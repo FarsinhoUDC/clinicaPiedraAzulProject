@@ -10,10 +10,12 @@ import { DoctorApiService } from '../../../core/services/doctor-api.service';
 import { UiMappersService } from '../../../core/services/ui-mappers.service';
 import { formatDateLabel, toHourLabel } from '../../../core/utils/date-time.utils';
 
+import { AtomButtonComponent, AtomInputComponent, AtomSelectComponent, AtomBadgeComponent, type SelectOption } from '../../../shared/atoms/index';
+
 @Component({
   selector: 'app-appointment-search',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, AtomButtonComponent, AtomInputComponent, AtomSelectComponent, AtomBadgeComponent],
   templateUrl: './appointment-search.component.html',
   styleUrls: ['./appointment-search.component.css']
 })
@@ -84,14 +86,18 @@ export class AppointmentSearchComponent implements OnInit {
     return this.summary.find((item) => item.label === label)?.total ?? 0;
   }
 
-  statusClass(status?: string): string {
+  get doctorOptions(): SelectOption[] {
+    return this.doctors.map(d => ({
+      label: `${d.nombres} ${d.apellidos}${d.especialidad ? ' - ' + d.especialidad : ''}`,
+      value: d.id
+    }));
+  }
+
+  getBadgeVariant(status?: string): 'admin' | 'medico' | 'agendador' | 'paciente' | 'default' | 'success' | 'warning' | 'error' {
     switch (status) {
-      case 'CONFIRMADA':
-        return 'status-confirmed';
-      case 'CANCELADA':
-        return 'status-cancelled';
-      default:
-        return 'status-pending';
+      case 'CONFIRMADA': return 'success';
+      case 'CANCELADA': return 'error';
+      default: return 'warning';
     }
   }
 

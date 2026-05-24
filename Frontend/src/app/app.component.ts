@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { HeaderComponent } from './core/components/header/header.component';
+import { Router, RouterOutlet } from '@angular/router';
+import { MainLayoutComponent } from './templates/main-layout/main-layout.component';
 import { LoginComponent } from './features/authentication/login/login.component';
 import { RegisterComponent } from './features/authentication/register/register.component';
 import { AuthService } from './core/services/auth.service';
@@ -12,9 +12,7 @@ import { AuthService } from './core/services/auth.service';
   imports: [
     CommonModule,
     RouterOutlet,
-    RouterLink,
-    RouterLinkActive,
-    HeaderComponent,
+    MainLayoutComponent,
     LoginComponent,
     RegisterComponent
   ],

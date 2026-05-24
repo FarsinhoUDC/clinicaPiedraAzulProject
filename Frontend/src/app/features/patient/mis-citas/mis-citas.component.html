@@ -5,7 +5,7 @@
       <strong>Mis Citas</strong>
     </div>
 
-    <div class="loading-state" *ngIf="isLoading">Cargando citas...</div>
+    <div class="loading-state" *ngIf="isLoading"><atom-spinner text="Cargando citas..."></atom-spinner></div>
     <div class="error-state" *ngIf="errorMessage">{{ errorMessage }}</div>
 
     <div class="empty-state" *ngIf="!isLoading && !errorMessage && citas.length === 0">
@@ -17,7 +17,7 @@
       <article class="cita-card" *ngFor="let cita of citas">
         <div class="cita-header">
           <span class="cita-id">#{{ cita.id }}</span>
-          <span class="cita-status">{{ cita.estado }}</span>
+          <atom-badge [variant]="getBadgeVariant(cita.estado)">{{ cita.estado }}</atom-badge>
         </div>
         <div class="cita-detail">
           <strong>Médico:</strong> {{ cita.nombreMedico }}

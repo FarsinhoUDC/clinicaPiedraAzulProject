@@ -10,9 +10,9 @@
         <h3>Parametros globales de agendamiento</h3>
         <label>Ventana de agendamiento *</label>
         <div class="window-row">
-          <input type="number" [formControl]="form.controls.ventanaSemanas">
+          <atom-input type="number" [formControl]="form.controls.ventanaSemanas" size="sm"></atom-input>
           <span>semanas</span>
-          <button type="button" class="save-button" (click)="requestSaveSystemWindow()">Guardar</button>
+          <atom-button variant="primary" size="sm" (onClick)="requestSaveSystemWindow()">Guardar</atom-button>
         </div>
         <div class="field-error" *ngIf="form.controls.ventanaSemanas.touched && form.controls.ventanaSemanas.invalid">Debe ingresar una ventana valida entre 1 y 52 semanas.</div>
         <div class="window-preview">Citas habilitadas hasta el {{ appointmentWindowEnd }}</div>
@@ -26,17 +26,14 @@
     <div class="availability-panel">
       <div class="availability-head">
         <h3>Disponibilidad por medico / terapista</h3>
-        <button type="button" class="save-button secondary" (click)="toggleMedicoForm()">+ Agregar profesional</button>
+        <atom-button variant="secondary" size="sm" (onClick)="toggleMedicoForm()">+ Agregar profesional</atom-button>
       </div>
 
       <form [formGroup]="form" class="availability-grid">
         <div class="availability-left">
           <div class="config-field">
             <label>Seleccione el profesional a configurar</label>
-            <select formControlName="medicoId" (change)="updatePreview()">
-              <option value="">Seleccione un medico</option>
-              <option *ngFor="let doctor of doctors" [value]="doctor.id">{{ doctor.nombres }} {{ doctor.apellidos }} - {{ doctor.especialidad || 'Especialidad general' }}</option>
-            </select>
+            <atom-select formControlName="medicoId" [options]="doctorOptions" (onSelectChange)="updatePreview()"></atom-select>
             <div class="field-error" *ngIf="form.controls.medicoId.touched && form.controls.medicoId.invalid">Debe seleccionar un medico.</div>
           </div>
 
@@ -57,12 +54,12 @@
           <div class="time-grid">
             <div class="config-field">
               <label>Hora de inicio *</label>
-              <input type="time" formControlName="horaInicio" (change)="updatePreview()">
+              <atom-input type="time" formControlName="horaInicio" (onBlur)="updatePreview()"></atom-input>
               <div class="field-error" *ngIf="form.controls.horaInicio.touched && form.controls.horaInicio.invalid">Debe ingresar la hora de inicio.</div>
             </div>
             <div class="config-field">
               <label>Hora de fin *</label>
-              <input type="time" formControlName="horaFin" (change)="updatePreview()">
+              <atom-input type="time" formControlName="horaFin" (onBlur)="updatePreview()"></atom-input>
               <div class="field-error" *ngIf="form.controls.horaFin.touched && form.controls.horaFin.invalid">Debe ingresar la hora de fin.</div>
             </div>
           </div>
@@ -82,8 +79,8 @@
           </div>
 
           <div class="config-actions">
-            <button type="button" class="cancel-button" (click)="requestCancel()">Cancelar</button>
-            <button type="button" class="save-button" (click)="requestSaveAvailability()">Guardar cambios</button>
+            <atom-button variant="secondary" (onClick)="requestCancel()">Cancelar</atom-button>
+            <atom-button variant="primary" (onClick)="requestSaveAvailability()">Guardar cambios</atom-button>
           </div>
         </div>
 
@@ -138,26 +135,21 @@
     <div class="field-error" *ngIf="errorMessage">{{ errorMessage }}</div>
   </div>
 
-  <div class="dialog-backdrop" *ngIf="showDialog" (click)="closeDialog()">
-    <div class="dialog-card" [class.error]="dialogVariant === 'error'" (click)="$event.stopPropagation()">
-      <strong>
-        {{
-          dialogMode === 'confirm'
-            ? 'Confirmar accion'
-            : (dialogVariant === 'success' ? 'Operacion exitosa' : 'Operacion fallida')
-        }}
-      </strong>
-      <p>{{ dialogMessage }}</p>
-      <div class="dialog-actions" *ngIf="dialogMode === 'confirm'">
-        <button type="button" class="cancel-button" (click)="closeDialog()">No</button>
-        <button type="button" class="save-button" (click)="confirmDialogAction()">Si</button>
-      </div>
-      <button type="button" class="save-button" *ngIf="dialogMode === 'result'" (click)="closeDialog()">Aceptar</button>
-    </div>
-  </div>
+  <atom-dialog
+    [visible]="showDialog"
+    [title]="dialogMode === 'confirm' ? 'Confirmar accion' : (dialogVariant === 'success' ? 'Operacion exitosa' : 'Operacion fallida')"
+    [variant]="dialogVariant === 'error' ? 'error' : 'default'"
+    [showActions]="dialogMode === 'confirm'"
+    [confirmText]="'Si'"
+    [cancelText]="'No'"
+    (onConfirm)="confirmDialogAction()"
+    (onCancel)="closeDialog()"
+    (onClose)="closeDialog()">
+    <p>{{ dialogMessage }}</p>
+  </atom-dialog>
 
-  <div class="dialog-backdrop" *ngIf="showMedicoForm" (click)="toggleMedicoForm()">
-    <div class="dialog-card patient-card form-dialog" (click)="$event.stopPropagation()">
+  <div class="patient-dialog-backdrop" *ngIf="showMedicoForm" (click)="toggleMedicoForm()">
+    <div class="patient-dialog-card" (click)="$event.stopPropagation()">
       <div class="patient-register-panel">
         <div class="patient-register-intro">
           <strong>Crear Cuenta</strong>
@@ -168,48 +160,43 @@
           <div class="patient-grid">
             <div class="patient-field">
               <label>Número de Documento *</label>
-              <input formControlName="numeroDocumento" placeholder="C.C., T.I., etc.">
+              <atom-input formControlName="numeroDocumento" placeholder="C.C., T.I., etc." size="md"></atom-input>
             </div>
             <div class="patient-field">
               <label>Tipo de Documento</label>
-              <select>
-                <option>Cédula de Ciudadanía</option>
-              </select>
+              <atom-select placeholder="Cédula de Ciudadanía"></atom-select>
             </div>
             
             <div class="patient-field">
               <label>Nombre *</label>
-              <input formControlName="nombres" placeholder="Tu nombre">
+              <atom-input formControlName="nombres" placeholder="Tu nombre" size="md"></atom-input>
             </div>
             <div class="patient-field">
               <label>Apellido *</label>
-              <input formControlName="apellidos" placeholder="Tu apellido">
+              <atom-input formControlName="apellidos" placeholder="Tu apellido" size="md"></atom-input>
             </div>
 
             <div class="patient-field">
               <label>Celular *</label>
-              <input formControlName="celular" placeholder="Número de celular">
+              <atom-input formControlName="celular" placeholder="Número de celular" size="md"></atom-input>
             </div>
             <div class="patient-field">
               <label>Género</label>
-              <select formControlName="genero">
-                <option value="">Seleccionar</option>
-                <option *ngFor="let option of genderOptions" [value]="option.value">{{ option.label }}</option>
-              </select>
+              <atom-select formControlName="genero" [options]="genderSelectOptions"></atom-select>
             </div>
 
             <div class="patient-field">
               <label>Fecha de Nacimiento</label>
-              <input type="date" formControlName="fechaNacimiento">
+              <atom-input type="date" formControlName="fechaNacimiento" size="md"></atom-input>
             </div>
             <div class="patient-field">
               <label>Especialidad</label>
-              <input formControlName="especialidad" placeholder="Ej: Pediatría (opcional)">
+              <atom-input formControlName="especialidad" placeholder="Ej: Pediatría (opcional)" size="md"></atom-input>
             </div>
             
             <div class="patient-field" style="grid-column: span 2;">
               <label>Correo Electrónico</label>
-              <input type="email" formControlName="correo" placeholder="tu@correo.com (opcional)">
+              <atom-input type="email" formControlName="correo" placeholder="tu@correo.com (opcional)" size="md"></atom-input>
             </div>
           </div>
 
@@ -218,7 +205,7 @@
           </div>
 
           <div class="patient-actions" style="justify-content: stretch; margin-top: 24px;">
-            <button class="patient-primary" type="submit" style="width: 100%;">Crear Cuenta</button>
+            <atom-button variant="primary" type="submit" size="lg" [block]="true" style="width: 100%;">Crear Cuenta</atom-button>
           </div>
         </form>
       </div>

@@ -1,0 +1,20 @@
+<header class="organismo-topbar">
+  <div class="topbar-left">
+    <button type="button" class="organismo-menu-toggle" (click)="toggleMenu.emit()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <a routerLink="/inicio" class="organismo-brand-text">Piedra Azul</a>
+  </div>
+  <div class="organismo-user-area">
+    <ng-container *ngIf="isLoggedIn; else authLinks">
+      <span class="user-name">{{ userLabel }}</span>
+      <span class="organismo-user-badge">{{ userInitials }}</span>
+    </ng-container>
+    <ng-template #authLinks>
+      <a class="auth-link" (click)="login.emit()">Iniciar Sesión</a>
+      <a class="auth-link register" (click)="register.emit()">Regístrate</a>
+    </ng-template>
+  </div>
+</header>

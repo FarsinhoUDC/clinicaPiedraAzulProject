@@ -1,0 +1,17 @@
+<div class="atom-input-wrapper" [class.has-error]="hasError">
+  <label class="atom-input-label" *ngIf="label" [for]="id">{{ label }}</label>
+  <input
+    #innerInput
+    [id]="id"
+    [type]="type"
+    [placeholder]="placeholder"
+    [required]="required"
+    [disabled]="disabled"
+    [value]="value"
+    (input)="handleInput($event)"
+    (blur)="onBlur()"
+    class="atom-input"
+    [class.input-sm]="size === 'sm'"
+    [class.input-lg]="size === 'lg'">
+  <span class="atom-input-error" *ngIf="hasError && errorMessage">{{ errorMessage }}</span>
+</div>

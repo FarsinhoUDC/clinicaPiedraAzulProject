@@ -1,0 +1,16 @@
+.molecule-form-field {
+  display: grid;
+  gap: 0.35rem;
+}
+.molecule-form-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #305064;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.molecule-form-error {
+  font-size: 0.75rem;
+  color: #d64545;
+  margin-top: 2px;
+}

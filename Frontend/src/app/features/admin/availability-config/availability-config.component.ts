@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
+import { AtomButtonComponent, AtomInputComponent, AtomSelectComponent, AtomSpinnerComponent, AtomDialogComponent, type SelectOption } from '../../../shared/atoms/index';
+
 import { DAY_OPTIONS } from '../../../core/constants/day-options';
 import { AuditLogEntry } from '../../../core/models/configuration.model';
 import { Doctor, DoctorAvailability } from '../../../core/models/doctor.model';
@@ -14,7 +16,7 @@ import { GENDER_OPTIONS } from '../../../core/constants/day-options';
 @Component({
   selector: 'app-availability-config',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, AtomButtonComponent, AtomInputComponent, AtomSelectComponent, AtomDialogComponent],
   templateUrl: './availability-config.component.html',
   styleUrls: ['./availability-config.component.css']
 })
@@ -44,6 +46,17 @@ export class AvailabilityConfigComponent implements OnInit {
   dialogMessage = '';
   pendingAction: 'save-window' | 'save-availability' | 'cancel' | null = null;
   readonly genderOptions = GENDER_OPTIONS;
+
+  get doctorOptions(): SelectOption[] {
+    return this.doctors.map(d => ({
+      label: `${d.nombres} ${d.apellidos}${d.especialidad ? ' - ' + d.especialidad : ''}`,
+      value: d.id
+    }));
+  }
+
+  get genderSelectOptions(): SelectOption[] {
+    return this.genderOptions.map(g => ({ label: g.label, value: g.value }));
+  }
 
   showMedicoForm = false;
   readonly medicoForm = this.formBuilder.group({

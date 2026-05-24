@@ -12,11 +12,12 @@ import { DoctorApiService } from '../../../core/services/doctor-api.service';
 import { PatientApiService } from '../../../core/services/patient-api.service';
 import { combineDateAndTime, toHourLabel } from '../../../core/utils/date-time.utils';
 import { colombianCellphoneValidator } from '../../../shared/validators/custom-validators';
+import { AtomButtonComponent, AtomInputComponent, AtomSelectComponent, AtomSpinnerComponent, AtomDialogComponent, type SelectOption } from '../../../shared/atoms/index';
 
 @Component({
   selector: 'app-new-appointment-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, AtomButtonComponent, AtomInputComponent, AtomSelectComponent, AtomSpinnerComponent, AtomDialogComponent],
   templateUrl: './new-appointment-form.component.html',
   styleUrls: ['./new-appointment-form.component.css']
 })
@@ -66,6 +67,8 @@ export class NewAppointmentFormComponent implements OnInit {
     this.configurationApi.listDoctorAvailability().subscribe((availabilities) => {
     this.doctorAvailabilities = availabilities;
   });
+    this.form.controls.fecha.valueChanges.subscribe(() => this.loadSlots());
+    this.form.controls.medicoId.valueChanges.subscribe(() => this.loadSlots());
   }
 
   lookupPatient(): void {
@@ -293,6 +296,13 @@ export class NewAppointmentFormComponent implements OnInit {
   get selectedDoctorName(): string {
     const doctor = this.doctors.find((item) => item.id === Number(this.form.controls.medicoId.value));
     return doctor ? `${doctor.nombres} ${doctor.apellidos} - ${doctor.especialidad || 'Especialidad general'}` : 'Sin seleccionar';
+  }
+
+  get doctorOptions(): SelectOption[] {
+    return this.doctors.map(d => ({
+      label: `${d.nombres} ${d.apellidos}${d.especialidad ? ' - ' + d.especialidad : ''}`,
+      value: d.id
+    }));
   }
 
   private fillPatient(patient: Patient): void {

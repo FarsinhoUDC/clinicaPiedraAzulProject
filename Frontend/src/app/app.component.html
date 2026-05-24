@@ -1,84 +1,42 @@
-<div class="app-shell" [class.no-sidebar]="!showSidebar || !isLoggedIn">
+<template-main-layout
+  [isLoggedIn]="isLoggedIn"
+  [showSidebar]="showSidebar"
+  [brandName]="brandName"
+  [userLabel]="userLabel"
+  [userInitials]="userInitials"
+  [menuOpen]="menuOpen"
+  [isAgendador]="isAgendador"
+  [isPaciente]="isPaciente"
+  [isAdmin]="isAdmin"
+  [isMedico]="isMedico"
+  (onToggleMenu)="toggleMenu()"
+  (onMenuClose)="closeMenu()"
+  (onLogout)="logout()"
+  (onLogin)="openLoginModal()"
+  (onRegister)="openRegisterModal()">
 
-  <!-- Sidebar - solo visible cuando está logueado -->
-  <aside class="app-sidebar" *ngIf="showSidebar && isLoggedIn" [class.mobile-open]="menuOpen">
-    <div class="app-brand">
-      <span class="app-brand-badge">P</span>
-      <span>{{ brandName }}</span>
-    </div>
+  <router-outlet></router-outlet>
 
-    <nav class="app-menu">
-      <a class="app-menu-item" routerLink="/inicio" routerLinkActive="active" (click)="closeMenu()">Inicio</a>
+</template-main-layout>
 
-      <!-- Menú del AGENDADOR (rol MEDICO): buscar y crear citas -->
-      <ng-container *ngIf="isAgendador">
-        <a class="app-menu-item" routerLink="/agendador/consulta"  routerLinkActive="active" (click)="closeMenu()">Consultar citas</a>
-        <a class="app-menu-item" routerLink="/agendador/nuevaCita" routerLinkActive="active" (click)="closeMenu()">Nueva cita</a>
-      </ng-container>
-
-      <!-- Menú exclusivo del MÉDICO -->
-      <ng-container *ngIf="isMedico">
-        <a class="app-menu-item" routerLink="/agendador/consulta"  routerLinkActive="active" (click)="closeMenu()">Consultar citas</a>
-        <a class="app-menu-item" routerLink="/medico/reagendar" routerLinkActive="active" (click)="closeMenu()">Re-agendar citas</a>
-        <a class="app-menu-item" routerLink="/medico/reportes"  routerLinkActive="active" (click)="closeMenu()">Reportes</a>
-      </ng-container>
-
-      <!-- Menú del PACIENTE: portal para agendar y mis citas -->
-      <ng-container *ngIf="isPaciente">
-        <a class="app-menu-item" routerLink="/paciente/portal" routerLinkActive="active" (click)="closeMenu()">Agendar citas</a>
-        <a class="app-menu-item" routerLink="/paciente/mis-citas" routerLinkActive="active" (click)="closeMenu()">Mis citas</a>
-      </ng-container>
-
-      <!-- Menú del ADMINISTRADOR: consultar citas y configuración del sistema -->
-      <ng-container *ngIf="isAdmin">
-        <a class="app-menu-item" routerLink="/agendador/consulta"  routerLinkActive="active" (click)="closeMenu()">Consultar citas</a>
-        <a class="app-menu-item" routerLink="/admin/disponibilidad" routerLinkActive="active" (click)="closeMenu()">Configuración</a>
-      </ng-container>
-
-      <a class="app-menu-item logout-item" (click)="logout()">Cerrar Sesión</a>
-    </nav>
-  </aside>
-
-  <!-- Área Principal -->
-  <div class="app-main">
-    <app-header
-      *ngIf="showHeader"
-      [isLoggedIn]="isLoggedIn"
-      [userLabel]="userLabel"
-      [userInitials]="userInitials"
-      (toggleMenuClick)="toggleMenu()"
-      (logoutClick)="logout()"
-      (loginClick)="openLoginModal()"
-      (registerClick)="openRegisterModal()">
-    </app-header>
-
-    <main class="app-content">
-      <router-outlet></router-outlet>
-    </main>
+<!-- Modal Login -->
+<div class="modal-overlay" *ngIf="showLoginModal" (click)="closeLoginModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <button class="modal-close" (click)="closeLoginModal()">&times;</button>
+    <app-login
+      (loginSuccess)="onLoginSuccess()"
+      (switchToRegister)="closeLoginModal(); openRegisterModal()">
+    </app-login>
   </div>
+</div>
 
-  <!-- Modal Login -->
-  <div class="modal-overlay" *ngIf="showLoginModal" (click)="closeLoginModal()">
-    <div class="modal-content" (click)="$event.stopPropagation()">
-      <button class="modal-close" (click)="closeLoginModal()">&times;</button>
-      <app-login
-        (loginSuccess)="onLoginSuccess()"
-        (switchToRegister)="closeLoginModal(); openRegisterModal()">
-      </app-login>
-    </div>
+<!-- Modal Registro -->
+<div class="modal-overlay" *ngIf="showRegisterModal" (click)="closeRegisterModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <button class="modal-close" (click)="closeRegisterModal()">&times;</button>
+    <app-register
+      (registerSuccess)="onRegisterSuccess()"
+      (switchToLogin)="closeRegisterModal(); openLoginModal()">
+    </app-register>
   </div>
-
-  <!-- Modal Registro -->
-  <div class="modal-overlay" *ngIf="showRegisterModal" (click)="closeRegisterModal()">
-    <div class="modal-content" (click)="$event.stopPropagation()">
-      <button class="modal-close" (click)="closeRegisterModal()">&times;</button>
-      <app-register
-        (registerSuccess)="onRegisterSuccess()"
-        (switchToLogin)="closeRegisterModal(); openLoginModal()">
-      </app-register>
-    </div>
-  </div>
-
-  <!-- Overlay móvil -->
-  <div class="app-overlay" *ngIf="menuOpen && showSidebar && isLoggedIn" (click)="closeMenu()"></div>
 </div>

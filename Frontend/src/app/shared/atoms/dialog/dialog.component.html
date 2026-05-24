@@ -1,0 +1,20 @@
+<div class="atom-dialog-backdrop" *ngIf="visible" (click)="onBackdropClick.emit()">
+  <div class="atom-dialog-card" [class.dialog-error]="variant === 'error'" (click)="$event.stopPropagation()">
+    <div class="atom-dialog-header" *ngIf="title">
+      <h3 class="atom-dialog-title">{{ title }}</h3>
+      <button type="button" class="atom-dialog-close" (click)="onClose.emit()">&times;</button>
+    </div>
+    <div class="atom-dialog-body">
+      <ng-content></ng-content>
+    </div>
+    <div class="atom-dialog-actions" *ngIf="showActions">
+      <ng-content select="[dialog-actions]"></ng-content>
+      <atom-button *ngIf="!customActions" variant="secondary" size="sm" (onClick)="onCancel.emit()">
+        {{ cancelText }}
+      </atom-button>
+      <atom-button *ngIf="!customActions" [variant]="variant === 'error' ? 'danger' : 'primary'" size="sm" (onClick)="onConfirm.emit()">
+        {{ confirmText }}
+      </atom-button>
+    </div>
+  </div>
+</div>

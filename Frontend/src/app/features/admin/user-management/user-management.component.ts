@@ -2,6 +2,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { forkJoin } from 'rxjs';
+import { AtomButtonComponent, AtomInputComponent, AtomSelectComponent, AtomSpinnerComponent, AtomBadgeComponent, type SelectOption } from '../../../shared/atoms/index';
 import {
   KeycloakAdminService,
   KeycloakUser,
@@ -20,7 +21,7 @@ interface UserWithRole extends KeycloakUser {
 @Component({
   selector: 'app-user-management',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, AtomButtonComponent, AtomInputComponent, AtomSelectComponent, AtomSpinnerComponent, AtomBadgeComponent],
   templateUrl: './user-management.component.html',
   styleUrl: './user-management.component.css'
 })
@@ -100,9 +101,12 @@ export class UserManagementComponent implements OnInit {
   }
 
 
-  buscar(event: Event): void {
-    const term = (event.target as HTMLInputElement).value;
+  buscar(term: string): void {
     this.searchTerm.set(term);
+  }
+
+  get roleOptions(): SelectOption[] {
+    return this.appRoles.map(r => ({ label: r, value: r }));
   }
 
   get usuariosFiltrados(): UserWithRole[] {

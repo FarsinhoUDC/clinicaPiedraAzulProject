@@ -1,0 +1,32 @@
+<div class="template-shell" [class.no-sidebar]="!showSidebar || !isLoggedIn">
+  <organismo-sidebar
+    *ngIf="showSidebar && isLoggedIn"
+    [brandName]="brandName"
+    [isAgendador]="isAgendador"
+    [isPaciente]="isPaciente"
+    [isAdmin]="isAdmin"
+    [isMedico]="isMedico"
+    [isLoggedIn]="isLoggedIn"
+    [mobileOpen]="menuOpen"
+    (menuClose)="onMenuClose.emit()"
+    (logout)="onLogout.emit()">
+  </organismo-sidebar>
+
+  <div class="template-main">
+    <organismo-header
+      [isLoggedIn]="isLoggedIn"
+      [userLabel]="userLabel"
+      [userInitials]="userInitials"
+      (toggleMenu)="onToggleMenu.emit()"
+      (logout)="onLogout.emit()"
+      (login)="onLogin.emit()"
+      (register)="onRegister.emit()">
+    </organismo-header>
+
+    <main class="template-content">
+      <ng-content></ng-content>
+    </main>
+  </div>
+
+  <div class="template-overlay" *ngIf="menuOpen && showSidebar && isLoggedIn" (click)="onMenuClose.emit()"></div>
+</div>

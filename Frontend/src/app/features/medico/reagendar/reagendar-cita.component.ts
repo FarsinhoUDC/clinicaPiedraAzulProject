@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { AtomButtonComponent, AtomInputComponent, AtomSelectComponent, AtomSpinnerComponent, AtomBadgeComponent, type SelectOption } from '../../../shared/atoms/index';
 import {
   AbstractControl,
   FormBuilder,
@@ -20,7 +21,7 @@ type ViewState = 'search' | 'select-slot' | 'confirm' | 'success' | 'error';
 @Component({
   selector: 'app-reagendar-cita',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, AtomButtonComponent, AtomInputComponent, AtomSelectComponent, AtomSpinnerComponent, AtomBadgeComponent],
   templateUrl: './reagendar-cita.component.html',
   styleUrl: './reagendar-cita.component.css'
 })
@@ -231,12 +232,28 @@ export class ReagendarCitaComponent implements OnInit {
     return this.doctors.find((d) => d.id === id);
   }
 
+  get doctorOptions(): SelectOption[] {
+    return this.doctors.map(d => ({
+      label: `${d.nombres} ${d.apellidos}${d.especialidad ? ' — ' + d.especialidad : ''}`,
+      value: d.id
+    }));
+  }
+
   statusClass(status?: string): string {
     switch (status) {
       case 'CONFIRMADA':  return 'status-confirmed';
       case 'REAGENDADA':  return 'status-rescheduled';
       case 'CANCELADA':   return 'status-cancelled';
       default:            return 'status-pending';
+    }
+  }
+
+  getBadgeVariant(status?: string): 'admin' | 'medico' | 'agendador' | 'paciente' | 'default' | 'success' | 'warning' | 'error' {
+    switch (status) {
+      case 'CONFIRMADA': return 'success';
+      case 'REAGENDADA': return 'warning';
+      case 'CANCELADA': return 'error';
+      default: return 'default';
     }
   }
 

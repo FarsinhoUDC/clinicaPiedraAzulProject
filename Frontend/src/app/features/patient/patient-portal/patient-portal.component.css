@@ -54,14 +54,6 @@
   color: #315064;
 }
 
-.portal-toolbar select,
-.portal-toolbar input {
-  min-height: 42px;
-  border: 1px solid #c8d7e0;
-  border-radius: 10px;
-  padding: 10px 14px;
-  background: #fbfdff;
-}
 
 .portal-grid {
   display: grid;
@@ -96,26 +88,14 @@
   margin-top: 16px;
 }
 
-.slot-pill,
-.portal-primary,
-.portal-secondary {
+.slot-pill {
   min-height: 42px;
   border-radius: 10px;
   padding: 10px 16px;
   font-weight: 700;
-}
-
-.slot-pill,
-.portal-secondary {
   border: 1px solid #d4dfe7;
   background: #ffffff;
   color: #526f81;
-}
-
-.portal-primary {
-  border: none;
-  background: #118a9b;
-  color: #ffffff;
 }
 
 .portal-success {
@@ -209,12 +189,7 @@
   font-size: 0.95rem;
 }
 
-.confirm-modal-btn {
-  width: 100%;
-  padding: 14px;
-  font-size: 1rem;
-  border-radius: 12px;
-}
+
 .day-unavailable-msg {
   margin-top: 8px;
   padding: 10px 14px;

@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AtomButtonComponent, AtomInputComponent, AtomSelectComponent, type SelectOption } from '../../../shared/atoms/index';
 import { Appointment } from '../../../core/models/appointment.model';
 import { Doctor, TimeSlot, DoctorAvailability } from '../../../core/models/doctor.model';
 import { AppointmentApiService } from '../../../core/services/appointment-api.service';
@@ -14,7 +15,7 @@ import { calculateWindowEndDate } from '../../../core/utils/slot-calculator.util
 @Component({
   selector: 'app-patient-portal',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, AtomButtonComponent, AtomInputComponent, AtomSelectComponent],
   templateUrl: './patient-portal.component.html',
   styleUrls: ['./patient-portal.component.css']
 })
@@ -37,6 +38,13 @@ export class PatientPortalComponent implements OnInit {
     { index: 2, title: '2. Fecha y hora' },
     { index: 3, title: '3. Confirmación' }
   ] as const;
+
+  get specialtyOptions(): SelectOption[] {
+    return [
+      { label: 'Todas', value: '' },
+      ...this.specialties.map(s => ({ label: s, value: s }))
+    ];
+  }
 
   constructor(
     public readonly wizardStore: BookingWizardStore,

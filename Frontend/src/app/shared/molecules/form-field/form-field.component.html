@@ -1,0 +1,5 @@
+<div class="molecule-form-field" [class.field-error]="hasError">
+  <label class="molecule-form-label" *ngIf="label" [for]="id">{{ label }}</label>
+  <ng-content></ng-content>
+  <span class="molecule-form-error" *ngIf="hasError && errorMessage">{{ errorMessage }}</span>
+</div>

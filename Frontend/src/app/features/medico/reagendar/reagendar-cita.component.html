@@ -38,13 +38,7 @@
       <form [formGroup]="searchForm" class="search-bar" (ngSubmit)="searchAppointments()">
         <div class="form-field">
           <label for="medicoId">Médico / Terapista *</label>
-          <select id="medicoId" formControlName="medicoId">
-            <option value="">Seleccione un médico</option>
-            <option *ngFor="let doctor of doctors" [value]="doctor.id">
-              {{ doctor.nombres }} {{ doctor.apellidos }}
-              <ng-container *ngIf="doctor.especialidad"> — {{ doctor.especialidad }}</ng-container>
-            </option>
-          </select>
+          <atom-select id="medicoId" formControlName="medicoId" [options]="doctorOptions" placeholder="Seleccione un médico"></atom-select>
           <span class="field-error"
                 *ngIf="searchForm.controls.medicoId.touched && searchForm.controls.medicoId.invalid">
             Seleccione un médico.
@@ -53,17 +47,17 @@
 
         <div class="form-field">
           <label for="fecha">Fecha *</label>
-          <input id="fecha" type="date" formControlName="fecha">
+          <atom-input id="fecha" type="date" formControlName="fecha"></atom-input>
           <span class="field-error"
                 *ngIf="searchForm.controls.fecha.touched && searchForm.controls.fecha.invalid">
             Seleccione una fecha.
           </span>
         </div>
 
-        <button type="submit" class="btn-primary" [disabled]="isLoadingAppointments">
+        <atom-button type="submit" variant="primary" [disabled]="isLoadingAppointments">
           <span *ngIf="!isLoadingAppointments">Buscar citas</span>
-          <span *ngIf="isLoadingAppointments" class="spinner-inline"></span>
-        </button>
+          <atom-spinner size="sm" *ngIf="isLoadingAppointments"></atom-spinner>
+        </atom-button>
       </form>
 
       <!-- Error de búsqueda -->
@@ -100,9 +94,7 @@
               <td>{{ apt.documentoPaciente }}</td>
               <td class="hour-cell">{{ hourLabel(apt.fechaHora) }}</td>
               <td>
-                <span class="status-pill" [ngClass]="statusClass(apt.estado)">
-                  {{ statusLabel(apt.estado) }}
-                </span>
+                <atom-badge [variant]="getBadgeVariant(apt.estado)">{{ statusLabel(apt.estado) }}</atom-badge>
               </td>
               <td>
                 <button type="button" class="btn-reschedule"
@@ -158,8 +150,7 @@
 
         <div class="form-field date-field">
           <label for="nuevaFecha">Nueva fecha *</label>
-          <input id="nuevaFecha" type="date" formControlName="nuevaFecha"
-                 (change)="onDateChange()">
+          <atom-input id="nuevaFecha" type="date" formControlName="nuevaFecha" (onInput)="onDateChange()"></atom-input>
           <span class="field-error"
                 *ngIf="reagendarForm.controls.nuevaFecha.touched && reagendarForm.controls.nuevaFecha.errors?.['required']">
             Seleccione una fecha.
@@ -178,7 +169,7 @@
           </div>
 
           <div class="loading-slots" *ngIf="isLoadingSlots">
-            <span class="spinner-inline"></span> Cargando horarios...
+            <atom-spinner size="sm"></atom-spinner> Cargando horarios...
           </div>
 
           <div class="alert alert-warning" *ngIf="!isLoadingSlots && slotError">{{ slotError }}</div>
@@ -214,13 +205,8 @@
         </div>
 
         <div class="form-actions">
-          <button type="button" class="btn-secondary" (click)="goBackToSearch()">
-            ← Volver
-          </button>
-          <button type="submit" class="btn-primary"
-                  [disabled]="reagendarForm.value.horario === '' || isLoadingSlots">
-            Continuar →
-          </button>
+          <atom-button variant="secondary" (onClick)="goBackToSearch()">← Volver</atom-button>
+          <atom-button type="submit" variant="primary" [disabled]="reagendarForm.value.horario === '' || isLoadingSlots">Continuar →</atom-button>
         </div>
       </form>
     </div>
@@ -266,13 +252,11 @@
       </div>
 
       <div class="form-actions confirm-actions">
-        <button type="button" class="btn-secondary" (click)="goBackToSlots()" [disabled]="isSubmitting">
-          ← Editar
-        </button>
-        <button type="button" class="btn-confirm" (click)="confirmReschedule()" [disabled]="isSubmitting">
+        <atom-button variant="secondary" (onClick)="goBackToSlots()" [disabled]="isSubmitting">← Editar</atom-button>
+        <atom-button variant="success" (onClick)="confirmReschedule()" [disabled]="isSubmitting">
           <span *ngIf="!isSubmitting">Confirmar re-agendamiento</span>
-          <span *ngIf="isSubmitting" class="spinner-inline"></span>
-        </button>
+          <atom-spinner size="sm" *ngIf="isSubmitting"></atom-spinner>
+        </atom-button>
       </div>
     </div>
 
@@ -302,15 +286,13 @@
         <div class="ct-row">
           <span class="ct-key">Estado</span>
           <span class="ct-val">
-            <span class="status-pill status-rescheduled">Reagendada</span>
+            <atom-badge variant="warning">Reagendada</atom-badge>
           </span>
         </div>
       </div>
 
       <div class="form-actions">
-        <button type="button" class="btn-primary" (click)="startOver()">
-          Re-agendar otra cita
-        </button>
+        <atom-button variant="primary" (onClick)="startOver()">Re-agendar otra cita</atom-button>
       </div>
     </div>
 
@@ -323,12 +305,8 @@
       <p class="error-message">{{ submitError }}</p>
 
       <div class="form-actions">
-        <button type="button" class="btn-secondary" (click)="goBackToSlots()">
-          ← Intentar de nuevo
-        </button>
-        <button type="button" class="btn-primary" (click)="startOver()">
-          Nueva búsqueda
-        </button>
+        <atom-button variant="secondary" (onClick)="goBackToSlots()">← Intentar de nuevo</atom-button>
+        <atom-button variant="primary" (onClick)="startOver()">Nueva búsqueda</atom-button>
       </div>
     </div>
 

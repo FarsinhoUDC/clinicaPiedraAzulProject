@@ -1,0 +1,91 @@
+.login-form-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100%;
+  gap: 0;
+}
+.login-form-left {
+  background: linear-gradient(135deg, #173250 0%, #1a5a7a 100%);
+  color: #ffffff;
+  padding: 48px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 24px;
+  border-radius: 16px 0 0 16px;
+}
+.login-logo-container {
+  display: grid;
+  gap: 12px;
+  justify-items: center;
+}
+.login-logo-container h1 {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.8rem;
+}
+.login-tagline {
+  font-size: 1rem;
+  line-height: 1.6;
+  opacity: 0.85;
+  max-width: 320px;
+}
+.login-form-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  background: #ffffff;
+  border-radius: 0 16px 16px 0;
+}
+.login-card {
+  max-width: 380px;
+  width: 100%;
+  display: grid;
+  gap: 20px;
+}
+.login-card h2 {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  color: #173250;
+  font-size: 1.6rem;
+}
+.login-subtitle {
+  color: #71889a;
+  margin: 0;
+  font-size: 0.9rem;
+}
+.login-info-box {
+  background: #edf7fb;
+  border-radius: 10px;
+  padding: 14px 16px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 0.85rem;
+  color: #305064;
+}
+.login-info-icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+.login-info-box p {
+  margin: 0;
+}
+.login-register-prompt {
+  text-align: center;
+  color: #71889a;
+  font-size: 0.87rem;
+  margin: 0;
+}
+.login-register-prompt a {
+  color: #118a9b;
+  text-decoration: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+.login-register-prompt a:hover {
+  text-decoration: underline;
+}

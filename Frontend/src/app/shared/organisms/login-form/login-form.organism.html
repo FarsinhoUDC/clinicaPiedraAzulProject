@@ -1,0 +1,47 @@
+<div class="login-form-container">
+  <div class="login-form-left">
+    <div class="login-logo-container">
+      <div class="login-logo">
+        <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="40" cy="40" r="38" fill="#5cb85c" stroke="#4cae4c" stroke-width="2"/>
+          <path d="M40 20C29.5 20 21 28.5 21 39C21 49.5 29.5 58 40 58C50.5 58 59 49.5 59 39C59 28.5 50.5 20 40 20ZM40 54C31.7 54 25 47.3 25 39C25 30.7 31.7 24 40 24C48.3 24 55 30.7 55 39C55 47.3 48.3 54 40 54Z" fill="white"/>
+          <circle cx="40" cy="39" r="8" fill="#173250"/>
+        </svg>
+      </div>
+      <h1>Piedra Azul</h1>
+    </div>
+    <p class="login-tagline">Tu salud es nuestra prioridad. Agenda tus citas médicas de forma rápida y sencilla.</p>
+  </div>
+
+  <div class="login-form-right">
+    <div class="login-card">
+      <h2>Bienvenido</h2>
+      <p class="login-subtitle">Accede de forma segura con tus credenciales institucionales</p>
+
+      <div class="login-info-box">
+        <span class="login-info-icon">&#8505;</span>
+        <p>Tu usuario y contraseña son tu <strong>número de documento de identidad</strong>.</p>
+      </div>
+
+      <atom-button
+        id="btn-iniciar-sesion"
+        variant="primary"
+        [block]="true"
+        (click)="onLogin()"
+        [disabled]="cargando"
+        type="button">
+        @if (cargando) {
+          <atom-spinner size="sm"></atom-spinner>
+          Redirigiendo…
+        } @else {
+          Iniciar Sesión
+        }
+      </atom-button>
+
+      <p class="login-register-prompt">
+        ¿No tienes una cuenta?
+        <a (click)="onSwitchToRegister()" role="button" tabindex="0">Regístrate aquí</a>
+      </p>
+    </div>
+  </div>
+</div>

@@ -3,12 +3,13 @@ import { Component, OnInit } from '@angular/core';
 import { Appointment } from '../../../core/models/appointment.model';
 import { AppointmentApiService } from '../../../core/services/appointment-api.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { AtomButtonComponent, AtomBadgeComponent, AtomSpinnerComponent } from '../../../shared/atoms/index';
 
 
 @Component({
   selector: 'app-mis-citas',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, AtomButtonComponent, AtomBadgeComponent, AtomSpinnerComponent],
   templateUrl: './mis-citas.component.html',
   styleUrls: ['./mis-citas.component.css']
 })
@@ -40,6 +41,16 @@ export class MisCitasComponent implements OnInit {
     });
   }
 
+
+  getBadgeVariant(status?: string): 'admin' | 'medico' | 'agendador' | 'paciente' | 'default' | 'success' | 'warning' | 'error' {
+    switch (status) {
+      case 'CONFIRMADA': return 'success';
+      case 'CANCELADA': return 'error';
+      case 'REAGENDADA': return 'warning';
+      case 'FINALIZADA': return 'default';
+      default: return 'warning';
+    }
+  }
 
   esFutura(cita: Appointment): boolean {
     return new Date(cita.fechaHora) > new Date();

@@ -1,0 +1,9 @@
+<div class="molecule-user-badge">
+  <ng-content select="[badge-avatar]">
+    <div class="molecule-user-avatar">{{ initials }}</div>
+  </ng-content>
+  <div class="molecule-user-info">
+    <span class="molecule-user-name">{{ name }}</span>
+    <span class="molecule-user-role" *ngIf="role">{{ role }}</span>
+  </div>
+</div>

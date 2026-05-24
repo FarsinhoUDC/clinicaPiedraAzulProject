@@ -1,0 +1,18 @@
+<div class="molecule-search" [class.search-dark]="dark">
+  <span class="molecule-search-icon">&#128269;</span>
+  <input
+    [id]="id"
+    type="text"
+    class="molecule-search-input"
+    [placeholder]="placeholder"
+    [value]="value"
+    (input)="onSearch.emit(($event.target as HTMLInputElement).value)"
+    (keyup)="onKeyUp.emit($event)">
+  <button
+    *ngIf="showButton"
+    type="button"
+    class="molecule-search-btn"
+    (click)="onSearchSubmit.emit(value)">
+    {{ buttonText }}
+  </button>
+</div>

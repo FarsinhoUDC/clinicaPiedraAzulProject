@@ -1,0 +1,47 @@
+.atom-input-wrapper {
+  display: grid;
+  gap: 0.35rem;
+}
+.atom-input-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #305064;
+}
+.atom-input {
+  min-height: 42px;
+  border: 1px solid #c8d7e0;
+  border-radius: 10px;
+  padding: 10px 14px;
+  background: #fbfdff;
+  font-size: 0.9rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+  width: 100%;
+}
+.atom-input:focus {
+  border-color: #118a9b;
+  box-shadow: 0 0 0 3px rgba(17, 138, 155, 0.12);
+}
+.atom-input::placeholder {
+  color: #a0b5c5;
+}
+.atom-input.input-sm {
+  min-height: 36px;
+  padding: 6px 12px;
+  font-size: 0.82rem;
+}
+.atom-input.input-lg {
+  min-height: 50px;
+  padding: 12px 18px;
+  font-size: 1rem;
+}
+.has-error .atom-input {
+  border-color: #d64545;
+}
+.has-error .atom-input:focus {
+  box-shadow: 0 0 0 3px rgba(214, 69, 69, 0.12);
+}
+.atom-input-error {
+  font-size: 0.75rem;
+  color: #d64545;
+}

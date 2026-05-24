@@ -7,27 +7,29 @@
 
     <form [formGroup]="searchForm" class="consult-search" (ngSubmit)="search()">
       <div class="consult-field">
-        <label for="medicoId">Medico / Terapista *</label>
-        <select id="medicoId" formControlName="medicoId">
-          <option value="">Seleccione un medico</option>
-          <option *ngFor="let doctor of doctors" [value]="doctor.id">
-            {{ doctor.nombres }} {{ doctor.apellidos }} - {{ doctor.especialidad || 'Especialidad general' }}
-          </option>
-        </select>
-        <span class="consult-error" *ngIf="searchForm.controls.medicoId.touched && searchForm.controls.medicoId.invalid">
-          Debe seleccionar un medico.
-        </span>
+        <atom-select
+          id="medicoId"
+          formControlName="medicoId"
+          label="Medico / Terapista *"
+          placeholder="Seleccione un medico"
+          [options]="doctorOptions"
+          [hasError]="searchForm.controls.medicoId.touched && searchForm.controls.medicoId.invalid"
+          errorMessage="Debe seleccionar un medico."
+        ></atom-select>
       </div>
 
       <div class="consult-field">
-        <label for="fecha">Fecha *</label>
-        <input id="fecha" type="date" formControlName="fecha">
-        <span class="consult-error" *ngIf="searchForm.controls.fecha.touched && searchForm.controls.fecha.invalid">
-          Debe seleccionar una fecha.
-        </span>
+        <atom-input
+          id="fecha"
+          type="date"
+          formControlName="fecha"
+          label="Fecha *"
+          [hasError]="searchForm.controls.fecha.touched && searchForm.controls.fecha.invalid"
+          errorMessage="Debe seleccionar una fecha."
+        ></atom-input>
       </div>
 
-      <button type="submit" class="consult-button">Buscar</button>
+      <atom-button type="submit" variant="primary">Buscar</atom-button>
     </form>
 
     <div class="metric-grid">
@@ -53,9 +55,7 @@
     <div class="consult-error" *ngIf="errorMessage">{{ errorMessage }}</div>
 
     <div class="consult-actions" *ngIf="appointments.length > 0">
-      <button type="button" class="export-button" (click)="downloadCSV()" [disabled]="!canDownload">
-        Descargar CSV
-      </button>
+      <atom-button variant="secondary" (onClick)="downloadCSV()" [disabled]="!canDownload">Descargar CSV</atom-button>
     </div>
 
     <div class="consult-table-card" *ngIf="appointments.length > 0">
@@ -79,9 +79,9 @@
             <td>{{ appointment.celularPaciente }}</td>
             <td>{{ hourLabel(appointment.fechaHora) }}</td>
             <td>
-              <span class="status-pill" [ngClass]="statusClass(appointment.estado)">
+              <atom-badge [variant]="getBadgeVariant(appointment.estado)">
                 {{ appointment.estado === 'CONFIRMADA' ? 'Confirmada' : appointment.estado === 'CANCELADA' ? 'Cancelada' : 'Pendiente' }}
-              </span>
+              </atom-badge>
             </td>
             <td>
               <button type="button" class="action-button">Ver</button>

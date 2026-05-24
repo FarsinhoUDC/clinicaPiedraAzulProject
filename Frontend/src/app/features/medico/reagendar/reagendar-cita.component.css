@@ -118,8 +118,6 @@
   font-size: 0.9rem;
 }
 
-.form-field input,
-.form-field select,
 .form-field textarea {
   width: 100%;
   min-height: 42px;
@@ -131,8 +129,6 @@
   transition: border-color 0.15s, box-shadow 0.15s;
 }
 
-.form-field input:focus,
-.form-field select:focus,
 .form-field textarea:focus {
   outline: none;
   border-color: #16b7b3;
@@ -159,94 +155,7 @@
   color: #8da3b0;
 }
 
-/* ── Botones ───────────────────────────────────────────── */
 
-.btn-primary {
-  min-width: 140px;
-  min-height: 42px;
-  border: none;
-  border-radius: 10px;
-  background: #16b7b3;
-  color: #ffffff;
-  font-weight: 700;
-  padding: 0 20px;
-  transition: background 0.2s, opacity 0.2s;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-.btn-primary:hover:not(:disabled) {
-  background: #0fa09c;
-}
-
-.btn-primary:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
-}
-
-.btn-secondary {
-  min-width: 120px;
-  min-height: 42px;
-  border: 1px solid #c0cfd8;
-  border-radius: 10px;
-  background: #ffffff;
-  color: #305064;
-  font-weight: 600;
-  padding: 0 18px;
-  transition: background 0.15s;
-}
-
-.btn-secondary:hover:not(:disabled) {
-  background: #f0f7fb;
-}
-
-.btn-secondary:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.btn-confirm {
-  min-width: 220px;
-  min-height: 44px;
-  border: none;
-  border-radius: 10px;
-  background: #173250;
-  color: #ffffff;
-  font-weight: 700;
-  padding: 0 24px;
-  transition: background 0.2s, opacity 0.2s;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-.btn-confirm:hover:not(:disabled) {
-  background: #0e2340;
-}
-
-.btn-confirm:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
-}
-
-.btn-reschedule {
-  border: 1px solid #16b7b3;
-  background: #f0fafa;
-  color: #0d9490;
-  border-radius: 8px;
-  padding: 7px 14px;
-  font-weight: 600;
-  font-size: 0.84rem;
-  transition: background 0.15s, border-color 0.15s;
-}
-
-.btn-reschedule:hover {
-  background: #d5f3f2;
-  border-color: #0fa09c;
-}
 
 /* ── Alertas ───────────────────────────────────────────── */
 
@@ -341,30 +250,7 @@
   box-shadow: 0 10px 22px rgba(30, 60, 82, 0.07);
 }
 
-/* ── Status pills ──────────────────────────────────────── */
 
-.status-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 11px;
-  border-radius: 999px;
-  font-size: 0.79rem;
-  font-weight: 700;
-}
-
-.status-pill::before {
-  content: "";
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: currentColor;
-}
-
-.status-confirmed   { background: #e7f8eb; color: #24a153; }
-.status-pending     { background: #fff1d4; color: #e6a01d; }
-.status-cancelled   { background: #ffe5e5; color: #ef5d5d; }
-.status-rescheduled { background: #e8f0ff; color: #3b6de8; }
 
 /* ── Tarjeta de cita seleccionada ──────────────────────── */
 
@@ -638,21 +524,7 @@
   font-size: 0.9rem;
 }
 
-/* ── Spinner inline ────────────────────────────────────── */
 
-.spinner-inline {
-  display: inline-block;
-  width: 18px;
-  height: 18px;
-  border: 2.5px solid rgba(255, 255, 255, 0.4);
-  border-top-color: #ffffff;
-  border-radius: 50%;
-  animation: spin 0.65s linear infinite;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
 
 /* ── Responsive ────────────────────────────────────────── */
 

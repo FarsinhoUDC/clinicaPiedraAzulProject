@@ -1,0 +1,129 @@
+.register-form-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100%;
+}
+.register-form-left {
+  background: linear-gradient(135deg, #173250 0%, #1a5a7a 100%);
+  color: #ffffff;
+  padding: 48px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 20px;
+  border-radius: 16px 0 0 16px;
+}
+.register-form-left h1 {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.8rem;
+}
+.register-form-left p {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  opacity: 0.85;
+  max-width: 300px;
+}
+.register-form-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  background: #ffffff;
+  border-radius: 0 16px 16px 0;
+}
+.register-card {
+  max-width: 500px;
+  width: 100%;
+}
+.register-card h2 {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  color: #173250;
+  font-size: 1.6rem;
+}
+.register-subtitle {
+  color: #71889a;
+  margin: 4px 0 16px;
+  font-size: 0.9rem;
+}
+.register-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 16px;
+}
+.register-field {
+  display: grid;
+  gap: 6px;
+}
+.register-field-full {
+  grid-column: span 2;
+}
+.register-field label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #305064;
+}
+.register-info-box {
+  grid-column: span 2;
+  background: #e8f5e9;
+  border-radius: 8px;
+  padding: 14px;
+  font-size: 0.82rem;
+  color: #1f8d49;
+}
+.register-error {
+  grid-column: span 2;
+  color: #d64545;
+  background: #ffebee;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+}
+.register-success {
+  grid-column: span 2;
+  color: #1f8d49;
+  background: #e8f5e9;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+}
+.register-login-prompt {
+  grid-column: span 2;
+  text-align: center;
+  color: #71889a;
+  font-size: 0.87rem;
+  margin: 8px 0 0;
+}
+.register-login-prompt a {
+  color: #118a9b;
+  text-decoration: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+.register-login-prompt a:hover {
+  text-decoration: underline;
+}
+@media (max-width: 860px) {
+  .register-form-container {
+    grid-template-columns: 1fr;
+  }
+  .register-form-left {
+    border-radius: 16px 16px 0 0;
+    padding: 32px 24px;
+  }
+  .register-form-right {
+    border-radius: 0 0 16px 16px;
+    padding: 24px;
+  }
+  .register-grid {
+    grid-template-columns: 1fr;
+  }
+  .register-field-full {
+    grid-column: span 1;
+  }
+}
