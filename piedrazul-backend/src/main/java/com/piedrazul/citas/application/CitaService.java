@@ -95,6 +95,7 @@ public class CitaService {
                 .fechaHora(c.getFechaHora())
                 .origen(c.getOrigen())
                 .creadoEn(c.getCreadoEn())
+                .estado(c.getEstado() != null ? c.getEstado().name() : "PROGRAMADA")
                 .build();
     }
 }

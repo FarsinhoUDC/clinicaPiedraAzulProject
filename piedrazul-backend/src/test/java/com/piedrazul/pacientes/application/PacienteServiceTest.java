@@ -6,6 +6,7 @@ import com.piedrazul.pacientes.dto.PacienteRequest;
 import com.piedrazul.pacientes.dto.PacienteResponse;
 import com.piedrazul.pacientes.infrastructure.persistence.PacienteRepository;
 import com.piedrazul.pacientes.infrastructure.KeycloakService;
+import com.piedrazul.shared.exception.BusinessException;
 import com.piedrazul.shared.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -95,6 +96,16 @@ class PacienteServiceTest {
         var result = pacienteService.buscarPorDocumento("99999");
 
         assertThat(result).isEmpty();
+    }
+
+    @Test
+    @DisplayName("crear - documento duplicado - lanza BusinessException")
+    void crear_duplicado_lanzaException() {
+        when(pacienteRepository.findByNumeroDocumento("12345")).thenReturn(Optional.of(paciente));
+
+        assertThatThrownBy(() -> pacienteService.crear(request))
+                .isInstanceOf(BusinessException.class)
+                .hasMessageContaining("Ya existe un paciente");
     }
 
     @Test

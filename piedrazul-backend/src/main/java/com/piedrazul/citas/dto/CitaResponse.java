@@ -19,4 +19,5 @@ public class CitaResponse {
     private LocalDateTime fechaHora;
     private OrigenCita origen;
     private LocalDateTime creadoEn;
+    private String estado;
 }

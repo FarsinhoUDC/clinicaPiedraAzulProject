@@ -28,7 +28,7 @@ public class PacienteController {
     @PostMapping
     public ResponseEntity<ApiResponse<PacienteResponse>> crear(
             @Valid @RequestBody PacienteRequest req) {
-        PacienteResponse paciente = pacienteService.crearOActualizar(req);
+        PacienteResponse paciente = pacienteService.crear(req);
         return ResponseEntity.ok(ApiResponse.ok("Paciente registrado exitosamente", paciente));
     }
 }

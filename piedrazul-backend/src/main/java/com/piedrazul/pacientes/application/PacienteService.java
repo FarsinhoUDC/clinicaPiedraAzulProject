@@ -23,6 +23,15 @@ public class PacienteService {
     private final KeycloakService keycloakService;
 
     @Transactional
+    public PacienteResponse crear(PacienteRequest request) {
+        if (pacienteRepository.findByNumeroDocumento(request.getNumeroDocumento()).isPresent()) {
+            throw new BusinessException("Ya existe un paciente registrado con el documento "
+                    + request.getNumeroDocumento());
+        }
+        return crearNuevo(request);
+    }
+
+    @Transactional
     public PacienteResponse crearOActualizar(PacienteRequest request) {
 
         Optional<Paciente> existente = pacienteRepository
@@ -39,6 +48,10 @@ public class PacienteService {
             return toResponse(pacienteRepository.save(p));
         }
 
+        return crearNuevo(request);
+    }
+
+    private PacienteResponse crearNuevo(PacienteRequest request) {
         String encodedPassword = request.getContrasena() != null
                 ? passwordEncoder.encode(request.getContrasena())
                 : passwordEncoder.encode("DEFAULT_PASS");
@@ -56,7 +69,6 @@ public class PacienteService {
 
         Paciente saved = pacienteRepository.save(paciente);
         
-        // Crear usuario en Keycloak
         keycloakService.crearUsuario(request);
         
         return toResponse(saved);
