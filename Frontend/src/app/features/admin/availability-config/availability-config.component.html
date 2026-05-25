@@ -50,6 +50,7 @@
               </button>
             </div>
           </div>
+          <div class="field-error" *ngIf="daysArray.touched && daysArray.length === 0">Debe seleccionar al menos un dia.</div>
 
           <div class="time-grid">
             <div class="config-field">
@@ -63,6 +64,7 @@
               <div class="field-error" *ngIf="form.controls.horaFin.touched && form.controls.horaFin.invalid">Debe ingresar la hora de fin.</div>
             </div>
           </div>
+          <div class="field-error" *ngIf="form.errors?.['invalidTimeRange']">{{ form.errors?.['invalidTimeRange'] }}</div>
 
           <div class="config-field">
             <label>Intervalo entre citas (minutos) *</label>
@@ -129,8 +131,8 @@
       </div>
     </div>
 
-    <div class="field-error" *ngIf="form.errors?.['invalidTimeRange']">{{ form.errors?.['invalidTimeRange'] }}</div>
-    <div class="field-error" *ngIf="daysArray.touched && daysArray.length === 0">Debe seleccionar al menos un dia.</div>
+    
+    
     <div class="success-message success-chip" *ngIf="message">{{ message }}</div>
     <div class="field-error" *ngIf="errorMessage">{{ errorMessage }}</div>
   </div>
