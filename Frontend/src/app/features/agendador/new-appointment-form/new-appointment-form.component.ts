@@ -11,7 +11,7 @@ import { AppointmentApiService } from '../../../core/services/appointment-api.se
 import { DoctorApiService } from '../../../core/services/doctor-api.service';
 import { PatientApiService } from '../../../core/services/patient-api.service';
 import { combineDateAndTime, toHourLabel } from '../../../core/utils/date-time.utils';
-import { colombianCellphoneValidator } from '../../../shared/validators/custom-validators';
+import { colombianCellphoneValidator, digitsOnlyValidator, lettersOnlyValidator, noMaliciousCharsValidator, notFutureDateValidator } from '../../../shared/validators/custom-validators';
 import { AtomButtonComponent, AtomInputComponent, AtomSelectComponent, AtomSpinnerComponent, AtomDialogComponent, type SelectOption } from '../../../shared/atoms/index';
 
 @Component({
@@ -24,11 +24,11 @@ import { AtomButtonComponent, AtomInputComponent, AtomSelectComponent, AtomSpinn
 export class NewAppointmentFormComponent implements OnInit {
   readonly genderOptions = GENDER_OPTIONS;
   readonly form = this.formBuilder.group({
-    numeroDocumento: ['', Validators.required],
-    nombres: ['', Validators.required],
-    celular: ['', [Validators.required, colombianCellphoneValidator()]],
+    numeroDocumento: ['', [Validators.required, digitsOnlyValidator()]],
+    nombres: ['', [Validators.required, lettersOnlyValidator(), noMaliciousCharsValidator()]],
+    celular: ['', [Validators.required, colombianCellphoneValidator(), digitsOnlyValidator()]],
     genero: ['', Validators.required],
-    fechaNacimiento: [''],
+    fechaNacimiento: ['', notFutureDateValidator()],
     correo: ['', Validators.email],
     medicoId: ['', Validators.required],
     fecha: ['', Validators.required],

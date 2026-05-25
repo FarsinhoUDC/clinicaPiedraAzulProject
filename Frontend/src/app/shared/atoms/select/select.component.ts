@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, forwardRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, forwardRef, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 
@@ -21,7 +21,7 @@ export interface SelectOption {
     }
   ]
 })
-export class AtomSelectComponent implements ControlValueAccessor {
+export class AtomSelectComponent implements ControlValueAccessor, AfterViewInit {
   @Input() id = '';
   @Input() label = '';
   @Input() placeholder = 'Seleccione una opción';
@@ -31,6 +31,9 @@ export class AtomSelectComponent implements ControlValueAccessor {
   @Input() hasError = false;
   @Input() errorMessage = '';
   @Output() onSelectChange = new EventEmitter<string | number>();
+
+  @ViewChild('selectEl') private selectRef!: ElementRef<HTMLSelectElement>;
+  private pendingValue: string | number | null = null;
 
   value: string | number = '';
 
@@ -50,6 +53,18 @@ export class AtomSelectComponent implements ControlValueAccessor {
 
   writeValue(value: string | number): void {
     this.value = value ?? '';
+    if (this.selectRef) {
+      this.selectRef.nativeElement.value = String(this.value);
+    } else {
+      this.pendingValue = this.value;
+    }
+  }
+
+  ngAfterViewInit(): void {
+    if (this.pendingValue !== null && this.selectRef) {
+      this.selectRef.nativeElement.value = String(this.pendingValue);
+      this.pendingValue = null;
+    }
   }
 
   registerOnChange(fn: (value: string | number) => void): void {

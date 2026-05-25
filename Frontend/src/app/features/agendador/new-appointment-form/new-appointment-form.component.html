@@ -39,7 +39,7 @@
 
         <div class="form-field">
           <label for="celular">Celular *</label>
-          <atom-input id="celular" formControlName="celular" [disabled]="!!(patientLookupMessage && !patientNotFound)"></atom-input>
+          <atom-input id="celular" formControlName="celular"></atom-input>
           <span class="field-error" *ngIf="form.controls.celular.touched && form.controls.celular.errors?.['colombianCellphone']">
             {{ form.controls.celular.errors?.['colombianCellphone'] }}
           </span>
@@ -68,7 +68,7 @@
 
         <div class="form-field">
           <label for="correo">Correo Electronico (opcional)</label>
-          <atom-input id="correo" type="email" formControlName="correo" [disabled]="!!(patientLookupMessage && !patientNotFound)"></atom-input>
+          <atom-input id="correo" type="email" formControlName="correo"></atom-input>
         </div>
       </section>
 
@@ -123,9 +123,9 @@
       <atom-button variant="primary" (onClick)="requestSave()">Guardar Cita</atom-button>
     </div>
 
-    <div class="success-message" *ngIf="submitMessage">{{ submitMessage }}</div>
+    <div class="success-message success-chip" *ngIf="submitMessage">{{ submitMessage }}</div>
     <div class="field-error" *ngIf="errorMessage">{{ errorMessage }}</div>
-    <div class="success-message" *ngIf="selectedAppointment">Cita creada con ID {{ selectedAppointment.id }} a las {{ hourLabel(selectedAppointment.fechaHora) }}.</div>
+    <div class="success-message success-chip" *ngIf="selectedAppointment">Cita creada con ID {{ selectedAppointment.id }} a las {{ hourLabel(selectedAppointment.fechaHora) }}.</div>
   </div>
 
   <atom-dialog

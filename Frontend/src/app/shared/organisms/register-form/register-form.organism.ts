@@ -1,5 +1,5 @@
 import { Component, Output, EventEmitter } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { environment } from '../../../../environments/environment';
@@ -7,11 +7,12 @@ import { AtomButtonComponent } from '../../atoms/button/button.component';
 import { AtomInputComponent } from '../../atoms/input/input.component';
 import { AtomSelectComponent } from '../../atoms/select/select.component';
 import { AtomSpinnerComponent } from '../../atoms/spinner/spinner.component';
+import { colombianCellphoneValidator, digitsOnlyValidator, lettersOnlyValidator, noMaliciousCharsValidator, notFutureDateValidator } from '../../validators/custom-validators';
 
 @Component({
   selector: 'organismo-register-form',
   standalone: true,
-  imports: [FormsModule, CommonModule, AtomButtonComponent, AtomInputComponent, AtomSelectComponent, AtomSpinnerComponent],
+  imports: [ReactiveFormsModule, CommonModule, AtomButtonComponent, AtomInputComponent, AtomSelectComponent, AtomSpinnerComponent],
   templateUrl: './register-form.organism.html',
   styleUrls: ['./register-form.organism.css']
 })
@@ -19,27 +20,52 @@ export class RegisterFormOrganism {
   @Output() registerSuccess = new EventEmitter<void>();
   @Output() switchToLogin = new EventEmitter<void>();
 
-  documentNumber: string = '';
-  documentType: string = 'CC';
-  firstName: string = '';
-  lastName: string = '';
-  phone: string = '';
-  gender: string = '';
-  birthDate: string = '';
-  email: string = '';
+  readonly form = this.formBuilder.group({
+    documentNumber: ['', [Validators.required, digitsOnlyValidator(), noMaliciousCharsValidator()]],
+    documentType: ['CC'],
+    firstName: ['', [Validators.required, lettersOnlyValidator(), noMaliciousCharsValidator()]],
+    lastName: ['', [Validators.required, lettersOnlyValidator(), noMaliciousCharsValidator()]],
+    phone: ['', [Validators.required, colombianCellphoneValidator(), digitsOnlyValidator()]],
+    gender: [''],
+    birthDate: ['', notFutureDateValidator()],
+    email: ['', Validators.email]
+  });
 
   cargando: boolean = false;
   error: string = '';
   success: string = '';
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private readonly formBuilder: FormBuilder,
+    private http: HttpClient
+  ) {}
+
+  get f() {
+    return this.form.controls;
+  }
 
   onRegister(): void {
     this.error = '';
     this.success = '';
 
-    if (!this.documentNumber || !this.firstName || !this.lastName || !this.phone) {
-      this.error = 'Por favor completa todos los campos requeridos';
+    if (this.form.invalid) {
+      if (this.f.documentNumber.errors?.['required'] || this.f.firstName.errors?.['required'] || this.f.lastName.errors?.['required'] || this.f.phone.errors?.['required']) {
+        this.error = 'Por favor completa todos los campos requeridos';
+      } else if (this.f.documentNumber.errors?.['digitsOnly']) {
+        this.error = 'El número de documento solo acepta números';
+      } else if (this.f.firstName.errors?.['lettersOnly'] || this.f.lastName.errors?.['lettersOnly']) {
+        this.error = 'Los nombres solo aceptan letras';
+      } else if (this.f.phone.errors?.['colombianCellphone']) {
+        this.error = this.f.phone.errors?.['colombianCellphone'];
+      } else if (this.f.phone.errors?.['digitsOnly']) {
+        this.error = 'El celular solo acepta números';
+      } else if (this.f.birthDate.errors?.['notFutureDate']) {
+        this.error = 'La fecha de nacimiento no puede ser posterior al día de hoy';
+      } else if (this.f.email.errors?.['email']) {
+        this.error = 'Correo electrónico inválido';
+      } else {
+        this.error = 'Corrige los errores del formulario';
+      }
       return;
     }
 
@@ -49,15 +75,16 @@ export class RegisterFormOrganism {
       'M': 'HOMBRE', 'F': 'MUJER', 'OTRO': 'OTRO', 'PND': 'OTRO'
     };
 
+    const v = this.form.getRawValue();
     const request = {
-      numeroDocumento: this.documentNumber,
-      nombres: this.firstName,
-      apellidos: this.lastName,
-      correo: this.email,
-      contrasena: this.documentNumber,
-      celular: this.phone,
-      genero: generoMap[this.gender] || 'OTRO',
-      fechaNacimiento: this.birthDate || null
+      numeroDocumento: v.documentNumber ?? '',
+      nombres: v.firstName ?? '',
+      apellidos: v.lastName ?? '',
+      correo: v.email ?? '',
+      contrasena: v.documentNumber ?? '',
+      celular: v.phone ?? '',
+      genero: generoMap[v.gender ?? ''] || 'OTRO',
+      fechaNacimiento: v.birthDate || null
     };
 
     this.http.post<any>(`${environment.apiBaseUrl}/pacientes`, request).subscribe({

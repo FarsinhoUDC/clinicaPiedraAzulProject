@@ -52,3 +52,38 @@ export function timeRangeValidator(startKey: string, endKey: string): ValidatorF
     return start < end ? null : { invalidTimeRange: 'La hora fin debe ser posterior a la hora inicio' };
   };
 }
+
+export function digitsOnlyValidator(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const value = `${control.value ?? ''}`.trim();
+    if (!value) return null;
+    return /^\d+$/.test(value) ? null : { digitsOnly: 'Este campo solo acepta números' };
+  };
+}
+
+export function lettersOnlyValidator(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const value = `${control.value ?? ''}`.trim();
+    if (!value) return null;
+    return /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(value) ? null : { lettersOnly: 'Este campo solo acepta letras' };
+  };
+}
+
+export function notFutureDateValidator(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const value = `${control.value ?? ''}`.trim();
+    if (!value) return null;
+    const fecha = new Date(value);
+    const hoy = new Date();
+    hoy.setHours(23, 59, 59, 999);
+    return fecha <= hoy ? null : { notFutureDate: 'La fecha no puede ser posterior al día de hoy' };
+  };
+}
+
+export function noMaliciousCharsValidator(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const value = `${control.value ?? ''}`;
+    if (!value) return null;
+    return /^[^<>{}().;"'&$%#!|\\/]+$/.test(value) ? null : { noMaliciousChars: 'El campo contiene caracteres no permitidos' };
+  };
+}

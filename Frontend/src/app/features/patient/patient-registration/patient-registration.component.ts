@@ -11,7 +11,10 @@ import { getPasswordStrength } from '../../../core/utils/password.utils';
 import {
   colombianCellphoneValidator,
   passwordMatchValidator,
-  strongPasswordValidator
+  strongPasswordValidator,
+  digitsOnlyValidator,
+  lettersOnlyValidator,
+  noMaliciousCharsValidator
 } from '../../../shared/validators/custom-validators';
 
 @Component({
@@ -29,10 +32,10 @@ export class PatientRegistrationComponent {
   }
 
   readonly form = this.formBuilder.group({
-    numeroDocumento: ['', Validators.required],
-    nombres: ['', Validators.required],
-    apellidos: ['', Validators.required],
-    celular: ['', [Validators.required, colombianCellphoneValidator()]],
+    numeroDocumento: ['', [Validators.required, digitsOnlyValidator()]],
+    nombres: ['', [Validators.required, lettersOnlyValidator(), noMaliciousCharsValidator()]],
+    apellidos: ['', [Validators.required, lettersOnlyValidator(), noMaliciousCharsValidator()]],
+    celular: ['', [Validators.required, colombianCellphoneValidator(), digitsOnlyValidator()]],
     genero: ['', Validators.required],
     correo: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, strongPasswordValidator()]],

@@ -80,7 +80,7 @@
             <td>{{ hourLabel(appointment.fechaHora) }}</td>
             <td>
               <atom-badge [variant]="getBadgeVariant(appointment.estado)">
-                {{ appointment.estado === 'CONFIRMADA' ? 'Confirmada' : appointment.estado === 'CANCELADA' ? 'Cancelada' : 'Pendiente' }}
+                {{ statusLabel(appointment.estado) }}
               </atom-badge>
             </td>
             <td>

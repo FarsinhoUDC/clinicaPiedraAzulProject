@@ -10,7 +10,7 @@ import { Doctor, DoctorAvailability } from '../../../core/models/doctor.model';
 import { ConfigurationApiService } from '../../../core/services/configuration-api.service';
 import { DoctorApiService } from '../../../core/services/doctor-api.service';
 import { calculateDailySlots, calculateWindowEndDate } from '../../../core/utils/slot-calculator.util';
-import { timeRangeValidator } from '../../../shared/validators/custom-validators';
+import { timeRangeValidator, colombianCellphoneValidator, digitsOnlyValidator, lettersOnlyValidator, noMaliciousCharsValidator, notFutureDateValidator } from '../../../shared/validators/custom-validators';
 import { GENDER_OPTIONS } from '../../../core/constants/day-options';
 
 @Component({
@@ -60,12 +60,12 @@ export class AvailabilityConfigComponent implements OnInit {
 
   showMedicoForm = false;
   readonly medicoForm = this.formBuilder.group({
-    numeroDocumento: ['', [Validators.required, Validators.minLength(5)]],
-    nombres: ['', Validators.required],
-    apellidos: ['', Validators.required],
-    celular: ['', Validators.required],
+    numeroDocumento: ['', [Validators.required, Validators.minLength(5), digitsOnlyValidator()]],
+    nombres: ['', [Validators.required, lettersOnlyValidator(), noMaliciousCharsValidator()]],
+    apellidos: ['', [Validators.required, lettersOnlyValidator(), noMaliciousCharsValidator()]],
+    celular: ['', [Validators.required, colombianCellphoneValidator(), digitsOnlyValidator()]],
     genero: ['', Validators.required],
-    fechaNacimiento: ['', Validators.required],
+    fechaNacimiento: ['', [Validators.required, notFutureDateValidator()]],
     correo: ['', [Validators.email]],
     especialidad: ['']
   });

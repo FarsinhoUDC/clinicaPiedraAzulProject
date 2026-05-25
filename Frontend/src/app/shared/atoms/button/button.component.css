@@ -4,6 +4,8 @@
   align-items: center;
   gap: 0.4rem;
   --bs-btn-border-radius: 0.5rem;
+  margin-left: 2px;
+  min-width: 35px;
 }
 .btn-ghost {
   --bs-btn-bg: transparent;

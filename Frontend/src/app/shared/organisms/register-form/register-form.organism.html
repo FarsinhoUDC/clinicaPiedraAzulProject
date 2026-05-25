@@ -28,15 +28,17 @@
 
         <div *ngIf="error" class="alert alert-danger py-2 px-3" style="font-size: 0.85rem;">{{ error }}</div>
 
-        <form (ngSubmit)="onRegister()" class="row row-cols-1 row-cols-md-2 g-3">
+        <form [formGroup]="form" (ngSubmit)="onRegister()" class="row row-cols-1 row-cols-md-2 g-3">
           <div class="col">
             <label class="form-label" for="reg-documentNumber">Número de Documento *</label>
-            <atom-input id="reg-documentNumber" [(ngModel)]="documentNumber" name="documentNumber" placeholder="C.C., T.I., etc."></atom-input>
+            <atom-input id="reg-documentNumber" formControlName="documentNumber" placeholder="C.C., T.I., etc."
+              [hasError]="f.documentNumber.touched && f.documentNumber.invalid"
+              errorMessage="Este campo solo acepta números"></atom-input>
           </div>
 
           <div class="col">
             <label class="form-label" for="reg-documentType">Tipo de Documento</label>
-            <atom-select id="reg-documentType" [(ngModel)]="documentType" name="documentType" [options]="[
+            <atom-select id="reg-documentType" formControlName="documentType" [options]="[
               {label: 'Cédula de Ciudadanía', value: 'CC'},
               {label: 'Tarjeta de Identidad', value: 'TI'},
               {label: 'Cédula de Extranjería', value: 'CE'},
@@ -47,22 +49,28 @@
 
           <div class="col">
             <label class="form-label" for="reg-firstName">Nombre *</label>
-            <atom-input id="reg-firstName" [(ngModel)]="firstName" name="firstName" placeholder="Tu nombre"></atom-input>
+            <atom-input id="reg-firstName" formControlName="firstName" placeholder="Tu nombre"
+              [hasError]="f.firstName.touched && f.firstName.invalid"
+              errorMessage="Este campo solo acepta letras"></atom-input>
           </div>
 
           <div class="col">
             <label class="form-label" for="reg-lastName">Apellido *</label>
-            <atom-input id="reg-lastName" [(ngModel)]="lastName" name="lastName" placeholder="Tu apellido"></atom-input>
+            <atom-input id="reg-lastName" formControlName="lastName" placeholder="Tu apellido"
+              [hasError]="f.lastName.touched && f.lastName.invalid"
+              errorMessage="Este campo solo acepta letras"></atom-input>
           </div>
 
           <div class="col">
             <label class="form-label" for="reg-phone">Celular *</label>
-            <atom-input id="reg-phone" type="text" [(ngModel)]="phone" name="phone" placeholder="Número de celular"></atom-input>
+            <atom-input id="reg-phone" type="text" formControlName="phone" placeholder="Número de celular"
+              [hasError]="f.phone.touched && f.phone.invalid"
+              errorMessage="Ingrese un número celular colombiano válido (ej: 3001234567)"></atom-input>
           </div>
 
           <div class="col">
             <label class="form-label" for="reg-gender">Género</label>
-            <atom-select id="reg-gender" [(ngModel)]="gender" name="gender" placeholder="Seleccionar" [options]="[
+            <atom-select id="reg-gender" formControlName="gender" placeholder="Seleccionar" [options]="[
               {label: 'Masculino', value: 'M'},
               {label: 'Femenino', value: 'F'},
               {label: 'Prefiero no decir', value: 'PND'}
@@ -71,12 +79,16 @@
 
           <div class="col">
             <label class="form-label" for="reg-birthDate">Fecha de Nacimiento</label>
-            <atom-input id="reg-birthDate" type="date" [(ngModel)]="birthDate" name="birthDate"></atom-input>
+            <atom-input id="reg-birthDate" type="date" formControlName="birthDate"
+              [hasError]="f.birthDate.touched && f.birthDate.invalid"
+              errorMessage="La fecha no puede ser posterior al día de hoy"></atom-input>
           </div>
 
           <div class="col-12">
             <label class="form-label" for="reg-email">Correo Electrónico</label>
-            <atom-input id="reg-email" type="email" [(ngModel)]="email" name="email" placeholder="tu@correo.com (opcional)"></atom-input>
+            <atom-input id="reg-email" type="email" formControlName="email" placeholder="tu@correo.com (opcional)"
+              [hasError]="f.email.touched && f.email.invalid"
+              errorMessage="Correo electrónico inválido"></atom-input>
           </div>
 
           <div class="col-12">

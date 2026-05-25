@@ -40,8 +40,13 @@ export class AppointmentSearchComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.doctorApi.list().subscribe((doctors) => {
-      this.doctors = doctors;
+    this.doctorApi.list().subscribe({
+      next: (doctors) => {
+        this.doctors = doctors;
+      },
+      error: () => {
+        this.errorMessage = 'No se pudieron cargar los médicos. Verifica la conexión.';
+      }
     });
   }
 
@@ -62,8 +67,13 @@ export class AppointmentSearchComponent implements OnInit {
 
     this.appointmentApi.searchByDoctorAndDate(medicoId, fecha).subscribe({
       next: (appointments) => {
-        this.appointments = this.uiMappers.hydrateStatus(appointments);
-        this.summary = AppointmentSummaryFactory.create(this.appointments);
+        try {
+          this.appointments = this.uiMappers.hydrateStatus(appointments);
+          this.summary = AppointmentSummaryFactory.create(this.appointments);
+        } catch {
+          this.appointments = appointments;
+          this.summary = [];
+        }
         this.isLoading = false;
       },
       error: () => {
@@ -95,9 +105,22 @@ export class AppointmentSearchComponent implements OnInit {
 
   getBadgeVariant(status?: string): 'admin' | 'medico' | 'agendador' | 'paciente' | 'default' | 'success' | 'warning' | 'error' {
     switch (status) {
-      case 'CONFIRMADA': return 'success';
+      case 'CONFIRMADA':
+      case 'PROGRAMADA': return 'success';
       case 'CANCELADA': return 'error';
+      case 'FINALIZADA': return 'default';
       default: return 'warning';
+    }
+  }
+
+  statusLabel(status?: string): string {
+    switch (status) {
+      case 'CONFIRMADA':
+      case 'PROGRAMADA': return 'Confirmada';
+      case 'CANCELADA': return 'Cancelada';
+      case 'REAGENDADA': return 'Reagendada';
+      case 'FINALIZADA': return 'Finalizada';
+      default: return 'Pendiente';
     }
   }
 

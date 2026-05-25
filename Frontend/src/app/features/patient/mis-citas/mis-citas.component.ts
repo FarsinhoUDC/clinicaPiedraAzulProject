@@ -44,11 +44,23 @@ export class MisCitasComponent implements OnInit {
 
   getBadgeVariant(status?: string): 'admin' | 'medico' | 'agendador' | 'paciente' | 'default' | 'success' | 'warning' | 'error' {
     switch (status) {
-      case 'CONFIRMADA': return 'success';
+      case 'CONFIRMADA':
+      case 'PROGRAMADA': return 'success';
       case 'CANCELADA': return 'error';
       case 'REAGENDADA': return 'warning';
       case 'FINALIZADA': return 'default';
       default: return 'warning';
+    }
+  }
+
+  statusLabel(status?: string): string {
+    switch (status) {
+      case 'CONFIRMADA':
+      case 'PROGRAMADA': return 'Confirmada';
+      case 'CANCELADA': return 'Cancelada';
+      case 'REAGENDADA': return 'Reagendada';
+      case 'FINALIZADA': return 'Finalizada';
+      default: return 'Pendiente';
     }
   }
 

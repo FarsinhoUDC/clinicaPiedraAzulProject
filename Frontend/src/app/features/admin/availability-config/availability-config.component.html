@@ -131,7 +131,7 @@
 
     <div class="field-error" *ngIf="form.errors?.['invalidTimeRange']">{{ form.errors?.['invalidTimeRange'] }}</div>
     <div class="field-error" *ngIf="daysArray.touched && daysArray.length === 0">Debe seleccionar al menos un dia.</div>
-    <div class="success-message" *ngIf="message">{{ message }}</div>
+    <div class="success-message success-chip" *ngIf="message">{{ message }}</div>
     <div class="field-error" *ngIf="errorMessage">{{ errorMessage }}</div>
   </div>
 
@@ -161,6 +161,11 @@
             <div class="patient-field">
               <label>Número de Documento *</label>
               <atom-input formControlName="numeroDocumento" placeholder="C.C., T.I., etc." size="md"></atom-input>
+              <div class="field-error" *ngIf="medicoForm.controls.numeroDocumento.touched && medicoForm.controls.numeroDocumento.invalid">
+                <ng-container *ngIf="medicoForm.controls.numeroDocumento.errors?.['required']">El número de documento es obligatorio.</ng-container>
+                <ng-container *ngIf="medicoForm.controls.numeroDocumento.errors?.['minlength']">Debe tener al menos 5 dígitos.</ng-container>
+                <ng-container *ngIf="medicoForm.controls.numeroDocumento.errors?.['digitsOnly']">Solo se permiten números.</ng-container>
+              </div>
             </div>
             <div class="patient-field">
               <label>Tipo de Documento</label>
@@ -170,24 +175,46 @@
             <div class="patient-field">
               <label>Nombre *</label>
               <atom-input formControlName="nombres" placeholder="Tu nombre" size="md"></atom-input>
+              <div class="field-error" *ngIf="medicoForm.controls.nombres.touched && medicoForm.controls.nombres.invalid">
+                <ng-container *ngIf="medicoForm.controls.nombres.errors?.['required']">El nombre es obligatorio.</ng-container>
+                <ng-container *ngIf="medicoForm.controls.nombres.errors?.['lettersOnly']">Solo se permiten letras.</ng-container>
+                <ng-container *ngIf="medicoForm.controls.nombres.errors?.['noMaliciousChars']">El campo contiene caracteres no permitidos.</ng-container>
+              </div>
             </div>
             <div class="patient-field">
               <label>Apellido *</label>
               <atom-input formControlName="apellidos" placeholder="Tu apellido" size="md"></atom-input>
+              <div class="field-error" *ngIf="medicoForm.controls.apellidos.touched && medicoForm.controls.apellidos.invalid">
+                <ng-container *ngIf="medicoForm.controls.apellidos.errors?.['required']">El apellido es obligatorio.</ng-container>
+                <ng-container *ngIf="medicoForm.controls.apellidos.errors?.['lettersOnly']">Solo se permiten letras.</ng-container>
+                <ng-container *ngIf="medicoForm.controls.apellidos.errors?.['noMaliciousChars']">El campo contiene caracteres no permitidos.</ng-container>
+              </div>
             </div>
 
             <div class="patient-field">
               <label>Celular *</label>
               <atom-input formControlName="celular" placeholder="Número de celular" size="md"></atom-input>
+              <div class="field-error" *ngIf="medicoForm.controls.celular.touched && medicoForm.controls.celular.invalid">
+                <ng-container *ngIf="medicoForm.controls.celular.errors?.['required']">El celular es obligatorio.</ng-container>
+                <ng-container *ngIf="medicoForm.controls.celular.errors?.['digitsOnly']">Solo se permiten números.</ng-container>
+                <ng-container *ngIf="medicoForm.controls.celular.errors?.['colombianCellphone']">Debe ser un número celular colombiano válido (10 dígitos, empieza con 3).</ng-container>
+              </div>
             </div>
             <div class="patient-field">
-              <label>Género</label>
+              <label>Género *</label>
               <atom-select formControlName="genero" [options]="genderSelectOptions"></atom-select>
+              <div class="field-error" *ngIf="medicoForm.controls.genero.touched && medicoForm.controls.genero.invalid">
+                <ng-container *ngIf="medicoForm.controls.genero.errors?.['required']">Debe seleccionar un género.</ng-container>
+              </div>
             </div>
 
             <div class="patient-field">
-              <label>Fecha de Nacimiento</label>
+              <label>Fecha de Nacimiento *</label>
               <atom-input type="date" formControlName="fechaNacimiento" size="md"></atom-input>
+              <div class="field-error" *ngIf="medicoForm.controls.fechaNacimiento.touched && medicoForm.controls.fechaNacimiento.invalid">
+                <ng-container *ngIf="medicoForm.controls.fechaNacimiento.errors?.['required']">La fecha de nacimiento es obligatoria.</ng-container>
+                <ng-container *ngIf="medicoForm.controls.fechaNacimiento.errors?.['notFutureDate']">La fecha no puede ser futura.</ng-container>
+              </div>
             </div>
             <div class="patient-field">
               <label>Especialidad</label>
@@ -197,6 +224,9 @@
             <div class="patient-field" style="grid-column: span 2;">
               <label>Correo Electrónico</label>
               <atom-input type="email" formControlName="correo" placeholder="tu@correo.com (opcional)" size="md"></atom-input>
+              <div class="field-error" *ngIf="medicoForm.controls.correo.touched && medicoForm.controls.correo.invalid">
+                <ng-container *ngIf="medicoForm.controls.correo.errors?.['email']">Debe ingresar un correo electrónico válido.</ng-container>
+              </div>
             </div>
           </div>
 

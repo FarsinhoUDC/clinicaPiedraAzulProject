@@ -1,10 +1,10 @@
 <div class="mb-3">
   <label class="form-label" *ngIf="label" [for]="id">{{ label }}</label>
   <select
+    #selectEl
     [id]="id"
     [required]="required"
     [disabled]="disabled"
-    [value]="value"
     (change)="handleSelectChange($event)"
     (blur)="onBlur()"
     class="form-select"
