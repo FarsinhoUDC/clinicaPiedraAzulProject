@@ -1,10 +1,10 @@
 .form-select {
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
 }
 .form-select:focus {
-  border-color: #118a9b;
-  box-shadow: 0 0 0 3px rgba(17, 138, 155, 0.12);
+  border-color: var(--focus-color);
+  box-shadow: var(--focus-ring);
 }
 .form-select.is-invalid {
-  border-color: #d64545;
+  border-color: var(--color-error-alt);
 }

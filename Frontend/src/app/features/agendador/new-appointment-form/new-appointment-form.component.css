@@ -3,7 +3,7 @@
 }
 
 .form-card {
-  background: #eef4f8;
+  background: var(--color-bg-card);
   min-height: calc(100vh - 84px);
   padding: 28px;
 }
@@ -19,19 +19,19 @@
   margin: 0;
   font-family: Georgia, "Times New Roman", serif;
   font-size: 2rem;
-  color: #173250;
+  color: var(--color-primary);
 }
 
 .form-header p {
   margin: 8px 0 0;
-  color: #7890a1;
+  color: var(--color-text-subtle);
 }
 
 .channel-pill {
   padding: 8px 14px;
   border-radius: 999px;
   background: #41cc63;
-  color: #ffffff;
+  color: var(--color-bg-white);
   font-weight: 700;
 }
 
@@ -41,14 +41,14 @@
   gap: 18px;
   margin: 18px 0 20px;
   padding-bottom: 14px;
-  border-bottom: 1px solid #d6e2ea;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .step-item {
   display: flex;
   align-items: center;
   gap: 10px;
-  color: #7f95a4;
+  color: var(--color-text-faint);
   font-weight: 700;
 }
 
@@ -60,15 +60,15 @@
   align-items: center;
   justify-content: center;
   background: #91a4b0;
-  color: #ffffff;
+  color: var(--color-bg-white);
 }
 
 .step-item.active {
-  color: #1692a0;
+  color: var(--color-accent);
 }
 
 .step-item.active span {
-  background: #1692a0;
+  background: var(--color-accent);
 }
 
 .two-column-layout {
@@ -78,11 +78,11 @@
 }
 
 .panel-card {
-  background: #ffffff;
-  border: 1px solid #dce6ed;
-  border-radius: 14px;
+  background: var(--color-bg-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   padding: 18px;
-  box-shadow: 0 10px 22px rgba(30, 60, 82, 0.07);
+  box-shadow: var(--shadow-card);
 }
 
 .panel-card h3 {
@@ -101,7 +101,7 @@
 
 .form-field label {
   font-weight: 700;
-  color: #305064;
+  color: var(--color-primary-light);
 }
 
 .document-row {
@@ -118,8 +118,8 @@
 
 .choice-chip,
 .slot-chip {
-  border: 1px solid #d5e1e8;
-  background: #ffffff;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-white);
   color: #486879;
   border-radius: 999px;
   padding: 10px 16px;
@@ -127,17 +127,17 @@
 
 .choice-chip.active,
 .slot-chip.active {
-  background: #0f8f9b;
-  color: #ffffff;
-  border-color: #0f8f9b;
+  background: var(--color-accent);
+  color: var(--color-bg-white);
+  border-color: var(--color-accent);
 }
 
 .success-chip {
   display: inline-flex;
   padding: 5px 10px;
   border-radius: 8px;
-  background: #e7f8eb;
-  color: #2da35a;
+  background: var(--color-green-bg);
+  color: var(--color-green-text);
   font-size: 0.88rem;
 }
 
@@ -148,13 +148,13 @@
   gap: 8px;
   padding: 5px 10px;
   border-radius: 8px;
-  background: #fff3cd;
-  color: #856404;
+  background: var(--color-warning-bg);
+  color: var(--color-warning);
   font-size: 0.88rem;
 }
 
 .register-link {
-  color: #118a9b;
+  color: var(--color-link);
   text-decoration: none;
   font-weight: 700;
 }
@@ -166,8 +166,8 @@
 .appointment-summary {
   margin-top: 18px;
   padding: 14px 16px;
-  border-radius: 12px;
-  background: #eef4f8;
+  border-radius: var(--radius-md);
+  background: var(--color-bg-card);
   color: #4c697b;
   display: grid;
   gap: 8px;
@@ -182,27 +182,38 @@
 
 .success-message {
   margin-top: 12px;
-  color: #1d8f4b;
+  color: var(--color-green-text);
 }
 
 .field-error {
   margin-top: 8px;
-  color: #d64545;
+  color: var(--color-error-alt);
   font-size: 0.84rem;
 }
 
 .slot-help {
-  color: #778f9f;
+  color: var(--color-text-faint);
   font-size: 0.9rem;
 }
 
-@media (max-width: 1080px) {
+.day-unavailable-msg {
+  margin-top: 8px;
+  padding: 10px 14px;
+  background: var(--color-warning-bg);
+  border: 1px solid var(--color-warning-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-warning);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+@media (max-width:1080px) {
   .two-column-layout {
     grid-template-columns: 1fr;
   }
 }
 
-@media (max-width: 720px) {
+@media (max-width:720px) {
   .form-page {
     padding: 18px;
   }
@@ -219,14 +230,4 @@
   .step-row {
     grid-template-columns: 1fr;
   }
-}
-.day-unavailable-msg {
-  margin-top: 8px;
-  padding: 10px 14px;
-  background: #fff8e1;
-  border: 1px solid #f0c040;
-  border-radius: 10px;
-  color: #7a5a00;
-  font-size: 0.88rem;
-  line-height: 1.5;
 }

@@ -3,8 +3,8 @@
 }
 
 .consult-card {
-  background: #eef4f8;
-  border-top: 1px solid #d9e3ea;
+  background: var(--color-bg-card);
+  border-top: 1px solid var(--color-border);
   min-height: calc(100vh - 84px);
   padding: 28px 28px 36px;
 }
@@ -13,12 +13,12 @@
   margin: 0;
   font-family: Georgia, "Times New Roman", serif;
   font-size: 2rem;
-  color: #173250;
+  color: var(--color-primary);
 }
 
 .consult-header p {
   margin: 8px 0 24px;
-  color: #71889a;
+  color: var(--color-text-muted);
 }
 
 .consult-search {
@@ -26,11 +26,11 @@
   grid-template-columns: 1.5fr 0.9fr auto;
   gap: 18px;
   align-items: end;
-  background: #ffffff;
-  border: 1px solid #dce6ed;
-  border-radius: 16px;
+  background: var(--color-bg-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
   padding: 18px 20px;
-  box-shadow: 0 10px 22px rgba(30, 60, 82, 0.07);
+  box-shadow: var(--shadow-card);
 }
 
 .consult-field {
@@ -40,11 +40,11 @@
 
 .consult-field label {
   font-weight: 700;
-  color: #305064;
+  color: var(--color-primary-light);
 }
 
 .consult-error {
-  color: #d54242;
+  color: var(--color-error);
   font-size: 0.84rem;
 }
 
@@ -56,11 +56,11 @@
 }
 
 .metric-card {
-  background: #ffffff;
-  border-radius: 16px;
-  border-top: 3px solid #18c1bc;
+  background: var(--color-bg-white);
+  border-radius: var(--radius-lg);
+  border-top: 3px solid var(--color-accent);
   padding: 18px 20px;
-  box-shadow: 0 10px 22px rgba(30, 60, 82, 0.07);
+  box-shadow: var(--shadow-card);
 }
 
 .metric-card.warning {
@@ -81,13 +81,13 @@
 .metric-card span {
   display: block;
   margin-top: 8px;
-  color: #677f92;
+  color: var(--color-text-subtle);
 }
 
 .consult-table-card {
-  background: #ffffff;
-  border-radius: 16px;
-  box-shadow: 0 10px 22px rgba(30, 60, 82, 0.07);
+  background: var(--color-bg-white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
   overflow: hidden;
 }
 
@@ -97,8 +97,8 @@
 }
 
 .consult-table thead th {
-  background: #102d39;
-  color: #ffffff;
+  background: var(--color-table-head-bg);
+  color: var(--color-bg-white);
   padding: 14px 16px;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -108,12 +108,12 @@
 
 .consult-table tbody td {
   padding: 14px 16px;
-  border-bottom: 1px solid #e4edf2;
+  border-bottom: 1px solid var(--color-border-light);
   color: #325264;
 }
 
 .consult-table tbody tr:nth-child(even) td {
-  background: #f7fafc;
+  background: var(--color-table-row-alt);
 }
 
 .patient-cell {
@@ -122,21 +122,21 @@
 }
 
 .action-button {
-  border: 1px solid #d7e2ea;
-  background: #ffffff;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-white);
   color: #49697e;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   padding: 8px 14px;
 }
 
 .empty-state,
 .loading-state {
-  background: #ffffff;
-  border-radius: 16px;
+  background: var(--color-bg-white);
+  border-radius: var(--radius-lg);
   padding: 44px 20px;
   text-align: center;
   color: #8b9fb0;
-  box-shadow: 0 10px 22px rgba(30, 60, 82, 0.07);
+  box-shadow: var(--shadow-card);
 }
 
 .consult-actions {
@@ -145,7 +145,7 @@
   margin-bottom: 16px;
 }
 
-@media (max-width: 1100px) {
+@media (max-width:1100px) {
   .consult-search {
     grid-template-columns: 1fr;
   }
@@ -155,11 +155,9 @@
   }
 }
 
-@media (max-width: 720px) {
-  .consult-page {
-    padding: 18px;
-  }
+@media (max-width:720px) {
 
+  .consult-page,
   .consult-card {
     padding: 18px;
   }

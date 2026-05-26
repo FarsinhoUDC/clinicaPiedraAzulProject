@@ -3,7 +3,7 @@
 }
 
 .config-card {
-  background: #eef4f8;
+  background: var(--color-bg-card);
   min-height: calc(100vh - 84px);
   padding: 28px;
 }
@@ -12,7 +12,7 @@
   margin: 0;
   font-family: Georgia, "Times New Roman", serif;
   font-size: 2rem;
-  color: #173250;
+  color: var(--color-primary);
 }
 
 .config-header p {
@@ -23,11 +23,11 @@
 .global-panel,
 .availability-panel,
 .audit-panel {
-  background: #ffffff;
-  border: 1px solid #dce6ed;
-  border-radius: 16px;
+  background: var(--color-bg-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
   padding: 18px;
-  box-shadow: 0 10px 22px rgba(30, 60, 82, 0.07);
+  box-shadow: var(--shadow-card);
 }
 
 .global-panel {
@@ -60,16 +60,16 @@
 .config-field input,
 .config-field select {
   min-height: 42px;
-  border: 1px solid #c8d7e0;
-  border-radius: 10px;
+  border: 1px solid var(--color-border-input);
+  border-radius: var(--radius-sm);
   padding: 10px 14px;
-  background: #fbfdff;
+  background: var(--color-bg-input);
 }
 
 .window-preview {
   margin-top: 14px;
   padding: 14px 16px;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   background: #e2f5fb;
   color: #0f8392;
   font-weight: 700;
@@ -109,7 +109,7 @@
 
 .config-field label {
   font-weight: 700;
-  color: #325064;
+  color: var(--color-primary-light);
 }
 
 .day-row,
@@ -122,9 +122,9 @@
 
 .day-button,
 .interval-chip {
-  border: 1px solid #d1dee6;
-  border-radius: 10px;
-  background: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-white);
   color: #4b697c;
   padding: 10px 14px;
   min-width: 44px;
@@ -132,9 +132,9 @@
 
 .day-button.active,
 .interval-chip.active {
-  background: #0f8f9b;
-  color: #ffffff;
-  border-color: #0f8f9b;
+  background: var(--color-accent);
+  color: var(--color-bg-white);
+  border-color: var(--color-accent);
 }
 
 .time-grid {
@@ -164,7 +164,7 @@
 .preview-highlight {
   margin-top: 12px;
   padding: 16px;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   background: #dff3f9;
   color: #127d8c;
   display: grid;
@@ -177,12 +177,12 @@
 
 .success-message {
   margin-top: 14px;
-  color: #1f8d49;
+  color: var(--color-green-text);
 }
 
 .field-error {
   margin-top: 12px;
-  color: #d64545;
+  color: var(--color-error-alt);
   font-size: 0.84rem;
 }
 
@@ -196,8 +196,8 @@
 }
 
 .audit-table thead th {
-  background: #102d39;
-  color: #ffffff;
+  background: var(--color-table-head-bg);
+  color: var(--color-bg-white);
   padding: 14px 16px;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -207,7 +207,7 @@
 
 .audit-table tbody td {
   padding: 14px 16px;
-  border-bottom: 1px solid #e4edf2;
+  border-bottom: 1px solid var(--color-border-light);
   color: #325264;
 }
 
@@ -224,40 +224,13 @@
 }
 
 .audit-success {
-  background: #e7f8eb;
+  background: var(--color-green-bg);
   color: #24a153;
 }
 
 .audit-warning {
   background: #fff1d4;
   color: #e6a01d;
-}
-
-@media (max-width: 1100px) {
-  .global-panel,
-  .availability-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 720px) {
-  .config-page {
-    padding: 18px;
-  }
-
-  .config-card {
-    padding: 18px;
-  }
-
-  .availability-head {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-  }
-
-  .time-grid {
-    grid-template-columns: 1fr;
-  }
 }
 
 /* Patient Form Dialog */
@@ -274,18 +247,17 @@
 
 .patient-dialog-card {
   width: min(600px, 100%);
-  background: #ffffff;
-  border-radius: 16px;
+  background: var(--color-bg-white);
+  border-radius: var(--radius-lg);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
   max-height: 90vh;
   overflow-y: auto;
 }
 
-/* Patient Form Styles */
 .patient-register-panel {
-  background: #ffffff;
+  background: var(--color-bg-white);
   border: none;
-  border-radius: 16px;
+  border-radius: var(--radius-lg);
   padding: 26px;
 }
 
@@ -305,7 +277,7 @@
 .patient-register-intro strong {
   font-family: Georgia, "Times New Roman", serif;
   font-size: 1.7rem;
-  color: #173250;
+  color: var(--color-primary);
 }
 
 .patient-grid {
@@ -321,16 +293,16 @@
 
 .patient-field label {
   font-weight: 700;
-  color: #305064;
+  color: var(--color-primary-light);
   font-size: 0.9rem;
 }
 
 .patient-field input {
   min-height: 42px;
-  border: 1px solid #c8d7e0;
-  border-radius: 10px;
+  border: 1px solid var(--color-border-input);
+  border-radius: var(--radius-sm);
   padding: 10px 14px;
-  background: #fbfdff;
+  background: var(--color-bg-input);
   width: 100%;
 }
 
@@ -344,7 +316,7 @@
 .patient-primary,
 .patient-secondary {
   min-height: 42px;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   padding: 10px 18px;
   font-weight: 700;
   text-decoration: none;
@@ -353,18 +325,44 @@
 
 .patient-primary {
   border: none;
-  background: #118a9b;
-  color: #ffffff;
+  background: var(--color-link);
+  color: var(--color-bg-white);
 }
 
 .patient-secondary {
-  border: 1px solid #d4dfe7;
-  background: #ffffff;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-white);
   color: #526f81;
 }
 
-@media (max-width: 860px) {
+@media (max-width:1100px) {
+
+  .global-panel,
+  .availability-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width:860px) {
   .patient-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width:720px) {
+
+  .config-page,
+  .config-card {
+    padding: 18px;
+  }
+
+  .availability-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .time-grid {
     grid-template-columns: 1fr;
   }
 }

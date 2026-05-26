@@ -5,12 +5,12 @@
 .molecule-form-label {
   font-size: 0.78rem;
   font-weight: 600;
-  color: #305064;
+  color: var(--color-primary-light);
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
 .molecule-form-error {
   font-size: 0.75rem;
-  color: #d64545;
+  color: var(--color-error-alt);
   margin-top: 2px;
 }

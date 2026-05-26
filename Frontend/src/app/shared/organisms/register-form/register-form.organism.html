@@ -1,4 +1,5 @@
 <div class="row g-0">
+  <!-- Panel izquierdo decorativo -->
   <div class="col-lg-6 d-flex flex-column justify-content-center align-items-center text-center p-5 register-form-left">
     <div class="mb-3">
       <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -8,11 +9,15 @@
       </svg>
       <h1 class="mt-3" style="font-family: Georgia, 'Times New Roman', serif; font-size: 1.8rem; color: #fff;">Piedra Azul</h1>
     </div>
-    <p style="opacity: 0.85; max-width: 300px; line-height: 1.5;">Crear una cuenta es fácil. Solo ingresa tus datos y comienza a gestionar tus citas médicas.</p>
+    <p style="opacity: 0.85; max-width: 300px; line-height: 1.5;">
+      Crear una cuenta es fácil. Solo ingresa tus datos y comienza a gestionar tus citas médicas.
+    </p>
   </div>
 
+  <!-- Panel derecho: formulario -->
   <div class="col-lg-6 d-flex align-items-center justify-content-center p-4 bg-white register-form-right">
     <div class="w-100" style="max-width: 500px;">
+
       <!-- Vista de éxito -->
       <div *ngIf="success" class="text-center py-4">
         <div class="mb-3" style="font-size: 4rem;">✅</div>
@@ -26,80 +31,93 @@
         <h2 style="font-family: Georgia, 'Times New Roman', serif; color: #173250; font-size: 1.6rem;">Crear Cuenta</h2>
         <p class="text-secondary mb-3" style="font-size: 0.9rem;">Completa tus datos para registrarte</p>
 
-        <div *ngIf="error" class="alert alert-danger py-2 px-3" style="font-size: 0.85rem;">{{ error }}</div>
+        <div *ngIf="error" class="alert alert-danger py-2 px-3 mb-3" style="font-size: 0.85rem;">{{ error }}</div>
 
         <form [formGroup]="form" (ngSubmit)="onRegister()" class="row row-cols-1 row-cols-md-2 g-3">
+
           <div class="col">
-            <label class="form-label" for="reg-documentNumber">Número de Documento *</label>
-            <atom-input id="reg-documentNumber" formControlName="documentNumber" placeholder="C.C., T.I., etc."
+            <molecule-form-field id="reg-documentNumber" label="Número de Documento *"
               [hasError]="f.documentNumber.touched && f.documentNumber.invalid"
-              errorMessage="Este campo solo acepta números"></atom-input>
+              errorMessage="Este campo solo acepta números">
+              <atom-input id="reg-documentNumber" formControlName="documentNumber"
+                placeholder="C.C., T.I., etc."
+                [hasError]="f.documentNumber.touched && f.documentNumber.invalid"></atom-input>
+            </molecule-form-field>
           </div>
 
           <div class="col">
-            <label class="form-label" for="reg-documentType">Tipo de Documento</label>
-            <atom-select id="reg-documentType" formControlName="documentType" [options]="[
-              {label: 'Cédula de Ciudadanía', value: 'CC'},
-              {label: 'Tarjeta de Identidad', value: 'TI'},
-              {label: 'Cédula de Extranjería', value: 'CE'},
-              {label: 'Registro Civil', value: 'RC'},
-              {label: 'Pasaporte', value: 'PASAPORTE'}
-            ]"></atom-select>
+            <molecule-form-field id="reg-documentType" label="Tipo de Documento">
+              <atom-select id="reg-documentType" formControlName="documentType" [options]="[
+                {label: 'Cédula de Ciudadanía', value: 'CC'},
+                {label: 'Tarjeta de Identidad', value: 'TI'},
+                {label: 'Cédula de Extranjería', value: 'CE'},
+                {label: 'Registro Civil', value: 'RC'},
+                {label: 'Pasaporte', value: 'PASAPORTE'}
+              ]"></atom-select>
+            </molecule-form-field>
           </div>
 
           <div class="col">
-            <label class="form-label" for="reg-firstName">Nombre *</label>
-            <atom-input id="reg-firstName" formControlName="firstName" placeholder="Tu nombre"
+            <molecule-form-field id="reg-firstName" label="Nombre *"
               [hasError]="f.firstName.touched && f.firstName.invalid"
-              errorMessage="Este campo solo acepta letras"></atom-input>
+              errorMessage="Este campo solo acepta letras">
+              <atom-input id="reg-firstName" formControlName="firstName" placeholder="Tu nombre"
+                [hasError]="f.firstName.touched && f.firstName.invalid"></atom-input>
+            </molecule-form-field>
           </div>
 
           <div class="col">
-            <label class="form-label" for="reg-lastName">Apellido *</label>
-            <atom-input id="reg-lastName" formControlName="lastName" placeholder="Tu apellido"
+            <molecule-form-field id="reg-lastName" label="Apellido *"
               [hasError]="f.lastName.touched && f.lastName.invalid"
-              errorMessage="Este campo solo acepta letras"></atom-input>
+              errorMessage="Este campo solo acepta letras">
+              <atom-input id="reg-lastName" formControlName="lastName" placeholder="Tu apellido"
+                [hasError]="f.lastName.touched && f.lastName.invalid"></atom-input>
+            </molecule-form-field>
           </div>
 
           <div class="col">
-            <label class="form-label" for="reg-phone">Celular *</label>
-            <atom-input id="reg-phone" type="text" formControlName="phone" placeholder="Número de celular"
+            <molecule-form-field id="reg-phone" label="Celular *"
               [hasError]="f.phone.touched && f.phone.invalid"
-              errorMessage="Ingrese un número celular colombiano válido (ej: 3001234567)"></atom-input>
+              errorMessage="Ingresa un número celular colombiano válido (ej: 3001234567)">
+              <atom-input id="reg-phone" type="text" formControlName="phone"
+                placeholder="Número de celular"
+                [hasError]="f.phone.touched && f.phone.invalid"></atom-input>
+            </molecule-form-field>
           </div>
 
           <div class="col">
-            <label class="form-label" for="reg-gender">Género</label>
-            <atom-select id="reg-gender" formControlName="gender" placeholder="Seleccionar" [options]="[
-              {label: 'Masculino', value: 'M'},
-              {label: 'Femenino', value: 'F'},
-              {label: 'Prefiero no decir', value: 'PND'}
-            ]"></atom-select>
+            <molecule-form-field id="reg-gender" label="Género">
+              <atom-select id="reg-gender" formControlName="gender" placeholder="Seleccionar" [options]="[
+                {label: 'Masculino', value: 'M'},
+                {label: 'Femenino', value: 'F'},
+                {label: 'Prefiero no decir', value: 'PND'}
+              ]"></atom-select>
+            </molecule-form-field>
           </div>
 
           <div class="col">
-            <label class="form-label" for="reg-birthDate">Fecha de Nacimiento</label>
-            <atom-input id="reg-birthDate" type="date" formControlName="birthDate"
+            <molecule-form-field id="reg-birthDate" label="Fecha de Nacimiento"
               [hasError]="f.birthDate.touched && f.birthDate.invalid"
-              errorMessage="La fecha no puede ser posterior al día de hoy"></atom-input>
+              errorMessage="La fecha no puede ser posterior al día de hoy">
+              <atom-input id="reg-birthDate" type="date" formControlName="birthDate"
+                [hasError]="f.birthDate.touched && f.birthDate.invalid"></atom-input>
+            </molecule-form-field>
           </div>
 
           <div class="col-12">
-            <label class="form-label" for="reg-email">Correo Electrónico</label>
-            <atom-input id="reg-email" type="email" formControlName="email" placeholder="tu@correo.com (opcional)"
+            <molecule-form-field id="reg-email" label="Correo Electrónico"
               [hasError]="f.email.touched && f.email.invalid"
-              errorMessage="Correo electrónico inválido"></atom-input>
+              errorMessage="Correo electrónico inválido">
+              <atom-input id="reg-email" type="email" formControlName="email"
+                placeholder="tu@correo.com (opcional)"
+                [hasError]="f.email.touched && f.email.invalid"></atom-input>
+            </molecule-form-field>
           </div>
 
           <div class="col-12">
             <div class="alert alert-success d-flex align-items-start gap-2 py-3 px-3" style="font-size: 0.82rem;" role="alert">
-              <strong>Nota:</strong> Tu número de documento será utilizado como contraseña temporal. Se recomienda cambiar la contraseña después del primer inicio de sesión.
+              <strong>Nota:</strong> Tu número de documento será utilizado como contraseña temporal. Se recomienda cambiarla después del primer inicio de sesión.
             </div>
-          </div>
-
-          <!-- Error al final del formulario, junto al botón -->
-          <div *ngIf="error" class="col-12">
-            <div class="alert alert-danger py-2 px-3 mb-0" style="font-size: 0.85rem;">{{ error }}</div>
           </div>
 
           <div class="col-12">
@@ -111,8 +129,12 @@
           </div>
 
           <p class="col-12 text-center mt-2 mb-0" style="color: #71889a; font-size: 0.87rem;">
-            ¿Ya tienes una cuenta? <a (click)="onSwitchToLogin()" class="fw-semibold" style="color: #118a9b; text-decoration: none; cursor: pointer;">Inicia sesión aquí</a>
+            ¿Ya tienes una cuenta?
+            <a (click)="onSwitchToLogin()" class="fw-semibold" style="color: #118a9b; text-decoration: none; cursor: pointer;">
+              Inicia sesión aquí
+            </a>
           </p>
+
         </form>
       </ng-container>
     </div>

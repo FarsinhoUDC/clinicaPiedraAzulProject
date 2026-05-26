@@ -1,13 +1,13 @@
 .form-control {
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
 }
 .form-control::placeholder {
-  color: #a0b5c5;
+  color: var(--color-text-faint);
 }
 .form-control:focus {
-  border-color: #118a9b;
-  box-shadow: 0 0 0 3px rgba(17, 138, 155, 0.12);
+  border-color: var(--focus-color);
+  box-shadow: var(--focus-ring);
 }
 .form-control.is-invalid:focus {
-  box-shadow: 0 0 0 3px rgba(214, 69, 69, 0.12);
+  box-shadow: var(--focus-ring-error);
 }

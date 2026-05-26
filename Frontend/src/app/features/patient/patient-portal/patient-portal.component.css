@@ -3,7 +3,7 @@
 }
 
 .portal-card {
-  background: #eef4f8;
+  background: var(--color-bg-card);
   min-height: calc(100vh - 84px);
   padding: 28px;
 }
@@ -18,7 +18,7 @@
 .portal-banner strong {
   font-family: Georgia, "Times New Roman", serif;
   font-size: 2rem;
-  color: #173250;
+  color: var(--color-primary);
 }
 
 .portal-steps {
@@ -29,17 +29,17 @@
 }
 
 .portal-step {
-  background: #ffffff;
-  border: 1px solid #dce6ed;
-  border-radius: 12px;
+  background: var(--color-bg-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   padding: 14px 16px;
   color: #7990a0;
   font-weight: 700;
 }
 
 .portal-step.active {
-  border-color: #11a6b1;
-  color: #118a9b;
+  border-color: var(--color-accent);
+  color: var(--color-link);
 }
 
 .portal-toolbar {
@@ -51,9 +51,8 @@
 
 .portal-toolbar label {
   font-weight: 700;
-  color: #315064;
+  color: var(--color-primary-light);
 }
-
 
 .portal-grid {
   display: grid;
@@ -64,11 +63,11 @@
 .doctor-card,
 .portal-detail,
 .portal-confirmation {
-  background: #ffffff;
-  border: 1px solid #dce6ed;
-  border-radius: 16px;
+  background: var(--color-bg-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
   padding: 18px;
-  box-shadow: 0 10px 22px rgba(30, 60, 82, 0.07);
+  box-shadow: var(--shadow-card);
 }
 
 .doctor-card {
@@ -90,36 +89,17 @@
 
 .slot-pill {
   min-height: 42px;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   padding: 10px 16px;
   font-weight: 700;
-  border: 1px solid #d4dfe7;
-  background: #ffffff;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-white);
   color: #526f81;
 }
 
 .portal-success {
   margin-top: 14px;
-  color: #1f8d49;
-}
-
-@media (max-width: 720px) {
-  .portal-page {
-    padding: 18px;
-  }
-
-  .portal-card {
-    padding: 18px;
-  }
-
-  .portal-steps {
-    grid-template-columns: 1fr;
-  }
-
-  .portal-toolbar {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+  color: var(--color-green-text);
 }
 
 .confirm-modal-overlay {
@@ -134,13 +114,18 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0
+  }
+
+  to {
+    opacity: 1
+  }
 }
 
 .confirm-modal {
-  background: #ffffff;
-  border-radius: 20px;
+  background: var(--color-bg-white);
+  border-radius: var(--radius-xl);
   padding: 40px 36px 32px;
   max-width: 400px;
   width: 90%;
@@ -150,8 +135,15 @@
 }
 
 @keyframes slideUp {
-  from { transform: translateY(24px); opacity: 0; }
-  to   { transform: translateY(0);    opacity: 1; }
+  from {
+    transform: translateY(24px);
+    opacity: 0
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1
+  }
 }
 
 .confirm-modal-icon {
@@ -159,7 +151,7 @@
   height: 64px;
   border-radius: 50%;
   background: #e6f7f4;
-  color: #118a9b;
+  color: var(--color-link);
   font-size: 2rem;
   font-weight: 900;
   display: flex;
@@ -171,13 +163,13 @@
 .confirm-modal-title {
   font-family: Georgia, "Times New Roman", serif;
   font-size: 1.5rem;
-  color: #173250;
+  color: var(--color-primary);
   margin: 0 0 20px;
 }
 
 .confirm-modal-body {
-  background: #eef4f8;
-  border-radius: 12px;
+  background: var(--color-bg-card);
+  border-radius: var(--radius-md);
   padding: 16px 20px;
   margin-bottom: 24px;
   text-align: left;
@@ -185,18 +177,34 @@
 
 .confirm-modal-body p {
   margin: 6px 0;
-  color: #315064;
+  color: var(--color-primary-light);
   font-size: 0.95rem;
 }
-
 
 .day-unavailable-msg {
   margin-top: 8px;
   padding: 10px 14px;
-  background: #fff8e1;
+  background: var(--color-warning-bg);
   border: 1px solid #f0c040;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   color: #7a5a00;
   font-size: 0.88rem;
   line-height: 1.5;
+}
+
+@media (max-width:720px) {
+
+  .portal-page,
+  .portal-card {
+    padding: 18px;
+  }
+
+  .portal-steps {
+    grid-template-columns: 1fr;
+  }
+
+  .portal-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }

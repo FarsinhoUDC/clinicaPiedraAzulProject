@@ -5,17 +5,21 @@
       <strong>Selecciona tu cita</strong>
     </div>
 
+    <!-- Indicador de pasos -->
     <div class="portal-steps">
-      <article class="portal-step" *ngFor="let step of steps" [class.active]="wizardStore.snapshot.step === step.index">
+      <article class="portal-step" *ngFor="let step of steps"
+               [class.active]="wizardStore.step() === step.index">
         {{ step.title }}
       </article>
     </div>
 
-    <div class="portal-toolbar" *ngIf="wizardStore.snapshot.step === 1">
-      <atom-select label="Especialidad" [options]="specialtyOptions" (onSelectChange)="filterBySpecialty($any($event))"></atom-select>
+    <!-- Paso 1: Selección de médico -->
+    <div class="portal-toolbar" *ngIf="wizardStore.step() === 1">
+      <atom-select label="Especialidad" [options]="specialtyOptions"
+                   (onSelectChange)="filterBySpecialty($any($event))"></atom-select>
     </div>
 
-    <div class="portal-grid" *ngIf="wizardStore.snapshot.step === 1">
+    <div class="portal-grid" *ngIf="wizardStore.step() === 1">
       <article class="doctor-card" *ngFor="let doctor of filteredDoctors">
         <strong>{{ doctor.nombres }} {{ doctor.apellidos }}</strong>
         <span>{{ doctor.especialidad || 'Especialidad general' }}</span>
@@ -23,46 +27,54 @@
       </article>
     </div>
 
-    <div class="portal-detail" *ngIf="wizardStore.snapshot.step === 2 && wizardStore.snapshot.selectedDoctor as doctor">
+    <!-- Paso 2: Selección de fecha y hora -->
+    <div class="portal-detail"
+         *ngIf="wizardStore.step() === 2 && wizardStore.selectedDoctor() as doctor">
       <strong>{{ doctor.nombres }} {{ doctor.apellidos }}</strong>
       <div class="portal-toolbar">
         <label>Fecha</label>
         <atom-input type="date" [id]="'fecha-cita'" (onInput)="loadSlots($event)"></atom-input>
       </div>
       <div class="day-unavailable-msg" *ngIf="dayUnavailableMessage">
-          {{ dayUnavailableMessage }}
+        {{ dayUnavailableMessage }}
       </div>
-
       <div class="slot-row">
-        <button class="slot-pill" type="button" *ngFor="let slot of availableSlots" (click)="selectSlot(slot)">
+        <button class="slot-pill" type="button"
+                *ngFor="let slot of availableSlots"
+                (click)="selectSlot(slot)">
           {{ slot.hora }}
         </button>
       </div>
     </div>
 
-    <div class="portal-confirmation" *ngIf="wizardStore.snapshot.step === 3 && wizardStore.snapshot.selectedDoctor && wizardStore.snapshot.selectedSlot">
-      <div><strong>Medico:</strong> {{ wizardStore.snapshot.selectedDoctor.nombres }} {{ wizardStore.snapshot.selectedDoctor.apellidos }}</div>
-      <div><strong>Fecha:</strong> {{ wizardStore.snapshot.selectedDate }}</div>
-      <div><strong>Hora:</strong> {{ wizardStore.snapshot.selectedSlot.hora }}</div>
+    <!-- Paso 3: Confirmación -->
+    <div class="portal-confirmation"
+         *ngIf="wizardStore.step() === 3 && wizardStore.selectedDoctor() && wizardStore.selectedSlot()">
+      <div><strong>Médico:</strong>
+        {{ wizardStore.selectedDoctor()!.nombres }} {{ wizardStore.selectedDoctor()!.apellidos }}
+      </div>
+      <div><strong>Fecha:</strong> {{ wizardStore.selectedDate() }}</div>
+      <div><strong>Hora:</strong>  {{ wizardStore.selectedSlot()!.hora }}</div>
       <div class="error-state" *ngIf="confirmError">{{ confirmError }}</div>
       <div class="portal-actions">
         <atom-button variant="secondary" (onClick)="backToDoctorSelection()">Volver</atom-button>
-        <atom-button variant="primary" (onClick)="confirmAppointment()">Confirmar</atom-button>
+        <atom-button variant="primary"   (onClick)="confirmAppointment()">Confirmar</atom-button>
       </div>
     </div>
 
-  <div class="confirm-modal-overlay" *ngIf="confirmation">
-  <div class="confirm-modal">
-    <div class="confirm-modal-icon">✓</div>
-    <h2 class="confirm-modal-title">¡Cita confirmada!</h2>
-    <div class="confirm-modal-body">
-      <p><strong>Código:</strong> {{ confirmation.id }}</p>
-      <p><strong>Médico:</strong> {{ confirmation.nombreMedico }}</p>
-      <p><strong>Fecha y hora:</strong> {{ confirmation.fechaHora | date:'dd/MM/yyyy HH:mm' }}</p>
+    <!-- Modal de éxito -->
+    <div class="confirm-modal-overlay" *ngIf="confirmation">
+      <div class="confirm-modal">
+        <div class="confirm-modal-icon">✓</div>
+        <h2 class="confirm-modal-title">¡Cita confirmada!</h2>
+        <div class="confirm-modal-body">
+          <p><strong>Código:</strong> {{ confirmation.id }}</p>
+          <p><strong>Médico:</strong> {{ confirmation.nombreMedico }}</p>
+          <p><strong>Fecha y hora:</strong> {{ confirmation.fechaHora | date:'dd/MM/yyyy HH:mm' }}</p>
+        </div>
+        <atom-button variant="primary" (onClick)="closeConfirmation()">Aceptar</atom-button>
+      </div>
     </div>
-    <atom-button variant="primary" (onClick)="closeConfirmation()">Aceptar</atom-button>
-  </div>
 
-</div>
   </div>
 </section>

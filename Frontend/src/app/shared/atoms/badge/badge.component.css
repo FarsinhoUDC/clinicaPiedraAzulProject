@@ -2,40 +2,11 @@
   letter-spacing: 0.04em;
   line-height: 1.4;
 }
-.badge-admin {
-  background: rgba(167, 139, 250, 0.2);
-  color: #c4b5fd;
-  border: 1px solid rgba(167, 139, 250, 0.3);
-}
-.badge-medico {
-  background: rgba(52, 211, 153, 0.15);
-  color: #2da35a;
-  border: 1px solid rgba(52, 211, 153, 0.3);
-}
-.badge-agendador {
-  background: rgba(96, 165, 250, 0.15);
-  color: #118a9b;
-  border: 1px solid rgba(96, 165, 250, 0.3);
-}
-.badge-paciente {
-  background: rgba(251, 191, 36, 0.15);
-  color: #d4a017;
-  border: 1px solid rgba(251, 191, 36, 0.3);
-}
-.badge-default {
-  background: rgba(100, 116, 139, 0.2);
-  color: #64748b;
-  border: 1px solid rgba(100, 116, 139, 0.3);
-}
-.badge-success {
-  background: #e7f8eb;
-  color: #2da35a;
-}
-.badge-warning {
-  background: #fff8e1;
-  color: #d4a017;
-}
-.badge-error {
-  background: #ffebee;
-  color: #d64545;
-}
+.badge-admin    { background: rgba(167,139,250,0.2); color: #c4b5fd; border: 1px solid rgba(167,139,250,0.3); }
+.badge-medico   { background: rgba(52,211,153,0.15); color: var(--color-green-text); border: 1px solid rgba(52,211,153,0.3); }
+.badge-agendador{ background: rgba(96,165,250,0.15); color: var(--color-link); border: 1px solid rgba(96,165,250,0.3); }
+.badge-paciente { background: rgba(251,191,36,0.15); color: #d4a017; border: 1px solid rgba(251,191,36,0.3); }
+.badge-default  { background: rgba(100,116,139,0.2); color: #64748b; border: 1px solid rgba(100,116,139,0.3); }
+.badge-success  { background: var(--color-green-bg); color: var(--color-green-text); }
+.badge-warning  { background: var(--color-warning-bg); color: #d4a017; }
+.badge-error    { background: var(--color-error-bg); color: var(--color-error-alt); }

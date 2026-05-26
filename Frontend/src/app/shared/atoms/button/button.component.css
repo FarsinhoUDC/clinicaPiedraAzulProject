@@ -10,7 +10,7 @@
 .btn-ghost {
   --bs-btn-bg: transparent;
   --bs-btn-border-color: transparent;
-  --bs-btn-color: #94a3b8;
+  --bs-btn-color: var(--color-text-light);
   --bs-btn-hover-bg: rgba(0,0,0,0.04);
   --bs-btn-hover-color: #64748b;
   --bs-btn-active-bg: rgba(0,0,0,0.08);
@@ -19,16 +19,12 @@
   --bs-btn-bg: transparent;
   --bs-btn-border-color: transparent;
   background: linear-gradient(135deg, #667eea, #764ba2);
-  color: #fff;
+  color: var(--color-bg-white);
   box-shadow: 0 4px 15px rgba(102,126,234,0.35);
 }
 .btn-gradient:hover {
   transform: translateY(-1px);
   box-shadow: 0 6px 20px rgba(102,126,234,0.5);
 }
-.btn-sm {
-  min-height: 32px;
-}
-.btn-lg {
-  min-height: 50px;
-}
+.btn-sm { min-height: 32px; }
+.btn-lg { min-height: 50px; }

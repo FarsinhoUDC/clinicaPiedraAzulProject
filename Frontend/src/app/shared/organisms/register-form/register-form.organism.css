@@ -1,16 +1,10 @@
 .register-form-left {
-  background: linear-gradient(135deg, #173250 0%, #1a5a7a 100%);
-  color: #ffffff;
+  background: linear-gradient(135deg, var(--color-primary) 0%, #1a5a7a 100%);
+  color: var(--color-bg-white);
   border-radius: 16px 0 0 16px;
 }
-.register-form-right {
-  border-radius: 0 16px 16px 0;
-}
+.register-form-right { border-radius: 0 16px 16px 0; }
 @media (max-width: 992px) {
-  .register-form-left {
-    border-radius: 16px 16px 0 0;
-  }
-  .register-form-right {
-    border-radius: 0 0 16px 16px;
-  }
+  .register-form-left  { border-radius: 16px 16px 0 0; }
+  .register-form-right { border-radius: 0 0 16px 16px; }
 }
