@@ -3,17 +3,19 @@ package com.piedrazul.pacientes.application;
 import com.piedrazul.pacientes.domain.Paciente;
 import com.piedrazul.pacientes.dto.PacienteRequest;
 import com.piedrazul.pacientes.dto.PacienteResponse;
-import com.piedrazul.pacientes.infrastructure.persistence.PacienteRepository;
 import com.piedrazul.pacientes.infrastructure.KeycloakService;
+import com.piedrazul.pacientes.infrastructure.persistence.PacienteRepository;
 import com.piedrazul.shared.exception.BusinessException;
 import com.piedrazul.shared.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PacienteService {
@@ -74,10 +76,29 @@ public class PacienteService {
         return toResponse(saved);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public Optional<PacienteResponse> buscarPorDocumento(String numeroDocumento) {
-        return pacienteRepository.findByNumeroDocumento(numeroDocumento)
-                .map(this::toResponse);
+        // 1. Buscar en BD local
+        var local = pacienteRepository.findByNumeroDocumento(numeroDocumento);
+        if (local.isPresent()) return local.map(this::toResponse);
+
+        // 2. No existe localmente → buscar en Keycloak
+        var keycloakUser = keycloakService.buscarUsuario(numeroDocumento);
+        if (keycloakUser.isEmpty()) return Optional.empty();
+
+        // 3. Existe en Keycloak → crear en BD local
+        var kc = keycloakUser.get();
+        var nuevo = Paciente.nuevo(
+                kc.getFirstName() != null ? kc.getFirstName() : "",
+                kc.getLastName() != null ? kc.getLastName() : "",
+                kc.getEmail() != null ? kc.getEmail() : numeroDocumento + "@sin-correo.com",
+                "KEYCLOAK_MANAGED",
+                numeroDocumento,
+                null, null, null
+        );
+        var saved = pacienteRepository.save(nuevo);
+        log.info("Paciente {} creado desde Keycloak bajo demanda", numeroDocumento);
+        return Optional.of(toResponse(saved));
     }
 
     @Transactional(readOnly = true)

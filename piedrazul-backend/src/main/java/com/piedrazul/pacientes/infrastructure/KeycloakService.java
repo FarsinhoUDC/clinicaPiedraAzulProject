@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -180,6 +181,19 @@ public class KeycloakService {
         } catch (Exception e) {
             log.error("Error al asignar rol MEDICO al usuario {}", userId, e);
             throw new BusinessException("El medico se creó, pero falló la asignación de roles.");
+        }
+    }
+
+    public Optional<UserRepresentation> buscarUsuario(String numeroDocumento) {
+        try (Keycloak keycloak = getInstance()) {
+            UsersResource usersResource = keycloak.realm(realm).users();
+            List<UserRepresentation> users = usersResource.search(numeroDocumento, true);
+            return users.stream()
+                    .filter(u -> numeroDocumento.equals(u.getUsername()))
+                    .findFirst();
+        } catch (Exception e) {
+            log.error("Error al buscar usuario en Keycloak: {}", numeroDocumento, e);
+            return Optional.empty();
         }
     }
 }
