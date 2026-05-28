@@ -1,27 +1,27 @@
-<aside class="organismo-sidebar" [class.mobile-open]="mobileOpen">
+<aside class="organismo-sidebar" [class.sidebar-open]="sidebarOpen">
   <div class="organismo-brand">
     <span class="organismo-brand-badge">P</span>
     <span>{{ brandName }}</span>
   </div>
   <nav class="organismo-menu">
-    <a class="organismo-menu-item" routerLink="/inicio" routerLinkActive="active" (click)="close()">Inicio</a>
+    <a class="organismo-menu-item" routerLink="/inicio" routerLinkActive="active" (click)="close()" appTooltip="Volver a la página principal">Inicio</a>
     <ng-container *ngIf="isAgendador">
-      <a class="organismo-menu-item" routerLink="/agendador/consulta" routerLinkActive="active" (click)="close()">Consultar citas</a>
-      <a class="organismo-menu-item" routerLink="/agendador/nuevaCita" routerLinkActive="active" (click)="close()">Nueva cita</a>
+      <a class="organismo-menu-item" routerLink="/agendador/consulta" routerLinkActive="active" (click)="close()" appTooltip="Buscar y consultar citas agendadas">Consultar citas</a>
+      <a class="organismo-menu-item" routerLink="/agendador/nuevaCita" routerLinkActive="active" (click)="close()" appTooltip="Registrar una nueva cita médica">Nueva cita</a>
     </ng-container>
     <ng-container *ngIf="isMedico">
-      <a class="organismo-menu-item" routerLink="/medico/reagendar" routerLinkActive="active" (click)="close()">Re-agendar citas</a>
-      <a class="organismo-menu-item" routerLink="/medico/reportes" routerLinkActive="active" (click)="close()">Reportes</a>
-      <a class="organismo-menu-item" routerLink="/agendador/nuevaCita" routerLinkActive="active" (click)="close()">Nueva cita</a>
+      <a class="organismo-menu-item" routerLink="/medico/reagendar" routerLinkActive="active" (click)="close()" appTooltip="Reagendar o reprogramar citas existentes">Re-agendar citas</a>
+      <a class="organismo-menu-item" routerLink="/medico/reportes" routerLinkActive="active" (click)="close()" appTooltip="Ver reportes y estadísticas de consultas">Reportes</a>
+      <a class="organismo-menu-item" routerLink="/agendador/nuevaCita" routerLinkActive="active" (click)="close()" appTooltip="Registrar una nueva cita médica">Nueva cita</a>
     </ng-container>
     <ng-container *ngIf="isPaciente">
-      <a class="organismo-menu-item" routerLink="/paciente/portal" routerLinkActive="active" (click)="close()">Agendar citas</a>
-      <a class="organismo-menu-item" routerLink="/paciente/mis-citas" routerLinkActive="active" (click)="close()">Mis citas</a>
+      <a class="organismo-menu-item" routerLink="/paciente/portal" routerLinkActive="active" (click)="close()" appTooltip="Agendar una nueva cita como paciente">Agendar citas</a>
+      <a class="organismo-menu-item" routerLink="/paciente/mis-citas" routerLinkActive="active" (click)="close()" appTooltip="Consultar sus citas programadas">Mis citas</a>
     </ng-container>
     <ng-container *ngIf="isAdmin">
-      <a class="organismo-menu-item" routerLink="/agendador/consulta" routerLinkActive="active" (click)="close()">Consultar citas</a>
-      <a class="organismo-menu-item" routerLink="/admin/disponibilidad" routerLinkActive="active" (click)="close()">Configuración</a>
+      <a class="organismo-menu-item" routerLink="/agendador/consulta" routerLinkActive="active" (click)="close()" appTooltip="Buscar y consultar citas agendadas">Consultar citas</a>
+      <a class="organismo-menu-item" routerLink="/admin/disponibilidad" routerLinkActive="active" (click)="close()" appTooltip="Configurar horarios y disponibilidad">Configuración</a>
     </ng-container>
-    <a class="organismo-menu-item organismo-logout-item" (click)="onLogout()">Cerrar Sesión</a>
+    <a class="organismo-menu-item organismo-logout-item" (click)="onLogout()" appTooltip="Cerrar su sesión actual">Cerrar Sesión</a>
   </nav>
 </aside>

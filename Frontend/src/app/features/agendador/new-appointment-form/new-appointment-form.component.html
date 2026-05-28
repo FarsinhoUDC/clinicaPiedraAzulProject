@@ -8,11 +8,7 @@
       <div class="channel-pill">WhatsApp</div>
     </div>
 
-    <div class="step-row">
-      <div class="step-item active"><span>1</span> Datos del Paciente</div>
-      <div class="step-item"><span>2</span> Datos de la Cita</div>
-      <div class="step-item"><span>3</span> Confirmar</div>
-    </div>
+    <molecule-step-indicator [steps]="steps" [currentStep]="currentStep" variant="numbered"></molecule-step-indicator>
 
     <form [formGroup]="form" class="two-column-layout" (ngSubmit)="submit()">
       <section class="panel-card">
@@ -87,26 +83,16 @@
           <span class="field-error" *ngIf="form.controls.fecha.touched && form.controls.fecha.invalid">Debe seleccionar una fecha.</span>
         </div>
 
-        <div class="form-field">
-          <label>Hora disponible *</label>
-          <div class="chip-row">
-            <button
-              *ngFor="let slot of availableSlots"
-              type="button"
-              class="slot-chip"
-              [class.active]="form.controls.hora.value === slot.hora"
-              (click)="selectSlot(slot)">
-              {{ slot.hora }}
-            </button>
-          </div>
-          <input type="hidden" formControlName="hora">
-          <div class="slot-help" *ngIf="isLoadingSlots">Consultando franjas disponibles...</div>
-          <div class="slot-help" *ngIf="!isLoadingSlots">{{ slotMessage }}</div>
-          <span class="field-error" *ngIf="form.controls.hora.touched && form.controls.hora.invalid">Debe seleccionar una hora disponible.</span>
-          <div class="day-unavailable-msg" *ngIf="dayUnavailableMessage">
-             {{ dayUnavailableMessage }}
-          </div>
-        </div>
+        <molecule-slot-picker
+          [slots]="slotOptions"
+          [selectedSlot]="form.controls.hora.value ?? ''"
+          [isLoading]="isLoadingSlots"
+          [message]="slotMessage"
+          [dayUnavailableMessage]="dayUnavailableMessage"
+          (onSelectSlot)="selectSlot($event)">
+        </molecule-slot-picker>
+        <input type="hidden" formControlName="hora">
+        <span class="field-error" *ngIf="form.controls.hora.touched && form.controls.hora.invalid">Debe seleccionar una hora disponible.</span>
 
         <div class="appointment-summary">
           <strong>Resumen de la cita</strong>

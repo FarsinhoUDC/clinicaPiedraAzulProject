@@ -1,0 +1,45 @@
+.form-field {
+  display: grid;
+  gap: 8px;
+}
+
+.form-field label {
+  font-weight: 700;
+  color: var(--color-primary-light);
+}
+
+.slot-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.loading-slots {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-text-subtle);
+  font-size: 0.9rem;
+  padding: 8px 0;
+}
+
+.slot-help {
+  color: var(--color-text-faint);
+  font-size: 0.9rem;
+}
+
+.slot-error {
+  color: var(--color-error);
+  font-size: 0.84rem;
+}
+
+.day-unavailable-msg {
+  margin-top: 8px;
+  padding: 10px 14px;
+  background: var(--color-warning-bg);
+  border: 1px solid var(--color-warning-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-warning);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}

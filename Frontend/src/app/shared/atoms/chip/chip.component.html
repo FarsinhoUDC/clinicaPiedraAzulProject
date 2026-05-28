@@ -1,0 +1,12 @@
+<button
+  [type]="type"
+  class="atom-chip"
+  [class.active]="active"
+  [class.chip-pill]="variant === 'pill'"
+  [class.chip-square]="variant === 'square'"
+  [class.chip-sm]="size === 'sm'"
+  [class.chip-md]="size === 'md'"
+  [disabled]="disabled"
+  (click)="onClick.emit($event)">
+  <ng-content></ng-content>
+</button>

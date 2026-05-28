@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AtomButtonComponent, AtomInputComponent, AtomSelectComponent, type SelectOption } from '../../../shared/atoms/index';
+import { MoleculeStepIndicatorComponent, MoleculeDoctorCardComponent, MoleculeSlotPickerComponent, type DoctorCardData, type SlotOption } from '../../../shared/molecules/index';
 import { Appointment } from '../../../core/models/appointment.model';
 import { Doctor, TimeSlot, DoctorAvailability } from '../../../core/models/doctor.model';
 import { AppointmentApiService } from '../../../core/services/appointment-api.service';
@@ -14,7 +15,7 @@ import { calculateWindowEndDate } from '../../../core/utils/slot-calculator.util
 @Component({
   selector: 'app-patient-portal',
   standalone: true,
-  imports: [CommonModule, AtomButtonComponent, AtomInputComponent, AtomSelectComponent],
+  imports: [CommonModule, AtomButtonComponent, AtomInputComponent, AtomSelectComponent, MoleculeStepIndicatorComponent, MoleculeDoctorCardComponent, MoleculeSlotPickerComponent],
   templateUrl: './patient-portal.component.html',
   styleUrls: ['./patient-portal.component.css']
 })
@@ -36,7 +37,25 @@ export class PatientPortalComponent implements OnInit {
     { index: 1, title: '1. Médico' },
     { index: 2, title: '2. Fecha y hora' },
     { index: 3, title: '3. Confirmación' }
-  ] as const;
+  ];
+
+  get doctorCards(): DoctorCardData[] {
+    return this.filteredDoctors.map(d => ({
+      id: d.id,
+      nombres: d.nombres,
+      apellidos: d.apellidos,
+      especialidad: d.especialidad
+    }));
+  }
+
+  get slotOptions(): SlotOption[] {
+    return this.availableSlots.map(s => ({ hora: s.hora }));
+  }
+
+  onSelectDoctor(doctor: DoctorCardData): void {
+    const full = this.doctors.find(d => d.id === doctor.id);
+    if (full) this.selectDoctor(full);
+  }
 
   get specialtyOptions(): SelectOption[] {
     return [
@@ -112,6 +131,11 @@ export class PatientPortalComponent implements OnInit {
   selectSlot(slot: TimeSlot): void {
     this.wizardStore.setSlot(slot);
     this.wizardStore.setStep(3);
+  }
+
+  onSlotSelected(hora: string): void {
+    const slot: TimeSlot = { hora, disponible: true };
+    this.selectSlot(slot);
   }
 
   confirmAppointment(): void {

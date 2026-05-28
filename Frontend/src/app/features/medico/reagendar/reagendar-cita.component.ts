@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { AtomButtonComponent, AtomInputComponent, AtomSelectComponent, AtomSpinnerComponent, AtomBadgeComponent, type SelectOption } from '../../../shared/atoms/index';
+import { MoleculeStepIndicatorComponent, MoleculeSearchFormComponent, MoleculeSlotPickerComponent, type SlotOption } from '../../../shared/molecules/index';
 import {
   AbstractControl,
   FormBuilder,
@@ -21,11 +22,17 @@ type ViewState = 'search' | 'select-slot' | 'confirm' | 'success' | 'error';
 @Component({
   selector: 'app-reagendar-cita',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, AtomButtonComponent, AtomInputComponent, AtomSelectComponent, AtomSpinnerComponent, AtomBadgeComponent],
+  imports: [CommonModule, ReactiveFormsModule, AtomButtonComponent, AtomInputComponent, AtomSelectComponent, AtomSpinnerComponent, AtomBadgeComponent, MoleculeStepIndicatorComponent, MoleculeSearchFormComponent, MoleculeSlotPickerComponent],
   templateUrl: './reagendar-cita.component.html',
   styleUrl: './reagendar-cita.component.css'
 })
 export class ReagendarCitaComponent implements OnInit {
+
+  readonly steps = [
+    { index: 1, title: 'Buscar cita' },
+    { index: 2, title: 'Nuevo horario' },
+    { index: 3, title: 'Confirmar' }
+  ];
 
   // ── Estado de la vista ────────────────────────────────────────────────────
   viewState: ViewState = 'search';
@@ -37,7 +44,7 @@ export class ReagendarCitaComponent implements OnInit {
   });
 
   readonly reagendarForm = this.fb.group({
-    nuevaFecha: ['', [Validators.required, this.futureDateValidator]],
+    nuevaFecha: ['', [Validators.required, futureDateValidator]],
     horario: ['', Validators.required],
     motivo: ['', [Validators.maxLength(300)]]
   });
@@ -232,6 +239,15 @@ export class ReagendarCitaComponent implements OnInit {
     return this.doctors.find((d) => d.id === id);
   }
 
+  get currentStep(): number {
+    const map: Record<ViewState, number> = { search: 1, 'select-slot': 2, confirm: 3, success: 3, error: 2 };
+    return map[this.viewState] ?? 1;
+  }
+
+  get slotOptions(): SlotOption[] {
+    return this.availableSlots.map(s => ({ hora: s.hora }));
+  }
+
   get doctorOptions(): SelectOption[] {
     return this.doctors.map(d => ({
       label: `${d.nombres} ${d.apellidos}${d.especialidad ? ' — ' + d.especialidad : ''}`,
@@ -272,11 +288,12 @@ export class ReagendarCitaComponent implements OnInit {
 
   // ── Validador personalizado ───────────────────────────────────────────────
 
-  private futureDateValidator(control: AbstractControl): ValidationErrors | null {
-    if (!control.value) return null;
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const selected = new Date(`${control.value}T00:00:00`);
-    return selected >= today ? null : { pastDate: true };
-  }
+}
+
+function futureDateValidator(control: AbstractControl): ValidationErrors | null {
+  if (!control.value) return null;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const selected = new Date(`${control.value}T00:00:00`);
+  return selected >= today ? null : { pastDate: true };
 }

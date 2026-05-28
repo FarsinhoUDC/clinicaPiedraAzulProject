@@ -1,0 +1,32 @@
+<div class="consult-table-card">
+  <table class="consult-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Paciente</th>
+        <th>Documento</th>
+        <th>Celular</th>
+        <th>Hora</th>
+        <th>Estado</th>
+        <th *ngIf="showAcciones">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let row of rows; trackBy: trackByRow">
+        <td>{{ row.index }}</td>
+        <td class="patient-cell">{{ row.paciente }}</td>
+        <td>{{ row.documento }}</td>
+        <td>{{ row.celular }}</td>
+        <td>{{ row.hora }}</td>
+        <td>
+          <atom-badge [variant]="getBadgeVariant(row.estado)">
+            {{ statusLabel(row.estado) }}
+          </atom-badge>
+        </td>
+        <td *ngIf="showAcciones">
+          <button type="button" class="action-button" (click)="onAccion.emit(row)">{{ accionText }}</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -5,26 +5,20 @@
       <strong>Selecciona tu cita</strong>
     </div>
 
-    <!-- Indicador de pasos -->
-    <div class="portal-steps">
-      <article class="portal-step" *ngFor="let step of steps"
-               [class.active]="wizardStore.step() === step.index">
-        {{ step.title }}
-      </article>
-    </div>
+    <molecule-step-indicator [steps]="steps" [currentStep]="wizardStore.step()" variant="numbered"></molecule-step-indicator>
 
     <!-- Paso 1: Selección de médico -->
     <div class="portal-toolbar" *ngIf="wizardStore.step() === 1">
-      <atom-select label="Especialidad" [options]="specialtyOptions"
-                   (onSelectChange)="filterBySpecialty($any($event))"></atom-select>
+      <atom-select label="Especialidad" [options]="specialtyOptions" (onSelectChange)="filterBySpecialty($any($event))"></atom-select>
     </div>
 
     <div class="portal-grid" *ngIf="wizardStore.step() === 1">
-      <article class="doctor-card" *ngFor="let doctor of filteredDoctors">
-        <strong>{{ doctor.nombres }} {{ doctor.apellidos }}</strong>
-        <span>{{ doctor.especialidad || 'Especialidad general' }}</span>
-        <atom-button variant="primary" size="sm" (onClick)="selectDoctor(doctor)">Agendar</atom-button>
-      </article>
+      <molecule-doctor-card
+        *ngFor="let doctor of doctorCards"
+        [doctor]="doctor"
+        buttonText="Agendar"
+        (onSelect)="onSelectDoctor($event)">
+      </molecule-doctor-card>
     </div>
 
     <!-- Paso 2: Selección de fecha y hora -->
@@ -35,16 +29,12 @@
         <label>Fecha</label>
         <atom-input type="date" [id]="'fecha-cita'" (onInput)="loadSlots($event)"></atom-input>
       </div>
-      <div class="day-unavailable-msg" *ngIf="dayUnavailableMessage">
-        {{ dayUnavailableMessage }}
-      </div>
-      <div class="slot-row">
-        <button class="slot-pill" type="button"
-                *ngFor="let slot of availableSlots"
-                (click)="selectSlot(slot)">
-          {{ slot.hora }}
-        </button>
-      </div>
+      <molecule-slot-picker
+        [slots]="slotOptions"
+        [selectedSlot]="wizardStore.selectedSlot()?.hora ?? ''"
+        [dayUnavailableMessage]="dayUnavailableMessage"
+        (onSelectSlot)="onSlotSelected($event)">
+      </molecule-slot-picker>
     </div>
 
     <!-- Paso 3: Confirmación -->

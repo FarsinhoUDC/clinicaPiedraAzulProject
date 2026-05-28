@@ -6,7 +6,7 @@
     class="molecule-search-input"
     [placeholder]="placeholder"
     [value]="value"
-    (input)="onSearch.emit(($event.target as HTMLInputElement).value)"
+    (input)="onInput($event)"
     (keyup)="onKeyUp.emit($event)">
   <button
     *ngIf="showButton"

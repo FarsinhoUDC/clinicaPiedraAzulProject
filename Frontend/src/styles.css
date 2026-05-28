@@ -82,8 +82,15 @@
   --color-table-head-bg:      #102d39;
   --color-table-row-alt:      #f7fafc;
 
+  /* ── Tipografía ───────────────────────────────── */
+  --font-family:              Verdana, Tahoma, Arial, sans-serif;
+  --font-size-base:           18px;
+  --line-height-base:         1.7;
+
   color-scheme: light;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
 }
 
 * {
@@ -111,7 +118,23 @@ button {
 }
 
 /* Scrollbar */
-::-webkit-scrollbar        { width: 8px; height: 8px; }
+::-webkit-scrollbar        { width: 10px; height: 10px; }
 ::-webkit-scrollbar-track  { background: #f1f1f1; }
 ::-webkit-scrollbar-thumb  { background: var(--color-border-input); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: #a0b5c5; }
+
+/* ── Tooltip ──────────────────────────────────── */
+.app-tooltip {
+  position: fixed;
+  z-index: 99999;
+  background: #173042;
+  color: #fff;
+  font-family: var(--font-family);
+  font-size: 16px;
+  line-height: 1.4;
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  pointer-events: none;
+  white-space: nowrap;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+}

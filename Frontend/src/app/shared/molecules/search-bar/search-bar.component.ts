@@ -19,4 +19,9 @@ export class MoleculeSearchBarComponent {
   @Output() onSearch = new EventEmitter<string>();
   @Output() onSearchSubmit = new EventEmitter<string>();
   @Output() onKeyUp = new EventEmitter<KeyboardEvent>();
+
+  onInput(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    this.onSearch.emit(target.value);
+  }
 }

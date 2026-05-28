@@ -12,4 +12,5 @@ export class MoleculeUserBadgeComponent {
   @Input() name = '';
   @Input() initials = '';
   @Input() role = '';
+  @Input() hideAvatar = false;
 }

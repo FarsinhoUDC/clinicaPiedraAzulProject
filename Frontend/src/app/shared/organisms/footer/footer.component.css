@@ -1,0 +1,29 @@
+.app-footer {
+  background-color: var(--color-sidebar-bg);
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.footer-icon {
+  font-size: 1.5rem;
+  color: var(--color-accent-muted);
+}
+
+.social-link {
+  color: var(--color-link);
+  transition: color 0.3s;
+  text-decoration: none;
+}
+
+.social-link:hover {
+  color: var(--color-accent);
+}
+
+.footer-copyright {
+  background-color: var(--color-sidebar-divider);
+  font-size: 0.85rem;
+}
+
+.footer-copyright a {
+  text-decoration: none;
+}

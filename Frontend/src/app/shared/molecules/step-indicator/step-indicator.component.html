@@ -1,0 +1,25 @@
+<ng-container [ngSwitch]="variant">
+  <!-- Variante: numbered (números 1, 2, 3) -->
+  <div class="step-row" *ngSwitchCase="'numbered'">
+    <div
+      class="step-item"
+      *ngFor="let step of steps"
+      [class.active]="step.index === currentStep">
+      <span>{{ step.index }}</span> {{ step.title }}
+    </div>
+  </div>
+
+  <!-- Variante: dots (círculos conectados) -->
+  <nav class="step-trail" *ngSwitchCase="'dots'" aria-label="Pasos">
+    <ng-container *ngFor="let step of steps; let last = last; let first = first">
+      <span
+        class="step-dot"
+        [class.active]="step.index === currentStep"
+        [class.done]="step.index < currentStep">
+        <span class="step-num">{{ step.index }}</span>
+        <span class="step-label">{{ step.title }}</span>
+      </span>
+      <span class="step-connector" *ngIf="!last"></span>
+    </ng-container>
+  </nav>
+</ng-container>

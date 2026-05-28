@@ -8,26 +8,7 @@
       <h2>Re-agendamiento de Citas</h2>
       <p>Busque una cita existente, seleccione el nuevo horario y confirme el cambio.</p>
 
-      <!-- Indicador de pasos -->
-      <nav class="step-trail" aria-label="Pasos del re-agendamiento">
-        <span class="step-dot" [class.active]="viewState === 'search'"
-              [class.done]="viewState === 'select-slot' || viewState === 'confirm' || viewState === 'success'">
-          <span class="step-num">1</span>
-          <span class="step-label">Buscar cita</span>
-        </span>
-        <span class="step-connector"></span>
-        <span class="step-dot" [class.active]="viewState === 'select-slot'"
-              [class.done]="viewState === 'confirm' || viewState === 'success'">
-          <span class="step-num">2</span>
-          <span class="step-label">Nuevo horario</span>
-        </span>
-        <span class="step-connector"></span>
-        <span class="step-dot" [class.active]="viewState === 'confirm'"
-              [class.done]="viewState === 'success'">
-          <span class="step-num">3</span>
-          <span class="step-label">Confirmar</span>
-        </span>
-      </nav>
+      <molecule-step-indicator [steps]="steps" [currentStep]="currentStep" variant="dots"></molecule-step-indicator>
     </div>
 
     <!-- ══════════════════════════════════════════════════════
@@ -35,30 +16,15 @@
     ══════════════════════════════════════════════════════ -->
     <div *ngIf="viewState === 'search'">
 
-      <form [formGroup]="searchForm" class="search-bar" (ngSubmit)="searchAppointments()">
-        <div class="form-field">
-          <label for="medicoId">Médico / Terapista *</label>
-          <atom-select id="medicoId" formControlName="medicoId" [options]="doctorOptions" placeholder="Seleccione un médico"></atom-select>
-          <span class="field-error"
-                *ngIf="searchForm.controls.medicoId.touched && searchForm.controls.medicoId.invalid">
-            Seleccione un médico.
-          </span>
-        </div>
-
-        <div class="form-field">
-          <label for="fecha">Fecha *</label>
-          <atom-input id="fecha" type="date" formControlName="fecha"></atom-input>
-          <span class="field-error"
-                *ngIf="searchForm.controls.fecha.touched && searchForm.controls.fecha.invalid">
-            Seleccione una fecha.
-          </span>
-        </div>
-
-        <atom-button type="submit" variant="primary" [disabled]="isLoadingAppointments">
-          <span *ngIf="!isLoadingAppointments">Buscar citas</span>
-          <atom-spinner size="sm" *ngIf="isLoadingAppointments"></atom-spinner>
-        </atom-button>
-      </form>
+      <molecule-search-form
+        [formGroup]="searchForm"
+        [doctorOptions]="doctorOptions"
+        [isLoading]="isLoadingAppointments"
+        buttonText="Buscar citas"
+        doctorLabel="Médico / Terapista *"
+        doctorPlaceholder="Seleccione un médico"
+        (onSearch)="searchAppointments()">
+      </molecule-search-form>
 
       <!-- Error de búsqueda -->
       <div class="alert alert-error" *ngIf="searchError">{{ searchError }}</div>
@@ -162,34 +128,18 @@
         </div>
 
         <!-- Franjas horarias -->
-        <div class="slots-section">
-          <div class="slots-label">
-            Horarios disponibles
-            <span class="slots-date-hint" *ngIf="selectedDateLabel"> — {{ selectedDateLabel }}</span>
-          </div>
-
-          <div class="loading-slots" *ngIf="isLoadingSlots">
-            <atom-spinner size="sm"></atom-spinner> Cargando horarios...
-          </div>
-
-          <div class="alert alert-warning" *ngIf="!isLoadingSlots && slotError">{{ slotError }}</div>
-
-          <div class="slots-grid" *ngIf="!isLoadingSlots && availableSlots.length > 0">
-            <button
-              type="button"
-              class="slot-chip"
-              *ngFor="let slot of availableSlots; trackBy: trackBySlot"
-              [class.selected]="reagendarForm.value.horario === slot.hora"
-              (click)="selectSlot(slot.hora)">
-              {{ slot.hora }}
-            </button>
-          </div>
-
-          <span class="field-error"
-                *ngIf="reagendarForm.controls.horario.touched && reagendarForm.controls.horario.invalid">
-            Seleccione un horario.
-          </span>
-        </div>
+        <molecule-slot-picker
+          [slots]="slotOptions"
+          [selectedSlot]="reagendarForm.value.horario ?? ''"
+          [isLoading]="isLoadingSlots"
+          [errorMessage]="slotError"
+          label="Horarios disponibles"
+          (onSelectSlot)="selectSlot($event)">
+        </molecule-slot-picker>
+        <span class="field-error"
+              *ngIf="reagendarForm.controls.horario.touched && reagendarForm.controls.horario.invalid">
+          Seleccione un horario.
+        </span>
 
         <!-- Motivo (opcional) -->
         <div class="form-field">

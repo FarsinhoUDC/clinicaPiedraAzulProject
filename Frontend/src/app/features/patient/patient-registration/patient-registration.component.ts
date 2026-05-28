@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
-import { AtomButtonComponent, AtomInputComponent, AtomSelectComponent, type SelectOption } from '../../../shared/atoms/index';
+import { FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { type SelectOption } from '../../../shared/atoms/index';
+import { OrganismoPatientFormComponent } from '../../../shared/organisms/index';
 
 import { GENDER_OPTIONS } from '../../../core/constants/day-options';
 import { PatientApiService } from '../../../core/services/patient-api.service';
@@ -20,7 +21,7 @@ import {
 @Component({
   selector: 'app-patient-registration',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, AtomButtonComponent, AtomInputComponent, AtomSelectComponent],
+  imports: [CommonModule, OrganismoPatientFormComponent],
   templateUrl: './patient-registration.component.html',
   styleUrls: ['./patient-registration.component.css']
 })

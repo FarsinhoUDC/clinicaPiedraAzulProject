@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 
-import { agendadorGuard, adminGuard, authGuard, medicoGuard, pacienteGuard, roleRedirectGuard } from './core/guards/auth.guard';
+import { agendadorGuard, adminGuard, medicoGuard, pacienteGuard } from './core/guards/auth.guard';
 import { AvailabilityConfigComponent } from './features/admin/availability-config/availability-config.component';
 import { UserManagementComponent } from './features/admin/user-management/user-management.component';
 import { AppointmentSearchComponent } from './features/agendador/appointment-search/appointment-search.component';
@@ -9,14 +9,14 @@ import { MedicoReportesComponent } from './features/medico/reportes/medico-repor
 import { ReagendarCitaComponent } from './features/medico/reagendar/reagendar-cita.component';
 import { PatientPortalComponent } from './features/patient/patient-portal/patient-portal.component';
 import { PatientRegistrationComponent } from './features/patient/patient-registration/patient-registration.component';
-import { DashboardComponent } from './features/agendador/dashboard/dashboard.component';
+import { HomeComponent } from './features/home/home.component';
 import { MisCitasComponent } from './features/patient/mis-citas/mis-citas.component';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'inicio' },
 
-  // Pública (pero con redirección si ya está logueado)
-  { path: 'inicio', component: DashboardComponent, canActivate: [roleRedirectGuard] },
+  // Página de inicio pública — visible para todos (logueados y no logueados)
+  { path: 'inicio', component: HomeComponent },
   { path: 'paciente/registro', component: PatientRegistrationComponent },
 
   // Solo MEDICO / AGENDADOR

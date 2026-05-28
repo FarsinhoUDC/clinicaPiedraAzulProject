@@ -1,9 +1,5 @@
-.template-overlay {
-  display: none;
-}
-@media (max-width: 980px) {
+@media (max-width: 979px) {
   .template-overlay {
-    display: block;
     position: fixed;
     inset: 0;
     background: rgba(7,17,25,0.35);

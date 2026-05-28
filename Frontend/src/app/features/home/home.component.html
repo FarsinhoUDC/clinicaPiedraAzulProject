@@ -1,0 +1,74 @@
+<div class="home-page">
+
+  <!-- ======================== CARRUSEL DE PROMOCIONES ======================== -->
+  <section class="home-section" id="promociones">
+    <div class="container-fluid px-4">
+      <h2 class="section-title">Promociones</h2>
+      <div class="carousel-wrapper mb-4">
+        <div class="carousel-track" [style.transform]="'translateX(-' + currentSlide * 100 + '%)'">
+          <div class="carousel-slide" *ngFor="let promo of promotions">
+            <img [src]="promo.image" class="carousel-img" alt="Promoción" loading="lazy">
+            <div class="carousel-caption rounded p-3">
+              <h3>{{ promo.title }}</h3>
+              <p>{{ promo.description }}</p>
+            </div>
+          </div>
+        </div>
+        <button class="carousel-btn carousel-btn-prev" (click)="prevSlide()">
+          <span class="carousel-control-icon">&#10094;</span>
+        </button>
+        <button class="carousel-btn carousel-btn-next" (click)="nextSlide()">
+          <span class="carousel-control-icon">&#10095;</span>
+        </button>
+        <div class="carousel-dots">
+          <span class="carousel-dot" *ngFor="let promo of promotions; let i = index"
+                [class.active]="i === currentSlide"
+                (click)="goToSlide(i)"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================== MÉDICOS ======================== -->
+  <section class="home-section" id="medicos">
+    <div class="container-fluid px-4">
+      <h2 class="section-title">Nuestros Especialistas</h2>
+      <div class="row">
+
+        <!-- Barra lateral de especialidades -->
+        <aside class="col-12 col-md-4 col-lg-3 mb-4">
+          <h3 class="subsection-title">Categorías</h3>
+          <ul class="list-group specialty-list">
+            <li class="list-group-item specialty-item"
+                *ngFor="let specialty of specialties"
+                [class.active]="selectedSpecialty === specialty.key"
+                (click)="selectSpecialty(specialty)">
+              <a>{{ specialty.name }}</a>
+            </li>
+          </ul>
+          <div class="specialty-description mt-3 p-3 rounded text-white"
+               *ngIf="selectedSpecialty">
+            {{ specialtyDescription }}
+          </div>
+        </aside>
+
+        <!-- Tarjetas de médicos -->
+        <section class="col-12 col-md-8 col-lg-9">
+          <div class="row g-3">
+            <div class="col-6 col-md-6 col-lg-4" *ngFor="let doctor of doctors; let i = index">
+              <div class="doctor-card p-3 rounded h-100 d-flex flex-column"
+                   [class.doctor-card-alt]="i % 2 === 1">
+                <h4 class="doctor-name">{{ doctor.name }}</h4>
+                <p class="doctor-specialty fw-semibold">{{ doctor.specialty }}</p>
+                <p class="doctor-experience">{{ doctor.experience }}</p>
+                <p class="doctor-desc flex-grow-1">{{ doctor.description }}</p>
+                <p class="doctor-schedule"><strong>Horario:</strong> {{ doctor.schedule }}</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </section>
+</div>

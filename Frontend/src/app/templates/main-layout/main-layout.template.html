@@ -1,13 +1,14 @@
 <div class="d-flex min-vh-100" style="background: #eaf0f5;">
   <organismo-sidebar
-    *ngIf="showSidebar && isLoggedIn"
+    *ngIf="isLoggedIn"
+    [class.sidebar-expanded]="sidebarOpen"
     [brandName]="brandName"
     [isAgendador]="isAgendador"
     [isPaciente]="isPaciente"
     [isAdmin]="isAdmin"
     [isMedico]="isMedico"
     [isLoggedIn]="isLoggedIn"
-    [mobileOpen]="menuOpen"
+    [sidebarOpen]="sidebarOpen"
     (menuClose)="onMenuClose.emit()"
     (logout)="onLogout.emit()">
   </organismo-sidebar>
@@ -26,7 +27,9 @@
     <main class="flex-grow-1">
       <ng-content></ng-content>
     </main>
+
+    <organismo-footer></organismo-footer>
   </div>
 
-  <div class="template-overlay" *ngIf="menuOpen && showSidebar && isLoggedIn" (click)="onMenuClose.emit()"></div>
+  <div class="template-overlay" *ngIf="sidebarOpen && isLoggedIn" (click)="onMenuClose.emit()"></div>
 </div>

@@ -1,11 +1,12 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { TooltipDirective } from '../../atoms/tooltip/tooltip.directive';
 
 @Component({
   selector: 'organismo-header',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, TooltipDirective],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })

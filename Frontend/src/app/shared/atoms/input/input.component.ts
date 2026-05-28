@@ -27,6 +27,7 @@ export class AtomInputComponent implements ControlValueAccessor {
   @Input() hasError = false;
   @Input() errorMessage = '';
   @Output() onInput = new EventEmitter<string>();
+  @Output() onBlur = new EventEmitter<void>();
 
   value: string = '';
 
@@ -40,8 +41,9 @@ export class AtomInputComponent implements ControlValueAccessor {
     this.onInput.emit(this.value);
   }
 
-  onBlur(): void {
+  handleBlur(): void {
     this.onTouched();
+    this.onBlur.emit();
   }
 
   writeValue(value: string): void {

@@ -1,0 +1,87 @@
+<div class="patient-register-panel">
+  <div class="patient-register-intro">
+    <div class="eyebrow" *ngIf="subtitle">{{ subtitle }}</div>
+    <strong>{{ title }}</strong>
+  </div>
+
+  <div class="field-error" *ngIf="errorMessage">{{ errorMessage }}</div>
+  <div class="patient-success" *ngIf="successMessage">{{ successMessage }}</div>
+
+  <form [formGroup]="formGroup" class="patient-form" (ngSubmit)="onSubmit.emit()">
+    <div class="patient-grid">
+      <div class="patient-field">
+        <label>Numero de Documento *</label>
+        <atom-input formControlName="numeroDocumento" placeholder="C.C., T.I., etc."
+          [hasError]="isInvalidField('numeroDocumento')" errorMessage="Este campo solo acepta números"></atom-input>
+      </div>
+
+      <div class="patient-field" *ngIf="showDocumentType">
+        <label>Tipo de Documento</label>
+        <atom-select placeholder="Cédula de Ciudadanía" [options]="[
+          {label: 'Cédula de Ciudadanía', value: 'CC'},
+          {label: 'Tarjeta de Identidad', value: 'TI'},
+          {label: 'Cédula de Extranjería', value: 'CE'},
+          {label: 'Registro Civil', value: 'RC'},
+          {label: 'Pasaporte', value: 'PASAPORTE'}
+        ]"></atom-select>
+      </div>
+
+      <div class="patient-field">
+        <label>Nombres *</label>
+        <atom-input formControlName="nombres" placeholder="Tu nombre"
+          [hasError]="isInvalidField('nombres')" errorMessage="Este campo solo acepta letras"></atom-input>
+      </div>
+
+      <div class="patient-field">
+        <label>Apellidos *</label>
+        <atom-input formControlName="apellidos" placeholder="Tu apellido"
+          [hasError]="isInvalidField('apellidos')" errorMessage="Este campo solo acepta letras"></atom-input>
+      </div>
+
+      <div class="patient-field">
+        <label>Celular *</label>
+        <atom-input formControlName="celular" placeholder="Número de celular"
+          [hasError]="isInvalidField('celular')" errorMessage="Ingrese un número celular colombiano válido (ej: 3001234567)"></atom-input>
+      </div>
+
+      <div class="patient-field">
+        <label>Género *</label>
+        <atom-select formControlName="genero" [options]="genderOptions" placeholder="Seleccione"></atom-select>
+      </div>
+
+      <div class="patient-field">
+        <label>Correo Electrónico</label>
+        <atom-input type="email" formControlName="correo" placeholder="tu@correo.com (opcional)"
+          [hasError]="isInvalidField('correo')" errorMessage="Correo electrónico inválido"></atom-input>
+      </div>
+
+      <div class="patient-field">
+        <label>Fecha de Nacimiento</label>
+        <atom-input type="date" formControlName="fechaNacimiento"
+          [hasError]="isInvalidField('fechaNacimiento')" errorMessage="La fecha no puede ser posterior al día de hoy"></atom-input>
+      </div>
+
+      <ng-container *ngIf="showPasswordFields">
+        <div class="patient-field">
+          <label>Contraseña *</label>
+          <atom-input type="password" formControlName="password" placeholder="Contraseña"></atom-input>
+        </div>
+        <div class="patient-field">
+          <label>Confirmar contraseña *</label>
+          <atom-input type="password" formControlName="passwordConfirmation" placeholder="Confirmar contraseña"></atom-input>
+        </div>
+      </ng-container>
+    </div>
+
+    <div class="patient-help" *ngIf="showNote" style="margin-top: 18px; padding: 14px; background: #e8f5e9; color: #1f8d49; border-radius: 8px; font-size: 0.85rem;">
+      <strong>Nota:</strong> Tu número de documento será utilizado como contraseña temporal. Se recomienda cambiar la contraseña después del primer inicio de sesión.
+    </div>
+
+    <div class="patient-actions">
+      <atom-button type="submit" variant="primary" [block]="true" [disabled]="isLoading">
+        <span *ngIf="!isLoading">{{ submitText }}</span>
+        <span *ngIf="isLoading">Guardando...</span>
+      </atom-button>
+    </div>
+  </form>
+</div>

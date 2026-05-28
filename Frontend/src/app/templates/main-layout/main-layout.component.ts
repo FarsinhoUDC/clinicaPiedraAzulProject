@@ -1,12 +1,11 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { OrganismoHeaderComponent } from '../../shared/organisms/header/header.component';
-import { OrganismoSidebarComponent } from '../../shared/organisms/sidebar/sidebar.component';
+import { OrganismoHeaderComponent, OrganismoSidebarComponent, OrganismoFooterComponent } from '../../shared/organisms/index';
 
 @Component({
   selector: 'template-main-layout',
   standalone: true,
-  imports: [CommonModule, OrganismoHeaderComponent, OrganismoSidebarComponent],
+  imports: [CommonModule, OrganismoHeaderComponent, OrganismoSidebarComponent, OrganismoFooterComponent],
   templateUrl: './main-layout.template.html',
   styleUrls: ['./main-layout.component.css']
 })
@@ -16,7 +15,7 @@ export class MainLayoutComponent {
   @Input() brandName = 'Piedrazul';
   @Input() userLabel = '';
   @Input() userInitials = '';
-  @Input() menuOpen = false;
+  @Input() sidebarOpen = false;
   @Input() isAgendador = false;
   @Input() isPaciente = false;
   @Input() isAdmin = false;

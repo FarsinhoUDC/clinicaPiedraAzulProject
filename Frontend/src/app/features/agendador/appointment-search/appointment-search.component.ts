@@ -8,14 +8,16 @@ import { AppointmentSummaryFactory } from '../../../core/factories/appointment-s
 import { AppointmentApiService } from '../../../core/services/appointment-api.service';
 import { DoctorApiService } from '../../../core/services/doctor-api.service';
 import { UiMappersService } from '../../../core/services/ui-mappers.service';
-import { formatDateLabel, toHourLabel } from '../../../core/utils/date-time.utils';
+import { toHourLabel } from '../../../core/utils/date-time.utils';
 
-import { AtomButtonComponent, AtomInputComponent, AtomSelectComponent, AtomBadgeComponent, type SelectOption } from '../../../shared/atoms/index';
+import { AtomButtonComponent, type SelectOption } from '../../../shared/atoms/index';
+import { MoleculeSearchFormComponent, MoleculeMetricCardsComponent, type MetricCard } from '../../../shared/molecules/index';
+import { OrganismoAppointmentTableComponent, type AppointmentTableRow } from '../../../shared/organisms/index';
 
 @Component({
   selector: 'app-appointment-search',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, AtomButtonComponent, AtomInputComponent, AtomSelectComponent, AtomBadgeComponent],
+  imports: [CommonModule, ReactiveFormsModule, AtomButtonComponent, MoleculeSearchFormComponent, MoleculeMetricCardsComponent, OrganismoAppointmentTableComponent],
   templateUrl: './appointment-search.component.html',
   styleUrls: ['./appointment-search.component.css']
 })
@@ -83,15 +85,6 @@ export class AppointmentSearchComponent implements OnInit {
     });
   }
 
-  get selectedDateLabel(): string {
-    const fecha = this.searchForm.value.fecha;
-    return fecha ? formatDateLabel(fecha) : '';
-  }
-
-  hourLabel(dateTime: string): string {
-    return toHourLabel(dateTime);
-  }
-
   getMetricValue(label: string): number {
     return this.summary.find((item) => item.label === label)?.total ?? 0;
   }
@@ -101,27 +94,6 @@ export class AppointmentSearchComponent implements OnInit {
       label: `${d.nombres} ${d.apellidos}${d.especialidad ? ' - ' + d.especialidad : ''}`,
       value: d.id
     }));
-  }
-
-  getBadgeVariant(status?: string): 'admin' | 'medico' | 'agendador' | 'paciente' | 'default' | 'success' | 'warning' | 'error' {
-    switch (status) {
-      case 'CONFIRMADA':
-      case 'PROGRAMADA': return 'success';
-      case 'CANCELADA': return 'error';
-      case 'FINALIZADA': return 'default';
-      default: return 'warning';
-    }
-  }
-
-  statusLabel(status?: string): string {
-    switch (status) {
-      case 'CONFIRMADA':
-      case 'PROGRAMADA': return 'Confirmada';
-      case 'CANCELADA': return 'Cancelada';
-      case 'REAGENDADA': return 'Reagendada';
-      case 'FINALIZADA': return 'Finalizada';
-      default: return 'Pendiente';
-    }
   }
 
   downloadCSV(): void {
@@ -159,7 +131,25 @@ export class AppointmentSearchComponent implements OnInit {
     return this.appointments.length > 0;
   }
 
-  trackByAppointment(_: number, appointment: Appointment): number {
-    return appointment.id;
+  get metricCards(): MetricCard[] {
+    return [
+      { label: 'Total de citas', value: this.appointments.length },
+      { label: 'Confirmadas', value: this.getMetricValue('Confirmadas') },
+      { label: 'Pendientes', value: this.getMetricValue('Pendientes'), variant: 'warning' },
+      { label: 'Canceladas', value: this.getMetricValue('Canceladas'), variant: 'danger' }
+    ];
   }
+
+  get tableRows(): AppointmentTableRow[] {
+    return this.appointments.map((apt, i) => ({
+      id: apt.id,
+      index: i + 1,
+      paciente: apt.nombrePaciente,
+      documento: apt.documentoPaciente,
+      celular: apt.celularPaciente,
+      hora: toHourLabel(apt.fechaHora),
+      estado: apt.estado ?? 'PENDIENTE'
+    }));
+  }
+
 }

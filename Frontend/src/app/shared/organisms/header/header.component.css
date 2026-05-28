@@ -5,8 +5,10 @@
   padding: 0 clamp(16px, 4vw, 34px);
   background: var(--color-primary-medium);
   color: #e8f3f7;
-  height: clamp(60px, 10vh, 84px);
+  height: clamp(64px, 10vh, 88px);
 }
+.organismo-topbar .navbar-brand { font-size: 1.3rem; }
+.organismo-topbar .nav-link { font-size: 1rem; }
 .organismo-user-badge {
   width: 34px; height: 34px;
   border-radius: 50%;

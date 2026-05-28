@@ -39,16 +39,11 @@
 
           <div class="config-field">
             <label>Dias de atencion *</label>
-            <div class="day-row">
-              <button
-                *ngFor="let day of dayOptions"
-                type="button"
-                class="day-button"
-                [class.active]="isSelected(day.value)"
-                (click)="toggleDay(day.value); updatePreview()">
-                {{ day.label.charAt(0) }}
-              </button>
-            </div>
+            <atom-day-picker
+              [days]="dayOptions"
+              [selectedDays]="daysArray.value"
+              (onToggleDay)="toggleDay($event); updatePreview()">
+            </atom-day-picker>
           </div>
           <div class="field-error" *ngIf="daysArray.touched && daysArray.length === 0">Debe seleccionar al menos un dia.</div>
 

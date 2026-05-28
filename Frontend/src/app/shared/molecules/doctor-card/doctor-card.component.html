@@ -1,0 +1,5 @@
+<article class="doctor-card">
+  <strong>{{ doctor.nombres }} {{ doctor.apellidos }}</strong>
+  <span>{{ doctor.especialidad || 'Especialidad general' }}</span>
+  <atom-button variant="primary" size="sm" (onClick)="select()">{{ buttonText }}</atom-button>
+</article>

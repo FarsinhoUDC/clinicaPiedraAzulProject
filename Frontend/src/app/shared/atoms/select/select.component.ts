@@ -51,19 +51,25 @@ export class AtomSelectComponent implements ControlValueAccessor, AfterViewInit 
     this.onTouched();
   }
 
+  private applyValue(): void {
+    if (!this.selectRef) return;
+    this.selectRef.nativeElement.value = String(this.value);
+  }
+
   writeValue(value: string | number): void {
     this.value = value ?? '';
     if (this.selectRef) {
-      this.selectRef.nativeElement.value = String(this.value);
+      this.applyValue();
     } else {
       this.pendingValue = this.value;
     }
   }
 
   ngAfterViewInit(): void {
-    if (this.pendingValue !== null && this.selectRef) {
-      this.selectRef.nativeElement.value = String(this.pendingValue);
+    if (this.pendingValue !== null) {
+      this.value = this.pendingValue;
       this.pendingValue = null;
+      this.applyValue();
     }
   }
 
@@ -77,5 +83,9 @@ export class AtomSelectComponent implements ControlValueAccessor, AfterViewInit 
 
   setDisabledState(isDisabled: boolean): void {
     this.disabled = isDisabled;
+  }
+
+  trackByOption(_: number, opt: SelectOption): string | number {
+    return opt.value;
   }
 }

@@ -26,16 +26,15 @@ export class AppComponent implements OnInit {
 
   constructor(
     private readonly auth: AuthService,
-    private readonly router: Router
+    private readonly router: Router,
   ) {}
 
-  /**
-   * Al arrancar la app, si Keycloak ya detectó una sesión SSO activa,
-   * redirigimos directamente al dashboard del rol — elimina la pantalla blanca.
-   */
   ngOnInit(): void {
-    if (this.auth.isAuthenticated()) {
+    if (this.auth.isAuthenticated() && this.router.url === '/') {
       this.auth.redirectToRoleHome();
+    }
+    if (this.auth.isAuthenticated()) {
+      this.menuOpen = window.innerWidth >= 980;
     }
   }
 

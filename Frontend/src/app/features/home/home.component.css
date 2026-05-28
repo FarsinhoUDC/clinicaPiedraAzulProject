@@ -1,0 +1,189 @@
+.home-page {
+  background: var(--color-bg-page);
+}
+
+.home-section {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
+.section-title {
+  color: var(--color-primary);
+  font-weight: 700;
+  margin-bottom: 1.25rem;
+  font-size: clamp(1.3rem, 2vw + 0.5rem, 1.75rem);
+}
+
+.subsection-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  margin-bottom: 0.75rem;
+}
+
+.carousel-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+}
+
+.carousel-track {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+
+.carousel-slide {
+  min-width: 100%;
+  position: relative;
+}
+
+.carousel-img {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  display: block;
+}
+
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.4);
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  z-index: 2;
+  border-radius: 50%;
+  transition: background 0.2s;
+  line-height: 1;
+}
+
+.carousel-btn:hover {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.carousel-btn-prev { left: 12px; }
+.carousel-btn-next { right: 12px; }
+
+.carousel-control-icon {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.carousel-dots {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 2;
+}
+
+.carousel-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.carousel-dot.active {
+  background: #fff;
+}
+
+.carousel-caption {
+  position: absolute;
+  bottom: 60px;
+  left: 20px;
+  right: 20px;
+  background: rgba(19, 38, 52, 0.8);
+}
+
+.specialty-item {
+  transition: background-color 0.2s;
+}
+
+.specialty-item.active {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.specialty-item.active a {
+  color: #fff;
+}
+
+.specialty-item a {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--color-text-main);
+  text-decoration: none;
+  display: block;
+}
+
+.specialty-description {
+  background: var(--color-primary) !important;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.doctor-card {
+  background: var(--color-primary-light);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-md);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.doctor-card-alt {
+  background: var(--color-bg-white);
+  color: var(--color-text-main);
+  border: 1px solid var(--color-border-light);
+}
+
+.doctor-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-card);
+}
+
+.doctor-name {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.doctor-specialty {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.doctor-card-alt .doctor-specialty {
+  color: var(--color-accent-dark);
+}
+
+.doctor-experience {
+  font-size: 0.8rem;
+  opacity: 0.85;
+  margin-bottom: 0.5rem;
+}
+
+.doctor-desc {
+  font-size: 0.8rem;
+  opacity: 0.9;
+  line-height: 1.4;
+}
+
+.doctor-schedule {
+  font-size: 0.78rem;
+  opacity: 0.85;
+  margin-bottom: 0;
+}
+
+@media (max-width: 768px) {
+  .carousel-img {
+    height: 250px;
+  }
+}

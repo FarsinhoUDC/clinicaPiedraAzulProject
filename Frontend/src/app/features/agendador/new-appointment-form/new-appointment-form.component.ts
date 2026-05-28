@@ -13,15 +13,22 @@ import { PatientApiService } from '../../../core/services/patient-api.service';
 import { combineDateAndTime, toHourLabel } from '../../../core/utils/date-time.utils';
 import { colombianCellphoneValidator, digitsOnlyValidator, lettersOnlyValidator, noMaliciousCharsValidator, notFutureDateValidator } from '../../../shared/validators/custom-validators';
 import { AtomButtonComponent, AtomInputComponent, AtomSelectComponent, AtomSpinnerComponent, AtomDialogComponent, type SelectOption } from '../../../shared/atoms/index';
+import { MoleculeStepIndicatorComponent, MoleculeSlotPickerComponent, type SlotOption } from '../../../shared/molecules/index';
 
 @Component({
   selector: 'app-new-appointment-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, AtomButtonComponent, AtomInputComponent, AtomSelectComponent, AtomSpinnerComponent, AtomDialogComponent],
+  imports: [CommonModule, ReactiveFormsModule, AtomButtonComponent, AtomInputComponent, AtomSelectComponent, AtomSpinnerComponent, AtomDialogComponent, MoleculeStepIndicatorComponent, MoleculeSlotPickerComponent],
   templateUrl: './new-appointment-form.component.html',
   styleUrls: ['./new-appointment-form.component.css']
 })
 export class NewAppointmentFormComponent implements OnInit {
+  readonly steps = [
+    { index: 1, title: 'Datos del Paciente' },
+    { index: 2, title: 'Datos de la Cita' },
+    { index: 3, title: 'Confirmar' }
+  ];
+
   readonly genderOptions = GENDER_OPTIONS;
   readonly form = this.formBuilder.group({
     numeroDocumento: ['', [Validators.required, digitsOnlyValidator()]],
@@ -51,6 +58,14 @@ export class NewAppointmentFormComponent implements OnInit {
   errorMessage = '';
   slotMessage = 'Selecciona medico y fecha para cargar las horas disponibles.';
   isLoadingSlots = false;
+  successResetPending = false;
+
+  get currentStep(): number {
+    const v = this.form.value;
+    if (v.medicoId && v.fecha && v.hora) return 3;
+    if (v.numeroDocumento && v.nombres && v.celular && v.genero) return 2;
+    return 1;
+  }
 
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -132,9 +147,13 @@ export class NewAppointmentFormComponent implements OnInit {
     });
   }
 
-  selectSlot(slot: TimeSlot): void {
-    this.form.controls.hora.setValue(slot.hora);
-    this.slotMessage = `Hora seleccionada: ${slot.hora}`;
+  get slotOptions(): SlotOption[] {
+    return this.availableSlots.map(s => ({ hora: s.hora }));
+  }
+
+  selectSlot(hora: string): void {
+    this.form.controls.hora.setValue(hora);
+    this.slotMessage = `Hora seleccionada: ${hora}`;
   }
 
   selectGender(gender: string): void {
@@ -193,6 +212,7 @@ export class NewAppointmentFormComponent implements OnInit {
         this.form.controls.hora.setValue('');
         this.slotMessage = 'La hora reservada ya no esta disponible.';
         this.submitMessage = 'Cita creada exitosamente. Puedes registrar otra cita sin recargar la página.';
+        this.successResetPending = true;
         this.dialogMode = 'result';
         this.dialogVariant = 'success';
         this.dialogMessage = 'La cita se creo exitosamente.';
@@ -253,8 +273,10 @@ export class NewAppointmentFormComponent implements OnInit {
     this.availableSlots = [];
     this.selectedAppointment = null;
     this.patientLookupMessage = '';
+    this.patientNotFound = false;
     this.submitMessage = '';
     this.errorMessage = '';
+    this.dayUnavailableMessage = '';
     this.slotMessage = 'Selecciona medico y fecha para cargar las horas disponibles.';
   }
 
@@ -269,6 +291,10 @@ export class NewAppointmentFormComponent implements OnInit {
   closeDialog(): void {
     this.showDialog = false;
     this.pendingAction = null;
+    if (this.successResetPending) {
+      this.successResetPending = false;
+      this.resetForm();
+    }
   }
 
   confirmDialogAction(): void {

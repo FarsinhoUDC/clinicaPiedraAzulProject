@@ -1,0 +1,10 @@
+<div class="day-row">
+  <button
+    *ngFor="let day of days"
+    type="button"
+    class="day-button"
+    [class.active]="isSelected(day.value)"
+    (click)="toggle(day.value)">
+    {{ day.label.charAt(0) }}
+  </button>
+</div>

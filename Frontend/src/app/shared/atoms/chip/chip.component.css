@@ -1,0 +1,53 @@
+.atom-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-white);
+  color: #486879;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  line-height: 1.2;
+}
+
+.atom-chip:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.atom-chip:hover:not(:disabled) {
+  background: #d5f3f2;
+  border-color: var(--color-accent);
+  color: #0d9490;
+}
+
+.atom-chip.active {
+  background: var(--color-accent);
+  color: var(--color-bg-white);
+  border-color: var(--color-accent);
+}
+
+.chip-pill {
+  border-radius: 999px;
+  padding: 10px 16px;
+  min-width: 72px;
+}
+
+.chip-square {
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  min-width: 44px;
+}
+
+.chip-sm {
+  min-height: 32px;
+  padding: 6px 12px;
+  font-size: 0.82rem;
+}
+
+.chip-md {
+  min-height: 42px;
+}

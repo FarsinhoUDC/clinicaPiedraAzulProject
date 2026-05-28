@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
-import { AtomButtonComponent, AtomInputComponent, AtomSelectComponent, AtomSpinnerComponent, AtomDialogComponent, type SelectOption } from '../../../shared/atoms/index';
+import { AtomButtonComponent, AtomInputComponent, AtomSelectComponent, AtomSpinnerComponent, AtomDialogComponent, AtomDayPickerComponent, type SelectOption } from '../../../shared/atoms/index';
 
 import { DAY_OPTIONS } from '../../../core/constants/day-options';
 import { AuditLogEntry } from '../../../core/models/configuration.model';
@@ -16,7 +16,7 @@ import { GENDER_OPTIONS } from '../../../core/constants/day-options';
 @Component({
   selector: 'app-availability-config',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, AtomButtonComponent, AtomInputComponent, AtomSelectComponent, AtomDialogComponent],
+  imports: [CommonModule, ReactiveFormsModule, AtomButtonComponent, AtomInputComponent, AtomSelectComponent, AtomDialogComponent, AtomDayPickerComponent],
   templateUrl: './availability-config.component.html',
   styleUrls: ['./availability-config.component.css']
 })

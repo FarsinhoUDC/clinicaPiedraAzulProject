@@ -1,0 +1,18 @@
+<div class="form-field">
+  <label>{{ label }}</label>
+  <div class="loading-slots" *ngIf="isLoading">
+    <atom-spinner size="sm"></atom-spinner> Cargando horarios...
+  </div>
+  <div class="slot-row" *ngIf="!isLoading && slots.length > 0">
+    <atom-chip
+      *ngFor="let slot of slots"
+      variant="pill"
+      [active]="selectedSlot === slot.hora"
+      (onClick)="selectSlot(slot.hora)">
+      {{ slot.label || slot.hora }}
+    </atom-chip>
+  </div>
+  <div class="slot-help" *ngIf="!isLoading && !errorMessage && !dayUnavailableMessage">{{ message }}</div>
+  <div class="slot-error" *ngIf="errorMessage">{{ errorMessage }}</div>
+  <div class="day-unavailable-msg" *ngIf="dayUnavailableMessage">{{ dayUnavailableMessage }}</div>
+</div>

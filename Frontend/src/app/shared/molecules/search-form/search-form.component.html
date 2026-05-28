@@ -1,0 +1,29 @@
+<form [formGroup]="formGroup" class="consult-search" (ngSubmit)="onSearch.emit()">
+  <div class="consult-field">
+    <atom-select
+      id="medicoId"
+      formControlName="medicoId"
+      [label]="doctorLabel"
+      [placeholder]="doctorPlaceholder"
+      [options]="doctorOptions"
+      [hasError]="formGroup.controls['medicoId'].touched && formGroup.controls['medicoId'].invalid"
+      errorMessage="Debe seleccionar un medico."
+    ></atom-select>
+  </div>
+
+  <div class="consult-field">
+    <atom-input
+      id="fecha"
+      type="date"
+      formControlName="fecha"
+      [label]="dateLabel"
+      [hasError]="formGroup.controls['fecha'].touched && formGroup.controls['fecha'].invalid"
+      errorMessage="Debe seleccionar una fecha."
+    ></atom-input>
+  </div>
+
+  <atom-button type="submit" variant="primary" [disabled]="isLoading">
+    <span *ngIf="!isLoading">{{ buttonText }}</span>
+    <atom-spinner size="sm" *ngIf="isLoading"></atom-spinner>
+  </atom-button>
+</form>
