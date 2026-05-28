@@ -24,4 +24,7 @@ public class MedicoRequest {
     private java.time.LocalDate fechaNacimiento;
 
     private String especialidad;
+    private String descripcion;
+    private String anosExperiencia;
+    private String fotoUrl;
 }

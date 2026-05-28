@@ -5,6 +5,8 @@ export interface Doctor {
   especialidad?: string;
   activo: boolean;
   fotoUrl?: string;
+  descripcion?: string;
+  anosExperiencia?: string;
 }
 
 export interface DoctorAvailability {

@@ -50,7 +50,10 @@ public class MedicoService {
                 request.getEspecialidad(),
                 request.getCelular(),
                 request.getGenero() != null && !request.getGenero().isEmpty() ? com.piedrazul.pacientes.domain.Genero.valueOf(request.getGenero()) : null,
-                request.getFechaNacimiento());
+                request.getFechaNacimiento(),
+                request.getDescripcion(),
+                request.getAnosExperiencia(),
+                request.getFotoUrl());
         Medico saved = medicoRepository.save(medico);
 
         // Crear medico en Keycloak
@@ -68,6 +71,9 @@ public class MedicoService {
                 .correo(m.getCorreo())
                 .especialidad(m.getEspecialidad())
                 .activo(m.isActivo())
+                .descripcion(m.getDescripcion())
+                .anosExperiencia(m.getAnosExperiencia())
+                .fotoUrl(m.getFotoUrl())
                 .build();
     }
 }

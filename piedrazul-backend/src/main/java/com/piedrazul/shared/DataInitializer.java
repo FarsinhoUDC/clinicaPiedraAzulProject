@@ -41,9 +41,13 @@ public class DataInitializer implements CommandLineRunner {
         crearUsuarioMedico("laura.martinez", "medico1234", "Laura",   "Martinez");
 
         MedicoResponse medico1 = crearMedico(
-                "Carlos", "Gomez", "1234", "Medicina General");
+                "Carlos", "Gomez", "1234", "Medicina General",
+                "Médico general con amplia experiencia en atención primaria y prevención de enfermedades crónicas.",
+                "8 años de experiencia");
         MedicoResponse medico2 = crearMedico(
-                "Laura", "Martinez", "5678", "Fisioterapia");
+                "Laura", "Martinez", "5678", "Fisioterapia",
+                "Fisioterapeuta especializada en rehabilitación musculoesquelética y terapia deportiva.",
+                "10 años de experiencia");
 
         configurarDisponibilidad(
                 medico1.getId(),
@@ -125,12 +129,16 @@ public class DataInitializer implements CommandLineRunner {
 
     private MedicoResponse crearMedico(String nombres, String apellidos,
                                         String numeroDocumento,
-                                        String especialidad) {
+                                        String especialidad,
+                                        String descripcion,
+                                        String anosExperiencia) {
         MedicoRequest req = new MedicoRequest();
         req.setNombres(nombres);
         req.setApellidos(apellidos);
         req.setNumeroDocumento(numeroDocumento);
         req.setEspecialidad(especialidad);
+        req.setDescripcion(descripcion);
+        req.setAnosExperiencia(anosExperiencia);
         return medicoService.crear(req);
     }
 

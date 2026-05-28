@@ -67,7 +67,10 @@ export class AvailabilityConfigComponent implements OnInit {
     genero: ['', Validators.required],
     fechaNacimiento: ['', [Validators.required, notFutureDateValidator()]],
     correo: ['', [Validators.email]],
-    especialidad: ['']
+    especialidad: [''],
+    descripcion: [''],
+    anosExperiencia: [''],
+    fotoUrl: ['']
   });
 
   constructor(
@@ -268,7 +271,7 @@ export class AvailabilityConfigComponent implements OnInit {
       return;
     }
 
-    const { numeroDocumento, nombres, apellidos, celular, genero, fechaNacimiento, correo, especialidad } = this.medicoForm.getRawValue();
+    const { numeroDocumento, nombres, apellidos, celular, genero, fechaNacimiento, correo, especialidad, descripcion, anosExperiencia, fotoUrl } = this.medicoForm.getRawValue();
 
     this.doctorApi.create({
       numeroDocumento,
@@ -278,7 +281,10 @@ export class AvailabilityConfigComponent implements OnInit {
       genero,
       fechaNacimiento,
       correo,
-      especialidad
+      especialidad,
+      descripcion,
+      anosExperiencia,
+      fotoUrl
     }).subscribe({
       next: (newDoctor) => {
         this.doctors.push(newDoctor);

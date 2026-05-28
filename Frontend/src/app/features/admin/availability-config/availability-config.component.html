@@ -225,6 +225,18 @@
                 <ng-container *ngIf="medicoForm.controls.correo.errors?.['email']">Debe ingresar un correo electrónico válido.</ng-container>
               </div>
             </div>
+            <div class="patient-field">
+              <label>Descripción</label>
+              <atom-input formControlName="descripcion" placeholder="Breve descripción del especialista" size="md"></atom-input>
+            </div>
+            <div class="patient-field">
+              <label>Años de experiencia</label>
+              <atom-input formControlName="anosExperiencia" placeholder="Ej: 8 años" size="md"></atom-input>
+            </div>
+            <div class="patient-field" style="grid-column: span 2;">
+              <label>URL de foto</label>
+              <atom-input formControlName="fotoUrl" placeholder="https://ejemplo.com/foto.jpg (opcional)" size="md"></atom-input>
+            </div>
           </div>
 
           <div class="patient-help" style="margin-top: 18px; padding: 14px; background: #e8f5e9; color: #1f8d49; border-radius: 8px; font-size: 0.85rem;">

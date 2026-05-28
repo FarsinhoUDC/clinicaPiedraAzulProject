@@ -33,42 +33,55 @@
   <section class="home-section" id="medicos">
     <div class="container-fluid px-4">
       <h2 class="section-title">Nuestros Especialistas</h2>
-      <div class="row">
+
+      <div *ngIf="loading" class="text-center py-5">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+      </div>
+
+      <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+      <div class="row" *ngIf="!loading && !errorMessage">
 
         <!-- Barra lateral de especialidades -->
         <aside class="col-12 col-md-4 col-lg-3 mb-4">
           <h3 class="subsection-title">Categorías</h3>
           <ul class="list-group specialty-list">
             <li class="list-group-item specialty-item"
+                [class.active]="selectedSpecialty === ''"
+                (click)="selectSpecialty('')">
+              <a>Todos</a>
+            </li>
+            <li class="list-group-item specialty-item"
                 *ngFor="let specialty of specialties"
                 [class.active]="selectedSpecialty === specialty.key"
-                (click)="selectSpecialty(specialty)">
+                (click)="selectSpecialty(specialty.key)">
               <a>{{ specialty.name }}</a>
             </li>
           </ul>
-          <div class="specialty-description mt-3 p-3 rounded text-white"
-               *ngIf="selectedSpecialty">
-            {{ specialtyDescription }}
-          </div>
         </aside>
 
         <!-- Tarjetas de médicos -->
         <section class="col-12 col-md-8 col-lg-9">
           <div class="row g-3">
-            <div class="col-6 col-md-6 col-lg-4" *ngFor="let doctor of doctors; let i = index">
+            <div class="col-6 col-md-6 col-lg-4" *ngFor="let doctor of filteredDoctors; let i = index">
               <div class="doctor-card p-3 rounded h-100 d-flex flex-column"
                    [class.doctor-card-alt]="i % 2 === 1">
-                <h4 class="doctor-name">{{ doctor.name }}</h4>
-                <p class="doctor-specialty fw-semibold">{{ doctor.specialty }}</p>
-                <p class="doctor-experience">{{ doctor.experience }}</p>
-                <p class="doctor-desc flex-grow-1">{{ doctor.description }}</p>
-                <p class="doctor-schedule"><strong>Horario:</strong> {{ doctor.schedule }}</p>
+                <h4 class="doctor-name">{{ doctor.nombres }} {{ doctor.apellidos }}</h4>
+                <p class="doctor-specialty fw-semibold">{{ doctor.especialidad || 'Especialidad General' }}</p>
+                <p class="doctor-experience" *ngIf="doctor.anosExperiencia">{{ doctor.anosExperiencia }}</p>
+                <p class="doctor-desc flex-grow-1" *ngIf="doctor.descripcion">{{ doctor.descripcion }}</p>
               </div>
             </div>
+          </div>
+          <div *ngIf="filteredDoctors.length === 0" class="text-center py-4 text-muted">
+            No hay médicos disponibles para esta especialidad.
           </div>
         </section>
 
       </div>
     </div>
   </section>
+
 </div>

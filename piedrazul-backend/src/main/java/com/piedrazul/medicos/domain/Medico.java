@@ -33,13 +33,23 @@ public class Medico extends Usuario {
 
     private java.time.LocalDate fechaNacimiento;
 
+    @Column(columnDefinition = "TEXT")
+    private String descripcion;
+
+    private String anosExperiencia;
+
+    private String fotoUrl;
+
     public static Medico nuevo(String nombres, String apellidos,
                                 String correo, String contrasena,
                                 String numeroDocumento,
                                 String especialidad,
                                 String celular,
                                 com.piedrazul.pacientes.domain.Genero genero,
-                                java.time.LocalDate fechaNacimiento) {
+                                java.time.LocalDate fechaNacimiento,
+                                String descripcion,
+                                String anosExperiencia,
+                                String fotoUrl) {
         Medico m = new Medico();
         m.setNombres(nombres);
         m.setApellidos(apellidos);
@@ -52,6 +62,9 @@ public class Medico extends Usuario {
         m.setCelular(celular != null ? celular : "");
         m.setGenero(genero);
         m.setFechaNacimiento(fechaNacimiento);
+        m.setDescripcion(descripcion);
+        m.setAnosExperiencia(anosExperiencia);
+        m.setFotoUrl(fotoUrl);
         return m;
     }
 }

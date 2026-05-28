@@ -14,4 +14,7 @@ public class MedicoResponse {
     private String correo;
     private String especialidad;
     private boolean activo;
+    private String descripcion;
+    private String anosExperiencia;
+    private String fotoUrl;
 }

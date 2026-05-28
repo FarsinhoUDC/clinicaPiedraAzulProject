@@ -65,10 +65,9 @@ public class SecurityConfig {
                 .requestMatchers("/api/citas/**")
                     .hasAnyRole("AGENDADOR", "MEDICO", "ADMIN", "PACIENTE")
 
-                // ── Médicos (lectura) — necesario para el agendamiento ─────
-                // PACIENTE necesita ver la lista de médicos para elegir
-                .requestMatchers(HttpMethod.GET, "/api/medicos/**")
-                    .hasAnyRole("AGENDADOR", "MEDICO", "ADMIN", "PACIENTE")
+                // ── Médicos (lectura) — pública para landing page ──────────
+                // Usuarios no autenticados pueden ver la lista en la home
+                .requestMatchers(HttpMethod.GET, "/api/medicos/**").permitAll()
                 // Escritura sobre médicos: solo roles de gestión
                 .requestMatchers(HttpMethod.POST,   "/api/medicos/**").hasAnyRole("AGENDADOR", "MEDICO", "ADMIN")
                 .requestMatchers(HttpMethod.PUT,    "/api/medicos/**").hasAnyRole("AGENDADOR", "MEDICO", "ADMIN")
