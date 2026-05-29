@@ -11,7 +11,10 @@ import com.piedrazul.shared.exception.BusinessException;
 import com.piedrazul.shared.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -79,10 +82,15 @@ public class SesionService {
             throw new BusinessException("El usuario se encuentra inactivo.");
         }
 
-        // Para usuarios gestionados por Keycloak, la contraseña ya fue validada
-        // mediante el flujo ROPC antes de llamar a este endpoint.
-        if ("KEYCLOAK_MANAGED".equals(usuario.getContrasena())) {
-            log.info("Usuario Keycloak-managed: omitiendo validación BCrypt local.");
+        // Si la petición ya trae un JWT válido de Keycloak, confiamos en él
+        // y omitimos la validación local de contraseña.
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        boolean autenticadoPorKeycloak = auth != null
+                && auth.isAuthenticated()
+                && auth.getPrincipal() instanceof Jwt;
+
+        if (autenticadoPorKeycloak || "KEYCLOAK_MANAGED".equals(usuario.getContrasena())) {
+            log.info("Usuario autenticado por Keycloak, omitiendo validación BCrypt local.");
         } else {
             if (!passwordEncoder.matches(request.getContrasena(), usuario.getContrasena())) {
                 log.warn("Contraseña incorrecta para: {}", request.getNumeroDocumento());

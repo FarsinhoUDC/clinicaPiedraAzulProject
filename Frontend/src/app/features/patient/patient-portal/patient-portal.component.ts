@@ -130,12 +130,15 @@ export class PatientPortalComponent implements OnInit {
 
   selectSlot(slot: TimeSlot): void {
     this.wizardStore.setSlot(slot);
-    this.wizardStore.setStep(3);
   }
 
   onSlotSelected(hora: string): void {
     const slot: TimeSlot = { hora, disponible: true };
     this.selectSlot(slot);
+  }
+
+  goToConfirmation(): void {
+    this.wizardStore.setStep(3);
   }
 
   confirmAppointment(): void {

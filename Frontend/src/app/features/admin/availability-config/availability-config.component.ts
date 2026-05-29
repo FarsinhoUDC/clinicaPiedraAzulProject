@@ -7,6 +7,7 @@ import { AtomButtonComponent, AtomInputComponent, AtomSelectComponent, AtomSpinn
 import { DAY_OPTIONS } from '../../../core/constants/day-options';
 import { AuditLogEntry } from '../../../core/models/configuration.model';
 import { Doctor, DoctorAvailability } from '../../../core/models/doctor.model';
+import { AgendadorApiService } from '../../../core/services/agendador-api.service';
 import { ConfigurationApiService } from '../../../core/services/configuration-api.service';
 import { DoctorApiService } from '../../../core/services/doctor-api.service';
 import { calculateDailySlots, calculateWindowEndDate } from '../../../core/utils/slot-calculator.util';
@@ -58,6 +59,17 @@ export class AvailabilityConfigComponent implements OnInit {
     return this.genderOptions.map(g => ({ label: g.label, value: g.value }));
   }
 
+  showAgendadorForm = false;
+  readonly agendadorForm = this.formBuilder.group({
+    numeroDocumento: ['', [Validators.required, Validators.minLength(5), digitsOnlyValidator()]],
+    nombres: ['', [Validators.required, lettersOnlyValidator(), noMaliciousCharsValidator()]],
+    apellidos: ['', [Validators.required, lettersOnlyValidator(), noMaliciousCharsValidator()]],
+    celular: ['', [colombianCellphoneValidator(), digitsOnlyValidator()]],
+    genero: [''],
+    fechaNacimiento: ['', [notFutureDateValidator()]],
+    correo: ['', [Validators.email]]
+  });
+
   showMedicoForm = false;
   readonly medicoForm = this.formBuilder.group({
     numeroDocumento: ['', [Validators.required, Validators.minLength(5), digitsOnlyValidator()]],
@@ -75,6 +87,7 @@ export class AvailabilityConfigComponent implements OnInit {
 
   constructor(
     private readonly formBuilder: FormBuilder,
+    private readonly agendadorApi: AgendadorApiService,
     private readonly doctorApi: DoctorApiService,
     private readonly configurationApi: ConfigurationApiService
   ) {}
@@ -253,6 +266,44 @@ export class AvailabilityConfigComponent implements OnInit {
       this.updatePreview();
       this.openResultDialog('success', 'La accion de cancelar se realizo correctamente.');
     }
+  }
+
+  toggleAgendadorForm(): void {
+    this.showAgendadorForm = !this.showAgendadorForm;
+    if (this.showAgendadorForm) {
+      this.agendadorForm.reset();
+    }
+  }
+
+  submitAgendadorForm(): void {
+    this.message = '';
+    this.errorMessage = '';
+
+    if (this.agendadorForm.invalid) {
+      this.agendadorForm.markAllAsTouched();
+      return;
+    }
+
+    const raw = this.agendadorForm.getRawValue();
+
+    this.agendadorApi.create({
+      numeroDocumento: raw.numeroDocumento ?? '',
+      nombres: raw.nombres ?? '',
+      apellidos: raw.apellidos ?? '',
+      celular: raw.celular || null,
+      genero: raw.genero || null,
+      fechaNacimiento: raw.fechaNacimiento || null,
+      correo: raw.correo || null
+    }).subscribe({
+      next: () => {
+        this.showAgendadorForm = false;
+        this.openResultDialog('success', `El agendador ${raw.nombres} ${raw.apellidos} fue registrado exitosamente.`);
+      },
+      error: (err) => {
+        console.error(err);
+        this.openResultDialog('error', 'Error al registrar el agendador. Verifique que no exista un usuario con ese número de documento.');
+      }
+    });
   }
 
   toggleMedicoForm(): void {

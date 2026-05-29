@@ -1,3 +1,7 @@
+section.p-4 {
+  background: var(--color-bg-page);
+}
+
 @media (max-width: 720px) {
   section {
     padding: 18px !important;

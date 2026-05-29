@@ -1,7 +1,0 @@
-com\piedrazul\pacientes\application\PacienteServiceTest.class
-com\piedrazul\configuracion\application\FranjaHorariaServiceTest.class
-com\piedrazul\sesion\application\SesionServiceTest.class
-com\piedrazul\medicos\application\MedicoServiceTest.class
-com\piedrazul\citas\application\AgendamientoServiceTest.class
-com\piedrazul\configuracion\application\ConfiguracionServiceTest.class
-com\piedrazul\citas\application\CitaServiceTest.class

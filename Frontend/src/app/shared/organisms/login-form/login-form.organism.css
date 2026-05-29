@@ -137,14 +137,17 @@
 
 .toggle-password {
   position: absolute;
-  right: 12px;
+  right: 8px;
   background: none;
   border: none;
   color: var(--color-link-blue, #118a9b);
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
-  padding: 4px 8px;
+  padding: 8px 12px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
   transition: color 0.2s;
 }
 

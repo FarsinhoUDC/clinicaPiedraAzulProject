@@ -1,7 +1,7 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from '../../../core/services/auth.service';
 import { environment } from '../../../../environments/environment';
 import { LoginRequest, LoginResponse } from '../../../core/models/login.model';
@@ -66,12 +66,18 @@ export class LoginFormOrganism {
         }
 
         // 2. Autenticar y cargar perfil desde el Backend local
+        // Enviar el JWT de Keycloak para que el backend confíe en él
+        // y omita la validación BCrypt local.
         const request: LoginRequest = {
           numeroDocumento: documentoTrimmed,
           contrasena: contrasenaToUse
         };
 
-        this.http.post<any>(`${environment.apiBaseUrl}/sesion/login`, request).subscribe({
+        const kcHeaders = new HttpHeaders({
+          'Authorization': `Bearer ${kcResponse.access_token}`
+        });
+
+        this.http.post<any>(`${environment.apiBaseUrl}/sesion/login`, request, { headers: kcHeaders }).subscribe({
           next: (response) => {
             this.cargando = false;
             if (response.success && response.data) {

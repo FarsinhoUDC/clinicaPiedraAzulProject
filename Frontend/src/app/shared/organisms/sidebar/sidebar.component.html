@@ -1,7 +1,10 @@
 <aside class="organismo-sidebar" [class.sidebar-open]="sidebarOpen">
-  <div class="organismo-brand">
-    <span class="organismo-brand-badge">P</span>
-    <span>{{ brandName }}</span>
+  <div class="organismo-sidebar-header">
+    <div class="organismo-brand">
+      <span class="organismo-brand-badge">P</span>
+      <span>{{ brandName }}</span>
+    </div>
+    <button type="button" class="organismo-close-btn" (click)="close()" aria-label="Cerrar menú">&times;</button>
   </div>
   <nav class="organismo-menu">
     <a class="organismo-menu-item" routerLink="/inicio" routerLinkActive="active" (click)="close()" appTooltip="Volver a la página principal">Inicio</a>

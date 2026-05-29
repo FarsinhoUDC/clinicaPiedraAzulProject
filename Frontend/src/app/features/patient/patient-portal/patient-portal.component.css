@@ -1,5 +1,6 @@
 .portal-page {
   padding: 28px 34px 34px;
+  background: var(--color-bg-page);
 }
 
 .portal-card {
@@ -54,6 +55,11 @@
   color: var(--color-primary-light);
 }
 
+.portal-toolbar atom-select {
+  flex: 1;
+  min-width: 0;
+}
+
 .portal-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -79,12 +85,18 @@
   color: #7790a0;
 }
 
-.slot-row,
-.portal-actions {
+.slot-row {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
   margin-top: 16px;
+}
+
+.portal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
 }
 
 .slot-pill {

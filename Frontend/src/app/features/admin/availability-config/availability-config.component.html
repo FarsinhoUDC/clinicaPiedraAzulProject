@@ -1,109 +1,125 @@
-<section class="config-page">
+<section class="config-page container-fluid px-2 px-sm-3">
   <div class="config-card">
     <div class="config-header">
       <h2>Configuracion del Sistema</h2>
       <p>Parametros globales y disponibilidad de medicos</p>
     </div>
 
-    <div class="global-panel">
-      <div class="global-left">
-        <h3>Parametros globales de agendamiento</h3>
-        <label>Ventana de agendamiento *</label>
-        <div class="window-row">
-          <atom-input type="number" [formControl]="form.controls.ventanaSemanas" size="sm"></atom-input>
-          <span>semanas</span>
-          <atom-button variant="primary" size="sm" (onClick)="requestSaveSystemWindow()">Guardar</atom-button>
+    <div class="global-panel p-2 p-sm-3 mb-2 mb-sm-3">
+      <div class="row g-2 g-sm-3">
+        <div class="col-12">
+          <div class="global-left">
+            <h3>Parametros globales de agendamiento</h3>
+            <label>Ventana de agendamiento *</label>
+            <div class="window-row d-flex flex-wrap align-items-center gap-2">
+              <atom-input type="number" [formControl]="form.controls.ventanaSemanas" size="sm"></atom-input>
+              <span>semanas</span>
+              <atom-button variant="primary" size="sm" (onClick)="requestSaveSystemWindow()">Guardar</atom-button>
+            </div>
+            <div class="field-error" *ngIf="form.controls.ventanaSemanas.touched && form.controls.ventanaSemanas.invalid">Debe ingresar una ventana valida entre 1 y 52 semanas.</div>
+            <div class="window-preview">Citas habilitadas hasta el {{ appointmentWindowEnd }}</div>
+          </div>
         </div>
-        <div class="field-error" *ngIf="form.controls.ventanaSemanas.touched && form.controls.ventanaSemanas.invalid">Debe ingresar una ventana valida entre 1 y 52 semanas.</div>
-        <div class="window-preview">Citas habilitadas hasta el {{ appointmentWindowEnd }}</div>
-      </div>
-      <div class="global-right">
-        <p>Define cuantas semanas hacia adelante pueden verse las fechas disponibles para agendar.</p>
-        <p>Rango permitido: 1 - 52 semanas</p>
+        <div class="col-12">
+          <div class="global-right">
+            <p>Define cuantas semanas hacia adelante pueden verse las fechas disponibles para agendar.</p>
+            <p>Rango permitido: 1 - 52 semanas</p>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="availability-panel">
-      <div class="availability-head">
+    <div class="availability-panel p-2 p-sm-3 mb-2 mb-sm-3">
+      <div class="availability-head d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2 mb-sm-3">
         <h3>Disponibilidad por medico / terapista</h3>
-        <atom-button variant="secondary" size="sm" (onClick)="toggleMedicoForm()">+ Agregar profesional</atom-button>
+        <div class="d-flex flex-wrap gap-2">
+          <atom-button variant="secondary" size="sm" (onClick)="toggleMedicoForm()">+ Agregar profesional</atom-button>
+          <atom-button variant="secondary" size="sm" (onClick)="toggleAgendadorForm()">+ Agregar agendador</atom-button>
+        </div>
       </div>
 
       <form [formGroup]="form" class="availability-grid">
-        <div class="availability-left">
-          <div class="config-field">
-            <label>Seleccione el profesional a configurar</label>
-            <atom-select formControlName="medicoId" [options]="doctorOptions" (onSelectChange)="updatePreview()"></atom-select>
-            <div class="field-error" *ngIf="form.controls.medicoId.touched && form.controls.medicoId.invalid">Debe seleccionar un medico.</div>
-          </div>
+        <div class="row g-3">
+          <div class="col-12">
+            <div class="availability-left d-flex flex-column gap-3">
 
-          <div class="config-field">
-            <label>Dias de atencion *</label>
-            <atom-day-picker
-              [days]="dayOptions"
-              [selectedDays]="daysArray.value"
-              (onToggleDay)="toggleDay($event); updatePreview()">
-            </atom-day-picker>
-          </div>
-          <div class="field-error" *ngIf="daysArray.touched && daysArray.length === 0">Debe seleccionar al menos un dia.</div>
+              <div class="config-field d-flex flex-column gap-1">
+                <label>Seleccione el profesional a configurar</label>
+                <atom-select formControlName="medicoId" [options]="doctorOptions" (onSelectChange)="updatePreview()"></atom-select>
+                <div class="field-error" *ngIf="form.controls.medicoId.touched && form.controls.medicoId.invalid">Debe seleccionar un medico.</div>
+              </div>
 
-          <div class="time-grid">
-            <div class="config-field">
-              <label>Hora de inicio *</label>
-              <atom-input type="time" formControlName="horaInicio" (onBlur)="updatePreview()"></atom-input>
-              <div class="field-error" *ngIf="form.controls.horaInicio.touched && form.controls.horaInicio.invalid">Debe ingresar la hora de inicio.</div>
+              <div class="config-field d-flex flex-column gap-1">
+                <label>Dias de atencion *</label>
+                <atom-day-picker
+                  [days]="dayOptions"
+                  [selectedDays]="daysArray.value"
+                  (onToggleDay)="toggleDay($event); updatePreview()">
+                </atom-day-picker>
+              </div>
+              <div class="field-error" *ngIf="daysArray.touched && daysArray.length === 0">Debe seleccionar al menos un dia.</div>
+
+              <div class="row g-2">
+                <div class="col-12 col-sm-6 config-field d-flex flex-column gap-1">
+                  <label>Hora de inicio *</label>
+                  <atom-input type="time" formControlName="horaInicio" (onBlur)="updatePreview()"></atom-input>
+                  <div class="field-error" *ngIf="form.controls.horaInicio.touched && form.controls.horaInicio.invalid">Debe ingresar la hora de inicio.</div>
+                </div>
+                <div class="col-12 col-sm-6 config-field d-flex flex-column gap-1">
+                  <label>Hora de fin *</label>
+                  <atom-input type="time" formControlName="horaFin" (onBlur)="updatePreview()"></atom-input>
+                  <div class="field-error" *ngIf="form.controls.horaFin.touched && form.controls.horaFin.invalid">Debe ingresar la hora de fin.</div>
+                </div>
+              </div>
+              <div class="field-error" *ngIf="form.errors?.['invalidTimeRange']">{{ form.errors?.['invalidTimeRange'] }}</div>
+
+              <div class="config-field d-flex flex-column gap-1">
+                <label>Intervalo entre citas (minutos) *</label>
+                <div class="chip-row d-flex flex-wrap gap-2">
+                  <button
+                    *ngFor="let interval of intervalOptions"
+                    type="button"
+                    class="interval-chip"
+                    [class.active]="form.controls.intervaloMinutos.value === interval"
+                    (click)="selectInterval(interval)">
+                    {{ interval }} min
+                  </button>
+                </div>
+              </div>
+
+              <div class="config-actions d-flex flex-column flex-sm-row gap-2">
+                <atom-button variant="secondary" (onClick)="requestCancel()">Cancelar</atom-button>
+                <atom-button variant="primary" (onClick)="requestSaveAvailability()">Guardar cambios</atom-button>
+              </div>
             </div>
-            <div class="config-field">
-              <label>Hora de fin *</label>
-              <atom-input type="time" formControlName="horaFin" (onBlur)="updatePreview()"></atom-input>
-              <div class="field-error" *ngIf="form.controls.horaFin.touched && form.controls.horaFin.invalid">Debe ingresar la hora de fin.</div>
-            </div>
-          </div>
-          <div class="field-error" *ngIf="form.errors?.['invalidTimeRange']">{{ form.errors?.['invalidTimeRange'] }}</div>
-
-          <div class="config-field">
-            <label>Intervalo entre citas (minutos) *</label>
-            <div class="chip-row">
-              <button
-                *ngFor="let interval of intervalOptions"
-                type="button"
-                class="interval-chip"
-                [class.active]="form.controls.intervaloMinutos.value === interval"
-                (click)="selectInterval(interval)">
-                {{ interval }} min
-              </button>
-            </div>
           </div>
 
-          <div class="config-actions">
-            <atom-button variant="secondary" (onClick)="requestCancel()">Cancelar</atom-button>
-            <atom-button variant="primary" (onClick)="requestSaveAvailability()">Guardar cambios</atom-button>
-          </div>
-        </div>
+          <div class="col-12">
+            <div class="availability-right">
+              <h4>Vista previa de franjas generadas</h4>
+              <div class="preview-card">
+                <strong>{{ selectedDoctorName }}</strong>
+                <div>{{ daysArray.value.join(', ') || 'Sin dias seleccionados' }}</div>
+                <div>{{ form.controls.horaInicio.value }} - {{ form.controls.horaFin.value }}</div>
+                <div>Intervalo {{ form.controls.intervaloMinutos.value }} min</div>
 
-        <div class="availability-right">
-          <h4>Vista previa de franjas generadas</h4>
-          <div class="preview-card">
-            <strong>{{ selectedDoctorName }}</strong>
-            <div>{{ daysArray.value.join(', ') || 'Sin dias seleccionados' }}</div>
-            <div>{{ form.controls.horaInicio.value }} - {{ form.controls.horaFin.value }}</div>
-            <div>Intervalo {{ form.controls.intervaloMinutos.value }} min</div>
+                <div class="preview-highlight">
+                  <strong>{{ previewSlotsPerDay }} citas/dia</strong>
+                  <span>{{ weeklySlots }} citas / semana</span>
+                </div>
 
-            <div class="preview-highlight">
-              <strong>{{ previewSlotsPerDay }} citas/dia</strong>
-              <span>{{ weeklySlots }} citas / semana</span>
+                <p>Las citas ya reservadas no seran afectadas. Solo se aplicara a nuevas franjas.</p>
+              </div>
             </div>
-
-            <p>Las citas ya reservadas no seran afectadas. Solo se aplicara a nuevas franjas.</p>
           </div>
         </div>
       </form>
     </div>
 
-    <div class="audit-panel">
+    <div class="audit-panel p-2 p-sm-3">
       <h3>Ultimos cambios - Registro de auditoria</h3>
-      <div class="audit-table-wrap">
-        <table class="audit-table">
+      <div class="audit-table-wrap overflow-auto">
+        <table class="audit-table table table-sm mb-0">
           <thead>
             <tr>
               <th>Fecha</th>
@@ -114,8 +130,8 @@
           </thead>
           <tbody>
             <tr *ngFor="let log of auditLog">
-              <td>{{ log.timestamp }}</td>
-              <td>{{ log.actor }}</td>
+              <td class="text-nowrap">{{ log.timestamp }}</td>
+              <td class="text-nowrap">{{ log.actor }}</td>
               <td>
                 <span class="audit-pill" [ngClass]="auditClass(log.action)">{{ log.action }}</span>
               </td>
@@ -126,8 +142,6 @@
       </div>
     </div>
 
-    
-    
     <div class="success-message success-chip" *ngIf="message">{{ message }}</div>
     <div class="field-error" *ngIf="errorMessage">{{ errorMessage }}</div>
   </div>
@@ -145,6 +159,90 @@
     <p>{{ dialogMessage }}</p>
   </atom-dialog>
 
+  <div class="patient-dialog-backdrop" *ngIf="showAgendadorForm" (click)="toggleAgendadorForm()">
+    <div class="patient-dialog-card" (click)="$event.stopPropagation()">
+      <div class="patient-register-panel">
+        <div class="patient-register-intro">
+          <strong>Crear Agendador</strong>
+          <span style="font-size: 0.9rem; color: #7a92a2;">Registra un nuevo agendador en el sistema</span>
+        </div>
+
+        <form [formGroup]="agendadorForm" class="patient-form" (ngSubmit)="submitAgendadorForm()">
+          <div class="row g-2 g-sm-3">
+            <div class="col-12 col-sm-6 patient-field d-flex flex-column gap-1">
+              <label>Número de Documento *</label>
+              <atom-input formControlName="numeroDocumento" placeholder="C.C., T.I., etc." size="md"></atom-input>
+              <div class="field-error" *ngIf="agendadorForm.controls.numeroDocumento.touched && agendadorForm.controls.numeroDocumento.invalid">
+                <ng-container *ngIf="agendadorForm.controls.numeroDocumento.errors?.['required']">El número de documento es obligatorio.</ng-container>
+                <ng-container *ngIf="agendadorForm.controls.numeroDocumento.errors?.['minlength']">Debe tener al menos 5 dígitos.</ng-container>
+                <ng-container *ngIf="agendadorForm.controls.numeroDocumento.errors?.['digitsOnly']">Solo se permiten números.</ng-container>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 patient-field d-flex flex-column gap-1">
+              <label>Tipo de Documento</label>
+              <atom-select placeholder="Cédula de Ciudadanía"></atom-select>
+            </div>
+
+            <div class="col-12 col-sm-6 patient-field d-flex flex-column gap-1">
+              <label>Nombre *</label>
+              <atom-input formControlName="nombres" placeholder="Nombre del agendador" size="md"></atom-input>
+              <div class="field-error" *ngIf="agendadorForm.controls.nombres.touched && agendadorForm.controls.nombres.invalid">
+                <ng-container *ngIf="agendadorForm.controls.nombres.errors?.['required']">El nombre es obligatorio.</ng-container>
+                <ng-container *ngIf="agendadorForm.controls.nombres.errors?.['lettersOnly']">Solo se permiten letras.</ng-container>
+                <ng-container *ngIf="agendadorForm.controls.nombres.errors?.['noMaliciousChars']">El campo contiene caracteres no permitidos.</ng-container>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 patient-field d-flex flex-column gap-1">
+              <label>Apellido *</label>
+              <atom-input formControlName="apellidos" placeholder="Apellido del agendador" size="md"></atom-input>
+              <div class="field-error" *ngIf="agendadorForm.controls.apellidos.touched && agendadorForm.controls.apellidos.invalid">
+                <ng-container *ngIf="agendadorForm.controls.apellidos.errors?.['required']">El apellido es obligatorio.</ng-container>
+                <ng-container *ngIf="agendadorForm.controls.apellidos.errors?.['lettersOnly']">Solo se permiten letras.</ng-container>
+                <ng-container *ngIf="agendadorForm.controls.apellidos.errors?.['noMaliciousChars']">El campo contiene caracteres no permitidos.</ng-container>
+              </div>
+            </div>
+
+            <div class="col-12 col-sm-6 patient-field d-flex flex-column gap-1">
+              <label>Celular *</label>
+              <atom-input formControlName="celular" placeholder="Número de celular (opcional)" size="md"></atom-input>
+              <div class="field-error" *ngIf="agendadorForm.controls.celular.touched && agendadorForm.controls.celular.invalid">
+                <ng-container *ngIf="agendadorForm.controls.celular.errors?.['digitsOnly']">Solo se permiten números.</ng-container>
+                <ng-container *ngIf="agendadorForm.controls.celular.errors?.['colombianCellphone']">Debe ser un número celular colombiano válido (10 dígitos, empieza con 3).</ng-container>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 patient-field d-flex flex-column gap-1">
+              <label>Género *</label>
+              <atom-select formControlName="genero" [options]="genderSelectOptions"></atom-select>
+            </div>
+
+            <div class="col-12 col-sm-6 patient-field d-flex flex-column gap-1">
+              <label>Fecha de Nacimiento *</label>
+              <atom-input type="date" formControlName="fechaNacimiento" size="md"></atom-input>
+              <div class="field-error" *ngIf="agendadorForm.controls.fechaNacimiento.touched && agendadorForm.controls.fechaNacimiento.invalid">
+                <ng-container *ngIf="agendadorForm.controls.fechaNacimiento.errors?.['notFutureDate']">La fecha no puede ser futura.</ng-container>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 patient-field d-flex flex-column gap-1">
+              <label>Correo Electrónico (opcional)</label>
+              <atom-input type="email" formControlName="correo" placeholder="correo@ejemplo.com (opcional)" size="md"></atom-input>
+              <div class="field-error" *ngIf="agendadorForm.controls.correo.touched && agendadorForm.controls.correo.invalid">
+                <ng-container *ngIf="agendadorForm.controls.correo.errors?.['email']">Debe ingresar un correo electrónico válido.</ng-container>
+              </div>
+            </div>
+          </div>
+
+          <div class="patient-help" style="margin-top: 18px; padding: 14px; background: #e8f5e9; color: #1f8d49; border-radius: 8px; font-size: 0.85rem;">
+            <strong>Nota:</strong> El número de documento será utilizado como contraseña temporal. Se recomienda cambiar la contraseña después del primer inicio de sesión.
+          </div>
+
+          <div class="patient-actions d-flex justify-content-stretch mt-4">
+            <atom-button variant="primary" type="submit" size="lg" [block]="true" style="width: 100%;">Crear Agendador</atom-button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <div class="patient-dialog-backdrop" *ngIf="showMedicoForm" (click)="toggleMedicoForm()">
     <div class="patient-dialog-card" (click)="$event.stopPropagation()">
       <div class="patient-register-panel">
@@ -154,8 +252,8 @@
         </div>
 
         <form [formGroup]="medicoForm" class="patient-form" (ngSubmit)="submitMedicoForm()">
-          <div class="patient-grid">
-            <div class="patient-field">
+          <div class="row g-2 g-sm-3">
+            <div class="col-12 col-sm-6 patient-field d-flex flex-column gap-1">
               <label>Número de Documento *</label>
               <atom-input formControlName="numeroDocumento" placeholder="C.C., T.I., etc." size="md"></atom-input>
               <div class="field-error" *ngIf="medicoForm.controls.numeroDocumento.touched && medicoForm.controls.numeroDocumento.invalid">
@@ -164,12 +262,12 @@
                 <ng-container *ngIf="medicoForm.controls.numeroDocumento.errors?.['digitsOnly']">Solo se permiten números.</ng-container>
               </div>
             </div>
-            <div class="patient-field">
+            <div class="col-12 col-sm-6 patient-field d-flex flex-column gap-1">
               <label>Tipo de Documento</label>
               <atom-select placeholder="Cédula de Ciudadanía"></atom-select>
             </div>
-            
-            <div class="patient-field">
+
+            <div class="col-12 col-sm-6 patient-field d-flex flex-column gap-1">
               <label>Nombre *</label>
               <atom-input formControlName="nombres" placeholder="Tu nombre" size="md"></atom-input>
               <div class="field-error" *ngIf="medicoForm.controls.nombres.touched && medicoForm.controls.nombres.invalid">
@@ -178,7 +276,7 @@
                 <ng-container *ngIf="medicoForm.controls.nombres.errors?.['noMaliciousChars']">El campo contiene caracteres no permitidos.</ng-container>
               </div>
             </div>
-            <div class="patient-field">
+            <div class="col-12 col-sm-6 patient-field d-flex flex-column gap-1">
               <label>Apellido *</label>
               <atom-input formControlName="apellidos" placeholder="Tu apellido" size="md"></atom-input>
               <div class="field-error" *ngIf="medicoForm.controls.apellidos.touched && medicoForm.controls.apellidos.invalid">
@@ -188,7 +286,7 @@
               </div>
             </div>
 
-            <div class="patient-field">
+            <div class="col-12 col-sm-6 patient-field d-flex flex-column gap-1">
               <label>Celular *</label>
               <atom-input formControlName="celular" placeholder="Número de celular" size="md"></atom-input>
               <div class="field-error" *ngIf="medicoForm.controls.celular.touched && medicoForm.controls.celular.invalid">
@@ -197,7 +295,7 @@
                 <ng-container *ngIf="medicoForm.controls.celular.errors?.['colombianCellphone']">Debe ser un número celular colombiano válido (10 dígitos, empieza con 3).</ng-container>
               </div>
             </div>
-            <div class="patient-field">
+            <div class="col-12 col-sm-6 patient-field d-flex flex-column gap-1">
               <label>Género *</label>
               <atom-select formControlName="genero" [options]="genderSelectOptions"></atom-select>
               <div class="field-error" *ngIf="medicoForm.controls.genero.touched && medicoForm.controls.genero.invalid">
@@ -205,7 +303,7 @@
               </div>
             </div>
 
-            <div class="patient-field">
+            <div class="col-12 col-sm-6 patient-field d-flex flex-column gap-1">
               <label>Fecha de Nacimiento *</label>
               <atom-input type="date" formControlName="fechaNacimiento" size="md"></atom-input>
               <div class="field-error" *ngIf="medicoForm.controls.fechaNacimiento.touched && medicoForm.controls.fechaNacimiento.invalid">
@@ -213,27 +311,27 @@
                 <ng-container *ngIf="medicoForm.controls.fechaNacimiento.errors?.['notFutureDate']">La fecha no puede ser futura.</ng-container>
               </div>
             </div>
-            <div class="patient-field">
+            <div class="col-12 col-sm-6 patient-field d-flex flex-column gap-1">
               <label>Especialidad</label>
               <atom-input formControlName="especialidad" placeholder="Ej: Pediatría (opcional)" size="md"></atom-input>
             </div>
-            
-            <div class="patient-field" style="grid-column: span 2;">
+
+            <div class="col-12 patient-field d-flex flex-column gap-1">
               <label>Correo Electrónico</label>
               <atom-input type="email" formControlName="correo" placeholder="tu@correo.com (opcional)" size="md"></atom-input>
               <div class="field-error" *ngIf="medicoForm.controls.correo.touched && medicoForm.controls.correo.invalid">
                 <ng-container *ngIf="medicoForm.controls.correo.errors?.['email']">Debe ingresar un correo electrónico válido.</ng-container>
               </div>
             </div>
-            <div class="patient-field">
+            <div class="col-12 col-sm-6 patient-field d-flex flex-column gap-1">
               <label>Descripción</label>
               <atom-input formControlName="descripcion" placeholder="Breve descripción del especialista" size="md"></atom-input>
             </div>
-            <div class="patient-field">
+            <div class="col-12 col-sm-6 patient-field d-flex flex-column gap-1">
               <label>Años de experiencia</label>
               <atom-input formControlName="anosExperiencia" placeholder="Ej: 8 años" size="md"></atom-input>
             </div>
-            <div class="patient-field" style="grid-column: span 2;">
+            <div class="col-12 patient-field d-flex flex-column gap-1">
               <label>URL de foto</label>
               <atom-input formControlName="fotoUrl" placeholder="https://ejemplo.com/foto.jpg (opcional)" size="md"></atom-input>
             </div>
@@ -243,7 +341,7 @@
             <strong>Nota:</strong> Tu número de documento será utilizado como contraseña temporal. Se recomienda cambiar la contraseña después del primer inicio de sesión.
           </div>
 
-          <div class="patient-actions" style="justify-content: stretch; margin-top: 24px;">
+          <div class="patient-actions d-flex justify-content-stretch mt-4">
             <atom-button variant="primary" type="submit" size="lg" [block]="true" style="width: 100%;">Crear Cuenta</atom-button>
           </div>
         </form>

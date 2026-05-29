@@ -1,6 +1,6 @@
 <header class="organismo-topbar">
   <div class="d-flex align-items-center gap-3">
-    <button type="button" *ngIf="isLoggedIn" class="navbar-toggler border-0 p-2" style="background: rgba(255,255,255,0.08); border-radius: 10px; color: #fff;" (click)="toggleMenu.emit()" appTooltip="Abrir menú de navegación">
+    <button type="button" *ngIf="isLoggedIn" class="navbar-toggler" (click)="toggleMenu.emit()" appTooltip="Abrir menú de navegación">
       <span class="navbar-toggler-icon"></span>
     </button>
     <a routerLink="/inicio" class="navbar-brand fw-bold" style="font-family: Georgia, 'Times New Roman', serif;" appTooltip="Ir a la página de inicio">Piedra Azul</a>

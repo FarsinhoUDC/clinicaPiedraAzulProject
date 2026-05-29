@@ -1,7 +1,7 @@
-C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\test\java\com\piedrazul\pacientes\application\PacienteServiceTest.java
-C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\test\java\com\piedrazul\citas\application\AgendamientoServiceTest.java
-C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\test\java\com\piedrazul\medicos\application\MedicoServiceTest.java
-C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\test\java\com\piedrazul\configuracion\application\ConfiguracionServiceTest.java
-C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\test\java\com\piedrazul\citas\application\CitaServiceTest.java
-C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\test\java\com\piedrazul\configuracion\application\FranjaHorariaServiceTest.java
-C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\test\java\com\piedrazul\sesion\application\SesionServiceTest.java
+/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 3)/piedrazul-backend/src/test/java/com/piedrazul/citas/application/CitaServiceTest.java
+/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 3)/piedrazul-backend/src/test/java/com/piedrazul/citas/application/AgendamientoServiceTest.java
+/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 3)/piedrazul-backend/src/test/java/com/piedrazul/sesion/application/SesionServiceTest.java
+/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 3)/piedrazul-backend/src/test/java/com/piedrazul/pacientes/application/PacienteServiceTest.java
+/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 3)/piedrazul-backend/src/test/java/com/piedrazul/configuracion/application/ConfiguracionServiceTest.java
+/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 3)/piedrazul-backend/src/test/java/com/piedrazul/configuracion/application/FranjaHorariaServiceTest.java
+/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 3)/piedrazul-backend/src/test/java/com/piedrazul/medicos/application/MedicoServiceTest.java

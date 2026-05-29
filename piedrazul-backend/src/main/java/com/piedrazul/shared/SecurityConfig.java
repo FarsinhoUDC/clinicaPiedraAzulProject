@@ -75,6 +75,9 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.PUT,    "/api/medicos/**").hasAnyRole("AGENDADOR", "MEDICO", "ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/api/medicos/**").hasAnyRole("AGENDADOR", "MEDICO", "ADMIN")
 
+                // ── Agendadores — solo ADMIN puede crear ───────────────────
+                .requestMatchers(HttpMethod.POST, "/api/agendadores/**").hasRole("ADMIN")
+
                 // ── Pacientes (lectura) — cualquier rol autenticado ────────
                 .requestMatchers(HttpMethod.GET, "/api/pacientes/**")
                     .hasAnyRole("AGENDADOR", "MEDICO", "ADMIN", "PACIENTE")

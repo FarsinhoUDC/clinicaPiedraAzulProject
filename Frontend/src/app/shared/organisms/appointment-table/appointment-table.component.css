@@ -2,12 +2,13 @@
   background: var(--color-bg-white);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
-  overflow: hidden;
+  overflow-x: auto;
 }
 
 .consult-table {
   width: 100%;
   border-collapse: collapse;
+  min-width: 600px;
 }
 
 .consult-table thead th {
@@ -18,6 +19,7 @@
   letter-spacing: 0.08em;
   font-size: 0.74rem;
   text-align: left;
+  white-space: nowrap;
 }
 
 .consult-table tbody td {
@@ -40,11 +42,29 @@
   background: var(--color-bg-white);
   color: #49697e;
   border-radius: var(--radius-sm);
-  padding: 8px 14px;
+  padding: 10px 16px;
+  min-height: 44px;
   cursor: pointer;
   transition: background 0.15s;
+  white-space: nowrap;
 }
 
 .action-button:hover {
   background: var(--color-bg-card);
+}
+
+@media (max-width: 768px) {
+  .consult-table-card {
+    border-radius: var(--radius-md);
+  }
+
+  .consult-table thead th,
+  .consult-table tbody td {
+    padding: 10px 12px;
+  }
+
+  .action-button {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+  }
 }

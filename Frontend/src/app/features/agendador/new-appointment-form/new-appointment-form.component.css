@@ -1,5 +1,6 @@
 .form-page {
   padding: 28px 34px 34px;
+  background: var(--color-bg-page);
 }
 
 .form-card {

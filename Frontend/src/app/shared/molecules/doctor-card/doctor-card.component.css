@@ -6,6 +6,13 @@
   border-radius: var(--radius-lg);
   padding: 18px;
   box-shadow: var(--shadow-card);
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.doctor-card:hover {
+  border-color: var(--color-accent);
+  box-shadow: 0 2px 12px rgba(22, 183, 179, 0.12);
 }
 
 .doctor-card span {

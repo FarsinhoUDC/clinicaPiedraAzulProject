@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.piedrazul.citas.application.AgendamientoServiceTest
 -------------------------------------------------------------------------------
-Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.207 s -- in com.piedrazul.citas.application.AgendamientoServiceTest
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.081 s -- in com.piedrazul.citas.application.AgendamientoServiceTest

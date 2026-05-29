@@ -13,6 +13,11 @@
   color: var(--color-link);
   transition: color 0.3s;
   text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
 }
 
 .social-link:hover {
@@ -26,4 +31,10 @@
 
 .footer-copyright a {
   text-decoration: none;
+}
+
+@media (max-width: 576px) {
+  .app-footer .row {
+    text-align: center !important;
+  }
 }

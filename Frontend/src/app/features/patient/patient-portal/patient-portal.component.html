@@ -35,6 +35,10 @@
         [dayUnavailableMessage]="dayUnavailableMessage"
         (onSelectSlot)="onSlotSelected($event)">
       </molecule-slot-picker>
+      <div class="portal-actions">
+        <atom-button variant="secondary" (onClick)="backToDoctorSelection()">← Volver</atom-button>
+        <atom-button variant="primary" (onClick)="goToConfirmation()" [disabled]="!wizardStore.selectedSlot()">Continuar →</atom-button>
+      </div>
     </div>
 
     <!-- Paso 3: Confirmación -->

@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 
-import { agendadorGuard, adminGuard, medicoGuard, pacienteGuard, roleRedirectGuard } from './core/guards/auth.guard';
+import { agendadorGuard, adminGuard, medicoGuard, pacienteGuard } from './core/guards/auth.guard';
 import { AvailabilityConfigComponent } from './features/admin/availability-config/availability-config.component';
 import { UserManagementComponent } from './features/admin/user-management/user-management.component';
 import { AppointmentSearchComponent } from './features/agendador/appointment-search/appointment-search.component';
@@ -16,7 +16,7 @@ export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'inicio' },
 
   // Página de inicio pública — visible para todos (logueados y no logueados)
-  { path: 'inicio', component: HomeComponent, canActivate: [roleRedirectGuard] },
+  { path: 'inicio', component: HomeComponent },
   { path: 'paciente/registro', component: PatientRegistrationComponent },
 
   // Solo MEDICO / AGENDADOR

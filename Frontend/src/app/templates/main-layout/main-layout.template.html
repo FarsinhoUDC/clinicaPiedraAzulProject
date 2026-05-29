@@ -1,4 +1,4 @@
-<div class="d-flex min-vh-100" style="background: #eaf0f5;">
+<div class="d-flex min-vh-100">
   <organismo-sidebar
     *ngIf="isLoggedIn"
     [class.sidebar-expanded]="sidebarOpen"
@@ -13,7 +13,7 @@
     (logout)="onLogout.emit()">
   </organismo-sidebar>
 
-  <div class="d-flex flex-column flex-grow-1 min-vh-100">
+  <div class="d-flex flex-column flex-grow-1 min-vh-100 min-width-0">
     <organismo-header
       [isLoggedIn]="isLoggedIn"
       [userLabel]="userLabel"

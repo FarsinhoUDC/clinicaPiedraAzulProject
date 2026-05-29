@@ -1,5 +1,12 @@
 .form-select {
   border-radius: var(--radius-sm);
+  max-width:fit-content;
+  text-overflow: ellipsis;
+}
+
+:host {
+  display: block;
+  min-width: 0;
 }
 .form-select:focus {
   border-color: var(--focus-color);

@@ -1,5 +1,5 @@
-<article class="doctor-card">
+<article class="doctor-card" (click)="select()">
   <strong>{{ doctor.nombres }} {{ doctor.apellidos }}</strong>
   <span>{{ doctor.especialidad || 'Especialidad general' }}</span>
-  <atom-button variant="primary" size="sm" (onClick)="select()">{{ buttonText }}</atom-button>
+  <atom-button variant="primary" size="sm" (onClick)="select(); $event.stopPropagation()">{{ buttonText }}</atom-button>
 </article>
