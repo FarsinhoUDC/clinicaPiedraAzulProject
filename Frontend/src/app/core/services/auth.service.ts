@@ -1,14 +1,52 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { BehaviorSubject } from 'rxjs';
 import { keycloak } from './keycloak-init';
+import { environment } from '../../../environments/environment';
 
 export type AppRole = 'ADMIN' | 'AGENDADOR' | 'MEDICO' | 'PACIENTE';
 
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+  private readonly showLoginSubject = new BehaviorSubject<boolean>(false);
+  showLogin$ = this.showLoginSubject.asObservable();
 
-  constructor(private readonly router: Router) {}
+  constructor(
+    private readonly router: Router,
+    private readonly http: HttpClient
+  ) {}
+
+  openLoginModal(): void {
+    this.showLoginSubject.next(true);
+  }
+
+  closeLoginModal(): void {
+    this.showLoginSubject.next(false);
+  }
+
+  /**
+   * Realiza una petición POST directa al endpoint de Keycloak usando ROPC Flow (Direct Grant)
+   * para obtener un token de acceso y actualizar el estado de autenticación local.
+   */
+  loginWithCredentials(numeroDocumento: string, contrasena: string) {
+    const url = `${environment.keycloak.url}/realms/${environment.keycloak.realm}/protocol/openid-connect/token`;
+    
+    const body = new URLSearchParams();
+    body.set('grant_type', 'password');
+    body.set('client_id', environment.keycloak.clientId);
+    body.set('username', numeroDocumento);
+    body.set('password', contrasena);
+    body.set('scope', 'openid');
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/x-www-form-urlencoded'
+    });
+
+    return this.http.post<any>(url, body.toString(), { headers });
+  }
+
 
   /** Retorna true si hay una sesión Keycloak activa con token válido. */
   isAuthenticated(): boolean {
@@ -86,6 +124,10 @@ export class AuthService {
 
   /** Cierra la sesión en Keycloak y redirige al inicio de la app. */
   logout(): void {
+    localStorage.removeItem('kc_token');
+    localStorage.removeItem('kc_refreshToken');
+    localStorage.removeItem('kc_idToken');
+    localStorage.removeItem('piedrazul_user');
     keycloak.logout({ redirectUri: window.location.origin });
   }
 

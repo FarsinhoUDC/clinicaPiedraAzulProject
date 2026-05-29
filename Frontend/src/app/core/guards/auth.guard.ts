@@ -9,10 +9,11 @@ import { keycloak } from '../services/keycloak-init';
  */
 export const authGuard: CanActivateFn = () => {
   const auth = inject(AuthService);
+  const router = inject(Router);
   if (auth.isAuthenticated()) return true;
 
-  keycloak.login({ locale: 'es' });
-  return false;
+  auth.openLoginModal();
+  return router.parseUrl('/inicio');
 };
 
 /**
@@ -24,8 +25,8 @@ export const agendadorGuard: CanActivateFn = () => {
   const router = inject(Router);
 
   if (!auth.isAuthenticated()) {
-    keycloak.login({ locale: 'es' });
-    return false;
+    auth.openLoginModal();
+    return router.parseUrl('/inicio');
   }
 
   const rol = auth.getRole();
@@ -43,8 +44,8 @@ export const adminGuard: CanActivateFn = () => {
   const router = inject(Router);
 
   if (!auth.isAuthenticated()) {
-    keycloak.login({ locale: 'es' });
-    return false;
+    auth.openLoginModal();
+    return router.parseUrl('/inicio');
   }
 
   const rol = auth.getRole();
@@ -63,8 +64,8 @@ export const pacienteGuard: CanActivateFn = () => {
   const router = inject(Router);
 
   if (!auth.isAuthenticated()) {
-    keycloak.login({ locale: 'es' });
-    return false;
+    auth.openLoginModal();
+    return router.parseUrl('/inicio');
   }
 
   const rol = auth.getRole();
@@ -82,8 +83,8 @@ export const medicoGuard: CanActivateFn = () => {
   const router = inject(Router);
 
   if (!auth.isAuthenticated()) {
-    keycloak.login({ locale: 'es' });
-    return false;
+    auth.openLoginModal();
+    return router.parseUrl('/inicio');
   }
 
   const rol = auth.getRole();

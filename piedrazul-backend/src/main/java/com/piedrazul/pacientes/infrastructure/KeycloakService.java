@@ -59,7 +59,7 @@ public class KeycloakService {
             UsersResource usersResource = realmResource.users();
 
             // Verificar si el usuario ya existe
-            List<UserRepresentation> existingUsers = usersResource.search(req.getNumeroDocumento());
+            List<UserRepresentation> existingUsers = usersResource.search(req.getNumeroDocumento(), true);
             if (!existingUsers.isEmpty()) {
                 log.warn("El usuario {} ya existe en Keycloak", req.getNumeroDocumento());
                 return; // Si existe, no lo volvemos a crear (idempotencia)
@@ -94,6 +94,9 @@ public class KeycloakService {
 
                 // Obtener ID del usuario recién creado para asignarle roles
                 String userId = response.getLocation().getPath().replaceAll(".*/([^/]+)$", "$1");
+
+                // Establecer la contraseña explícitamente (algunas configuraciones/versiones de Keycloak ignoran la lista en el UserRepresentation)
+                usersResource.get(userId).resetPassword(credential);
 
                 // Asignar rol PACIENTE
                 asignarRolPaciente(realmResource, userId);

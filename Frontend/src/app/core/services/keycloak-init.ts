@@ -12,31 +12,76 @@ export const keycloak = new Keycloak({
   clientId: environment.keycloak.clientId
 });
 
+// Registrar eventos de Keycloak para mantener automáticamente sincronizado el localStorage
+keycloak.onAuthSuccess = () => {
+  if (keycloak.token) localStorage.setItem('kc_token', keycloak.token);
+  if (keycloak.refreshToken) localStorage.setItem('kc_refreshToken', keycloak.refreshToken);
+  if (keycloak.idToken) localStorage.setItem('kc_idToken', keycloak.idToken);
+};
+
+keycloak.onAuthRefreshSuccess = () => {
+  if (keycloak.token) localStorage.setItem('kc_token', keycloak.token);
+  if (keycloak.refreshToken) localStorage.setItem('kc_refreshToken', keycloak.refreshToken);
+  if (keycloak.idToken) localStorage.setItem('kc_idToken', keycloak.idToken);
+};
+
+keycloak.onAuthRefreshError = () => {
+  clearStoredTokens();
+};
+
+keycloak.onAuthLogout = () => {
+  clearStoredTokens();
+};
+
+keycloak.onTokenExpired = () => {
+  // El interceptor se encarga de actualizar el token al detectar que expiró,
+  // pero si falla, se limpiará en onAuthRefreshError.
+};
+
+function clearStoredTokens(): void {
+  localStorage.removeItem('kc_token');
+  localStorage.removeItem('kc_refreshToken');
+  localStorage.removeItem('kc_idToken');
+  localStorage.removeItem('piedrazul_user');
+}
+
 /**
  * Función de inicialización que ejecuta Angular al arrancar.
- *
- * onLoad: 'check-sso'
- *   → Comprueba silenciosamente si ya hay una sesión SSO activa.
- *   → NO fuerza el login al cargar la página (el guard lo gestiona).
- *
- * silentCheckSsoRedirectUri
- *   → Apunta a un HTML mínimo en /assets/ que postMessage al padre.
- *   → Permite renovar la sesión sin redirigir al usuario.
- *
- * pkceMethod: 'S256'
- *   → Authorization Code Flow con PKCE — el flujo más seguro para SPAs.
- *
- * checkLoginIframe: false
- *   → Desactiva el iframe de comprobación periódica (causa problemas de CORS
- *     con algunos navegadores/configuraciones de Keycloak).
+ * Carga tokens de localStorage si están presentes para restaurar sesión,
+ * de lo contrario realiza check-sso clásico.
  */
 export function initializeKeycloak(): () => Promise<boolean> {
-  return () =>
-    keycloak.init({
+  return () => {
+    const token = localStorage.getItem('kc_token');
+    const refreshToken = localStorage.getItem('kc_refreshToken');
+    const idToken = localStorage.getItem('kc_idToken');
+
+    const options: any = {
       onLoad: 'check-sso',
       silentCheckSsoRedirectUri:
         window.location.origin + '/assets/silent-check-sso.html',
       pkceMethod: 'S256',
       checkLoginIframe: false
+    };
+
+    // Si existen tokens locales válidos, los inyectamos en la inicialización
+    if (token && token !== 'undefined' && token !== 'null' &&
+        refreshToken && refreshToken !== 'undefined' && refreshToken !== 'null') {
+      options.token = token;
+      options.refreshToken = refreshToken;
+      if (idToken && idToken !== 'undefined' && idToken !== 'null') {
+        options.idToken = idToken;
+      }
+    }
+
+    return keycloak.init(options).catch(err => {
+      console.warn('Error inicializando Keycloak con tokens locales guardados. Limpiando sesión...', err);
+      clearStoredTokens();
+      // En lugar de reinicializar sobre la misma instancia (lo que causa error),
+      // recargamos la página para iniciar en estado limpio y desautenticado.
+      window.location.reload();
+      return new Promise<boolean>(() => {});
     });
+  };
 }
+

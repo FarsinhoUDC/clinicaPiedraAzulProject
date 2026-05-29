@@ -1,41 +1,70 @@
-<div class="row g-0">
-  <div class="col-lg-6 d-flex flex-column justify-content-center align-items-center text-center p-5 login-form-left">
-    <div class="mb-3">
-      <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="40" cy="40" r="38" fill="#5cb85c" stroke="#4cae4c" stroke-width="2"/>
-        <path d="M40 20C29.5 20 21 28.5 21 39C21 49.5 29.5 58 40 58C50.5 58 59 49.5 59 39C59 28.5 50.5 20 40 20ZM40 54C31.7 54 25 47.3 25 39C25 30.7 31.7 24 40 24C48.3 24 55 30.7 55 39C55 47.3 48.3 54 40 54Z" fill="white"/>
-        <circle cx="40" cy="39" r="8" fill="#173250"/>
-      </svg>
-      <h1 class="mt-3" style="font-family: Georgia, 'Times New Roman', serif; font-size: 1.8rem; color: #fff;">Piedra Azul</h1>
+<div class="login-container">
+  <div class="login-left">
+    <div class="logo-container">
+      <div class="logo">
+        <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="40" cy="40" r="38" fill="#5cb85c" stroke="#4cae4c" stroke-width="2"/>
+          <path d="M40 20C29.5 20 21 28.5 21 39C21 49.5 29.5 58 40 58C50.5 58 59 49.5 59 39C59 28.5 50.5 20 40 20ZM40 54C31.7 54 25 47.3 25 39C25 30.7 31.7 24 40 24C48.3 24 55 30.7 55 39C55 47.3 48.3 54 40 54Z" fill="white"/>
+          <circle cx="40" cy="39" r="8" fill="#173250"/>
+        </svg>
+      </div>
+      <h1>Piedra Azul</h1>
     </div>
-    <p style="opacity: 0.85; max-width: 320px; line-height: 1.6;">Tu salud es nuestra prioridad. Agenda tus citas médicas de forma rápida y sencilla.</p>
+    <p class="tagline">Tu salud es nuestra prioridad. Agenda tus citas médicas de forma rápida y sencilla.</p>
   </div>
-
-  <div class="col-lg-6 d-flex align-items-center justify-content-center p-5 bg-white login-form-right">
-    <div class="w-100" style="max-width: 380px;">
-      <h2 style="font-family: Georgia, 'Times New Roman', serif; color: #173250; font-size: 1.6rem;">Bienvenido</h2>
-      <p class="text-secondary mb-4" style="font-size: 0.9rem;">Accede de forma segura con tus credenciales institucionales</p>
-
-
-
-      <atom-button
-        id="btn-iniciar-sesion"
-        variant="primary"
-        [block]="true"
-        (click)="onLogin()"
-        [disabled]="cargando"
-        type="button">
-        @if (cargando) {
-          <atom-spinner size="sm"></atom-spinner>
-          Redirigiendo…
-        } @else {
-          Iniciar Sesión
-        }
-      </atom-button>
-
-      <p class="text-center mt-3 mb-0" style="color: #71889a; font-size: 0.87rem;">
-        ¿No tienes una cuenta?
-        <a (click)="onSwitchToRegister()" role="button" tabindex="0" class="fw-semibold" style="color: #118a9b; text-decoration: none; cursor: pointer;">Regístrate aquí</a>
+  
+  <div class="login-right">
+    <div class="login-card">
+      <h2>Iniciar Sesión</h2>
+      <p class="subtitle">Ingresa tus credenciales para continuar</p>
+      
+      <div *ngIf="error" class="error-message">
+        {{ error }}
+      </div>
+      
+      <form (ngSubmit)="onLogin()">
+        <div class="form-field">
+          <label for="numeroDocumento">Número de Documento</label>
+          <input 
+            type="text" 
+            id="numeroDocumento" 
+            [(ngModel)]="numeroDocumento" 
+            name="numeroDocumento"
+            placeholder="Ingresa tu número de documento"
+            [disabled]="cargando"
+            required
+          >
+        </div>
+        
+        <div class="form-field">
+          <label for="contrasena">Contraseña</label>
+          <div class="password-input-wrapper">
+            <input 
+              [type]="mostrarContrasena ? 'text' : 'password'" 
+              id="contrasena" 
+              [(ngModel)]="contrasena" 
+              name="contrasena"
+              placeholder="Contraseña (o vacío para usar documento)"
+              [disabled]="cargando"
+            >
+            <button 
+              type="button" 
+              class="toggle-password"
+              (click)="toggleMostrarContrasena()"
+            >
+              {{ mostrarContrasena ? 'OCULTAR' : 'VER' }}
+            </button>
+          </div>
+        </div>
+        
+        <button type="submit" class="login-button" [disabled]="cargando">
+          <span *ngIf="!cargando">Iniciar Sesión</span>
+          <span *ngIf="cargando">Cargando...</span>
+        </button>
+      </form>
+      
+      <p class="register-prompt">
+        ¿No tienes una cuenta? <a (click)="onSwitchToRegister()">Regístrate aquí</a>
       </p>
     </div>
   </div>

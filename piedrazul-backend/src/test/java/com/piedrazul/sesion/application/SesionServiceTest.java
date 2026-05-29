@@ -1,6 +1,7 @@
 package com.piedrazul.sesion.application;
 
 import com.piedrazul.medicos.domain.Medico;
+import com.piedrazul.pacientes.application.PacienteService;
 import com.piedrazul.pacientes.domain.Genero;
 import com.piedrazul.pacientes.domain.Paciente;
 import com.piedrazul.pacientes.infrastructure.persistence.PacienteRepository;
@@ -31,6 +32,7 @@ class SesionServiceTest {
     @Mock private UsuarioRepository usuarioRepository;
     @Mock private PacienteRepository pacienteRepository;
     @Mock private PasswordEncoder passwordEncoder;
+    @Mock private PacienteService pacienteService;
     @InjectMocks private SesionService sesionService;
 
     private static final String HASH = "$2a$10$hashedpassword";
@@ -83,9 +85,11 @@ class SesionServiceTest {
     }
 
     @Test
-    @DisplayName("iniciarSesion - numero de documento no registrado - lanza ResourceNotFoundException")
+    @DisplayName("iniciarSesion - numero de documento no registrado ni en Keycloak - lanza ResourceNotFoundException")
     void iniciarSesion_documentoNoRegistrado_lanzaResourceNotFoundException() {
         when(usuarioRepository.findByNumeroDocumento("99999")).thenReturn(Optional.empty());
+        when(pacienteRepository.findByNumeroDocumento("99999")).thenReturn(Optional.empty());
+        when(pacienteService.buscarPorDocumento("99999")).thenReturn(Optional.empty());
 
         LoginRequest req = new LoginRequest();
         req.setNumeroDocumento("99999");
@@ -94,6 +98,27 @@ class SesionServiceTest {
         assertThatThrownBy(() -> sesionService.iniciarSesion(req))
                 .isInstanceOf(ResourceNotFoundException.class);
 
+        verify(passwordEncoder, never()).matches(anyString(), anyString());
+    }
+
+    @Test
+    @DisplayName("iniciarSesion - usuario Keycloak-managed - omite validacion BCrypt")
+    void iniciarSesion_keycloakManaged_omiteValidacionBCrypt() {
+        Paciente kcPaciente = Paciente.nuevo("Juan", "Perez", "juan@test.com",
+                "KEYCLOAK_MANAGED", "55555", null, Genero.HOMBRE, null);
+        kcPaciente.setId(5L);
+
+        when(usuarioRepository.findByNumeroDocumento("55555")).thenReturn(Optional.of(kcPaciente));
+
+        LoginRequest req = new LoginRequest();
+        req.setNumeroDocumento("55555");
+        req.setContrasena("55555");
+
+        UsuarioResponse response = sesionService.iniciarSesion(req);
+
+        assertThat(response.getRol()).isEqualTo(RolUsuario.PACIENTE);
+        assertThat(response.getNombres()).isEqualTo("Juan");
+        // BCrypt NO debe llamarse para usuarios Keycloak-managed
         verify(passwordEncoder, never()).matches(anyString(), anyString());
     }
 

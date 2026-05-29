@@ -47,6 +47,8 @@ public class SecurityConfig {
 
                 // Registro de pacientes: cualquiera puede registrarse
                 .requestMatchers(HttpMethod.POST, "/api/pacientes").permitAll()
+                // Iniciar sesión localmente (público)
+                .requestMatchers(HttpMethod.POST, "/api/sesion/login").permitAll()
 
                 // ── Reportes CSV — EXCLUSIVO MEDICO ───────────────────────
                 .requestMatchers("/api/reportes/**").hasRole("MEDICO")

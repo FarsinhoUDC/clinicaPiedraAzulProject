@@ -1,61 +1,61 @@
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/medicos/dto/MedicoRequest.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/citas/dto/CrearCitaRequest.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/medicos/infrastructure/persistence/MedicoRepository.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/citas/application/AgendamientoService.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/shared/response/ApiResponse.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/PiedrazulApplication.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/configuracion/application/ConfiguracionService.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/configuracion/domain/ConfiguracionSistema.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/pacientes/domain/Genero.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/sesion/domain/Usuario.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/configuracion/dto/FranjaHorariaResponse.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/shared/KeycloakSyncListener.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/sesion/infrastructure/web/SesionController.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/shared/exception/BusinessException.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/shared/exception/ResourceNotFoundException.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/configuracion/dto/ConfiguracionSistemaRequest.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/sesion/dto/LoginRequest.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/sesion/domain/RolUsuario.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/reports/application/service/IReportService.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/sesion/application/SesionService.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/shared/CorsConfig.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/pacientes/domain/Paciente.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/citas/domain/HistorialCita.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/citas/domain/OrigenCita.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/medicos/infrastructure/web/MedicoController.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/shared/AuditAspect.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/configuracion/dto/DisponibilidadMedicoRequest.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/reports/application/converter/IReportConvert.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/reports/infrastructure/web/ReportController.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/shared/KeycloakRoleConverter.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/citas/domain/EstadoCita.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/shared/exception/GlobalExceptionHandler.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/citas/infrastructure/persistence/HistorialCitaRepository.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/medicos/dto/MedicoResponse.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/shared/DataInitializer.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/pacientes/application/PacienteService.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/pacientes/dto/PacienteRequest.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/medicos/domain/Medico.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/citas/domain/Cita.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/pacientes/dto/PacienteResponse.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/configuracion/application/FranjaHorariaService.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/sesion/dto/UsuarioResponse.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/pacientes/infrastructure/KeycloakService.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/configuracion/infrastructure/persistence/ConfiguracionSistemaRepository.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/reports/application/service/ReportServiceImp.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/citas/dto/ReagendarCitaRequest.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/reports/infrastructure/converter/CSVConverter.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/sesion/infrastructure/persistence/UsuarioRepository.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/citas/infrastructure/persistence/CitaRepository.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/reports/domain/Report.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/configuracion/infrastructure/web/ConfiguracionController.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/configuracion/dto/DisponibilidadMedicoResponse.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/medicos/application/MedicoService.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/citas/application/CitaService.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/shared/SecurityConfig.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/citas/dto/CitaResponse.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/configuracion/domain/DisponibilidadMedico.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/citas/infrastructure/web/CitaController.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/pacientes/infrastructure/web/PacienteController.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/pacientes/infrastructure/persistence/PacienteRepository.java
-/home/cjor/Documentos/clinicaPiedraAzulProject (Copiar 2)/piedrazul-backend/src/main/java/com/piedrazul/configuracion/infrastructure/persistence/DisponibilidadMedicoRepository.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\citas\infrastructure\persistence\HistorialCitaRepository.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\shared\CorsConfig.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\sesion\dto\UsuarioResponse.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\shared\exception\BusinessException.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\configuracion\dto\DisponibilidadMedicoRequest.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\citas\domain\OrigenCita.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\citas\infrastructure\persistence\CitaRepository.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\reports\infrastructure\converter\CSVConverter.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\pacientes\application\PacienteService.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\reports\application\service\IReportService.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\citas\dto\ReagendarCitaRequest.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\medicos\dto\MedicoRequest.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\configuracion\application\FranjaHorariaService.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\citas\dto\CrearCitaRequest.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\shared\DataInitializer.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\configuracion\domain\ConfiguracionSistema.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\configuracion\application\ConfiguracionService.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\configuracion\dto\FranjaHorariaResponse.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\shared\response\ApiResponse.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\sesion\infrastructure\web\SesionController.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\citas\application\CitaService.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\sesion\dto\LoginRequest.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\medicos\domain\Medico.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\configuracion\infrastructure\web\ConfiguracionController.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\reports\application\converter\IReportConvert.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\configuracion\infrastructure\persistence\DisponibilidadMedicoRepository.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\reports\infrastructure\web\ReportController.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\configuracion\dto\DisponibilidadMedicoResponse.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\shared\KeycloakRoleConverter.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\pacientes\domain\Paciente.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\pacientes\dto\PacienteRequest.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\pacientes\dto\PacienteResponse.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\configuracion\domain\DisponibilidadMedico.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\shared\SecurityConfig.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\sesion\infrastructure\persistence\UsuarioRepository.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\citas\dto\CitaResponse.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\shared\exception\ResourceNotFoundException.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\shared\exception\GlobalExceptionHandler.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\pacientes\infrastructure\KeycloakService.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\reports\application\service\ReportServiceImp.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\citas\domain\HistorialCita.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\reports\domain\Report.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\medicos\infrastructure\web\MedicoController.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\pacientes\infrastructure\web\PacienteController.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\medicos\dto\MedicoResponse.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\citas\domain\Cita.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\shared\AuditAspect.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\PiedrazulApplication.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\sesion\application\SesionService.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\sesion\domain\Usuario.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\shared\KeycloakSyncListener.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\medicos\infrastructure\persistence\MedicoRepository.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\configuracion\dto\ConfiguracionSistemaRequest.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\medicos\application\MedicoService.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\sesion\domain\RolUsuario.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\citas\application\AgendamientoService.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\configuracion\infrastructure\persistence\ConfiguracionSistemaRepository.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\pacientes\infrastructure\persistence\PacienteRepository.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\citas\infrastructure\web\CitaController.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\citas\domain\EstadoCita.java
+C:\Users\edwin\Documents\Semestre 8\Laboratorio Ing Sotfware 3\clinicaPiedraAzulProject\piedrazul-backend\src\main\java\com\piedrazul\pacientes\domain\Genero.java

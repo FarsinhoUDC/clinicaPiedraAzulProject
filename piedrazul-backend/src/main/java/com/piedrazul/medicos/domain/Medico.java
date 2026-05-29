@@ -6,13 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-/**
- * Médico del sistema. Extiende de Usuario heredando:
- *  id, nombres, apellidos, correo, contrasena, rol, activo.
- *
- * Campos propios del médico:
- *  - especialidad
- */
+
 @Entity
 @Table(name = "medicos")
 @PrimaryKeyJoinColumn(name = "usuario_id")
@@ -40,6 +34,9 @@ public class Medico extends Usuario {
 
     private String fotoUrl;
 
+    /**
+     * Constructor completo con todos los campos del médico.
+     */
     public static Medico nuevo(String nombres, String apellidos,
                                 String correo, String contrasena,
                                 String numeroDocumento,
@@ -66,5 +63,21 @@ public class Medico extends Usuario {
         m.setAnosExperiencia(anosExperiencia);
         m.setFotoUrl(fotoUrl);
         return m;
+    }
+
+    /**
+     * Constructor de compatibilidad (9 params) para tests existentes.
+     * Los campos descripcion, anosExperiencia y fotoUrl quedan en null.
+     */
+    public static Medico nuevo(String nombres, String apellidos,
+                                String correo, String contrasena,
+                                String numeroDocumento,
+                                String especialidad,
+                                String celular,
+                                com.piedrazul.pacientes.domain.Genero genero,
+                                java.time.LocalDate fechaNacimiento) {
+        return nuevo(nombres, apellidos, correo, contrasena,
+                numeroDocumento, especialidad, celular, genero,
+                fechaNacimiento, null, null, null);
     }
 }

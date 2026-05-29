@@ -30,6 +30,10 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.auth.showLogin$.subscribe(show => {
+      this.showLoginModal = show;
+    });
+
     if (this.auth.isAuthenticated() && this.router.url === '/') {
       this.auth.redirectToRoleHome();
     }
@@ -103,15 +107,22 @@ export class AppComponent implements OnInit {
 
  
 
-  openLoginModal():    void { this.showLoginModal = true; }
-  closeLoginModal():   void { this.showLoginModal = false; }
+  openLoginModal():    void { 
+    this.showLoginModal = true; 
+    this.auth.openLoginModal();
+  }
+  closeLoginModal():   void { 
+    this.showLoginModal = false; 
+    this.auth.closeLoginModal();
+  }
   openRegisterModal(): void { this.showRegisterModal = true; }
   closeRegisterModal(): void { this.showRegisterModal = false; }
 
   /** Llamado cuando LoginComponent emite loginSuccess. */
   onLoginSuccess(): void {
     this.showLoginModal = false;
-    this.auth.redirectToRoleHome();
+    this.auth.closeLoginModal();
+    window.location.reload();
   }
 
   /** Llamado cuando RegisterComponent emite registerSuccess. */
