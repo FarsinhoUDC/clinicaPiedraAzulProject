@@ -24,6 +24,11 @@ public class ConfiguracionService {
     private final DisponibilidadMedicoRepository disponibilidadMedicoRepository;
     private final MedicoService medicoService;
 
+    @Transactional(readOnly = true)
+    public boolean existeConfiguracion() {
+        return !configuracionSistemaRepository.findAll().isEmpty();
+    }
+
     @Transactional
     public ConfiguracionSistema guardarConfiguracionSistema(ConfiguracionSistemaRequest request) {
         ConfiguracionSistema config = configuracionSistemaRepository.findAll()

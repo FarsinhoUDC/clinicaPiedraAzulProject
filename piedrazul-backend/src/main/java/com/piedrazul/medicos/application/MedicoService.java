@@ -62,6 +62,13 @@ public class MedicoService {
         return toResponse(saved);
     }
 
+    @Transactional(readOnly = true)
+    public MedicoResponse buscarPorDocumento(String numeroDocumento) {
+        return medicoRepository.findByNumeroDocumento(numeroDocumento)
+                .map(this::toResponse)
+                .orElseThrow(() -> new ResourceNotFoundException("Medico con documento " + numeroDocumento, 0L));
+    }
+
     public MedicoResponse toResponse(Medico m) {
         return MedicoResponse.builder()
                 .id(m.getId())

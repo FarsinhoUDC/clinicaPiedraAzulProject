@@ -10,4 +10,6 @@ public interface MedicoRepository extends JpaRepository<Medico, Long> {
     List<Medico> findByActivoTrue();
 
     boolean existsByNumeroDocumento(String numeroDocumento);
+
+    java.util.Optional<Medico> findByNumeroDocumento(String numeroDocumento);
 }

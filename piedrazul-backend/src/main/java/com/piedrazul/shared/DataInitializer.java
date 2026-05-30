@@ -19,6 +19,14 @@ import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.Set;
 
+/**
+ * Carga datos iniciales necesarios para que la aplicacion funcione.
+ * Usa existsByNumeroDocumento() antes de insertar — es idempotente:
+ * si los datos ya existen (segunda vez que arranca el servidor) no los duplica.
+ *
+ * En produccion (ddl-auto=create la primera vez, luego validate),
+ * esto corre una sola vez y crea los datos semilla.
+ */
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -31,14 +39,13 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        log.info("--- Cargando datos iniciales ---");
+        log.info("--- Cargando datos iniciales (idempotente) ---");
 
         crearAdmin();
         crearAgendador();
 
-        // Usuarios de sesión para los médicos (rol MEDICO en Keycloak / JWT)
-        crearUsuarioMedico("carlos.gomez",  "medico1234", "Carlos",  "Gomez");
-        crearUsuarioMedico("laura.martinez", "medico1234", "Laura",   "Martinez");
+        crearUsuarioMedico("carlos.gomez",   "medico1234", "Carlos", "Gomez");
+        crearUsuarioMedico("laura.martinez", "medico1234", "Laura",  "Martinez");
 
         MedicoResponse medico1 = crearMedico(
                 "Carlos", "Gomez", "1234", "Medicina General",
@@ -59,61 +66,52 @@ public class DataInitializer implements CommandLineRunner {
                 Set.of(DayOfWeek.TUESDAY, DayOfWeek.THURSDAY),
                 LocalTime.of(14, 0), LocalTime.of(18, 0), 45);
 
-        ConfiguracionSistemaRequest cfg = new ConfiguracionSistemaRequest();
-        cfg.setVentanaSemanas(4);
-        configuracionService.guardarConfiguracionSistema(cfg);
+        // Solo guarda configuracion si no existe ya
+        if (!configuracionService.existeConfiguracion()) {
+            ConfiguracionSistemaRequest cfg = new ConfiguracionSistemaRequest();
+            cfg.setVentanaSemanas(4);
+            configuracionService.guardarConfiguracionSistema(cfg);
+        }
 
-        log.info("--- Datos iniciales cargados. Medico1 id={}, Medico2 id={} ---",
-                medico1.getId(), medico2.getId());
-        log.info("--- Admin:     admin / admin1234 ---");
-        log.info("--- Agendador: agendador / agendador1234 ---");
-        log.info("--- Medico 1:  carlos.gomez / medico1234 ---");
-        log.info("--- Medico 2:  laura.martinez / medico1234 ---");
+        log.info("--- Datos iniciales OK ---");
     }
 
     private void crearAdmin() {
-        String numeroDocumento = "admin";
-        if (usuarioRepository.existsByNumeroDocumento(numeroDocumento)) {
-            log.info("Admin ya existe, omitiendo creacion.");
+        if (usuarioRepository.existsByNumeroDocumento("admin")) {
+            log.info("Admin ya existe, omitiendo.");
             return;
         }
         Usuario admin = new Usuario();
         admin.setNombres("Administrador");
         admin.setApellidos("Piedrazul");
-        admin.setNumeroDocumento(numeroDocumento);
+        admin.setNumeroDocumento("admin");
         admin.setContrasena(passwordEncoder.encode("admin1234"));
         admin.setRol(RolUsuario.ADMIN);
         admin.setActivo(true);
         usuarioRepository.save(admin);
-        log.info("Admin creado: {}", numeroDocumento);
+        log.info("Admin creado.");
     }
 
     private void crearAgendador() {
-        String numeroDocumento = "agendador";
-        if (usuarioRepository.existsByNumeroDocumento(numeroDocumento)) {
-            log.info("Agendador ya existe, omitiendo creacion.");
+        if (usuarioRepository.existsByNumeroDocumento("agendador")) {
+            log.info("Agendador ya existe, omitiendo.");
             return;
         }
         Usuario agendador = new Usuario();
         agendador.setNombres("Recepcionista");
         agendador.setApellidos("Piedrazul");
-        agendador.setNumeroDocumento(numeroDocumento);
+        agendador.setNumeroDocumento("agendador");
         agendador.setContrasena(passwordEncoder.encode("agendador1234"));
         agendador.setRol(RolUsuario.AGENDADOR);
         agendador.setActivo(true);
         usuarioRepository.save(agendador);
-        log.info("Agendador creado: {}", numeroDocumento);
+        log.info("Agendador creado.");
     }
 
-    /**
-     * Crea un usuario de sesión con rol MEDICO.
-     * El numeroDocumento actúa como preferred_username en Keycloak,
-     * por lo que debe coincidir con el username configurado allí.
-     */
     private void crearUsuarioMedico(String numeroDocumento, String contrasena,
                                      String nombres, String apellidos) {
         if (usuarioRepository.existsByNumeroDocumento(numeroDocumento)) {
-            log.info("Usuario médico '{}' ya existe, omitiendo creacion.", numeroDocumento);
+            log.info("Usuario médico '{}' ya existe, omitiendo.", numeroDocumento);
             return;
         }
         Usuario medico = new Usuario();
@@ -128,28 +126,36 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     private MedicoResponse crearMedico(String nombres, String apellidos,
-                                        String numeroDocumento,
-                                        String especialidad,
-                                        String descripcion,
-                                        String anosExperiencia) {
-        MedicoRequest req = new MedicoRequest();
-        req.setNombres(nombres);
-        req.setApellidos(apellidos);
-        req.setNumeroDocumento(numeroDocumento);
-        req.setEspecialidad(especialidad);
-        req.setDescripcion(descripcion);
-        req.setAnosExperiencia(anosExperiencia);
-        return medicoService.crear(req);
+                                        String numeroDocumento, String especialidad,
+                                        String descripcion, String anosExperiencia) {
+        // Si el medico ya existe en BD, busca y devuelve sin duplicar
+        try {
+            MedicoRequest req = new MedicoRequest();
+            req.setNombres(nombres);
+            req.setApellidos(apellidos);
+            req.setNumeroDocumento(numeroDocumento);
+            req.setEspecialidad(especialidad);
+            req.setDescripcion(descripcion);
+            req.setAnosExperiencia(anosExperiencia);
+            return medicoService.crear(req);
+        } catch (Exception e) {
+            log.info("Medico '{}' ya existe, omitiendo creacion.", numeroDocumento);
+            return medicoService.buscarPorDocumento(numeroDocumento);
+        }
     }
 
     private void configurarDisponibilidad(Long medicoId, Set<DayOfWeek> dias,
                                            LocalTime inicio, LocalTime fin, int intervalo) {
-        DisponibilidadMedicoRequest req = new DisponibilidadMedicoRequest();
-        req.setMedicoId(medicoId);
-        req.setDiasSemana(dias);
-        req.setHoraInicio(inicio);
-        req.setHoraFin(fin);
-        req.setIntervaloMinutos(intervalo);
-        configuracionService.guardarDisponibilidad(req);
+        try {
+            DisponibilidadMedicoRequest req = new DisponibilidadMedicoRequest();
+            req.setMedicoId(medicoId);
+            req.setDiasSemana(dias);
+            req.setHoraInicio(inicio);
+            req.setHoraFin(fin);
+            req.setIntervaloMinutos(intervalo);
+            configuracionService.guardarDisponibilidad(req);
+        } catch (Exception e) {
+            log.info("Disponibilidad para medico {} ya existe, omitiendo.", medicoId);
+        }
     }
 }

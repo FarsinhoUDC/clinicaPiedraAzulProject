@@ -1,0 +1,14 @@
+# Carpeta de compilados locales — Docker compila de cero
+target/
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Archivos de sistema
+.DS_Store
