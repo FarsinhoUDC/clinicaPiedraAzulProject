@@ -58,8 +58,8 @@ export function initializeKeycloak(): () => Promise<boolean> {
 
     const options: any = {
       onLoad: 'check-sso',
-      silentCheckSsoRedirectUri:
-        window.location.origin + '/assets/silent-check-sso.html',
+      // silentCheckSsoRedirectUri comentado para evitar bloqueo de iframe en local
+      // silentCheckSsoRedirectUri: window.location.origin + '/assets/silent-check-sso.html',
       pkceMethod: 'S256',
       checkLoginIframe: false
     };
@@ -77,11 +77,8 @@ export function initializeKeycloak(): () => Promise<boolean> {
     return keycloak.init(options).catch(err => {
       console.warn('Error inicializando Keycloak con tokens locales guardados. Limpiando sesión...', err);
       clearStoredTokens();
-      // En lugar de reinicializar sobre la misma instancia (lo que causa error),
-      // recargamos la página para iniciar en estado limpio y desautenticado.
       window.location.reload();
       return new Promise<boolean>(() => {});
     });
   };
 }
-

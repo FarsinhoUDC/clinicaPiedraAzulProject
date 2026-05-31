@@ -1,10 +1,10 @@
 export const environment = {
   production: false,
-  apiBaseUrl: 'http://localhost:8080/api',
+  apiBaseUrl: 'http://192.168.0.15:8000/api',
   sessionHours: 24,
   defaultAppointmentWindowWeeks: 4,
   keycloak: {
-    url:      'http://localhost:8180',
+    url:      'http://192.168.0.15:8180',
     realm:    'Piedrazul-Realm',
     clientId: 'piedrazul-frontend'
   }

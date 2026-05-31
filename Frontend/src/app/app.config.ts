@@ -1,9 +1,10 @@
-import { ApplicationConfig, APP_INITIALIZER } from '@angular/core';
+import { ApplicationConfig, APP_INITIALIZER, isDevMode } from '@angular/core';
 import {
   provideHttpClient,
   withInterceptors
 } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
+import { provideServiceWorker } from '@angular/service-worker';
 
 import { routes } from './app.routes';
 import { initializeKeycloak } from './core/services/keycloak-init';
@@ -20,6 +21,14 @@ export const appConfig: ApplicationConfig = {
     },
     // HTTP Client con interceptor JWT automático
     provideHttpClient(withInterceptors([authInterceptor])),
-    provideRouter(routes)
+    provideRouter(routes),
+
+    // PWA: registra el Service Worker solo en producción.
+    // En desarrollo (ng serve) queda desactivado para no interferir
+    // con el hot-reload y las llamadas al backend local.
+    provideServiceWorker('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      registrationStrategy: 'registerWhenStable:30000'
+    })
   ]
 };

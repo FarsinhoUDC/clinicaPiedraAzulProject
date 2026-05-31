@@ -4,7 +4,7 @@ export const environment = {
   sessionHours: 24,
   defaultAppointmentWindowWeeks: 4,
   keycloak: {
-    url: 'https://keycloak-production-9978.up.railway.app',
+    url:      'http://192.168.0.15:8180',
     realm: 'Piedrazul-Realm',
     clientId: 'piedrazul-frontend'
   }
