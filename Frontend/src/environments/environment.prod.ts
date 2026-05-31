@@ -1,11 +1,11 @@
 export const environment = {
   production: true,
-  apiBaseUrl: 'http://localhost:8080/api',
+  apiBaseUrl: 'https://clinicapiedraazulproject-production.up.railway.app/api',
   sessionHours: 24,
   defaultAppointmentWindowWeeks: 4,
   keycloak: {
-    url:      'http://localhost:8180',
-    realm:    'Piedrazul-Realm',
+    url: 'https://keycloak-production-9978.up.railway.app',
+    realm: 'master',
     clientId: 'piedrazul-frontend'
   }
 };
